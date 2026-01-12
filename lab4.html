@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4: ניתוח PE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--accent-primary); text-decoration: none; }
+        .chapter-header { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); padding: 4rem 2rem; text-align: center; }
+        .chapter-number { display: inline-block; background: rgba(0,0,0,0.3); color: white; padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 700; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: white; }
+        .subtitle { color: rgba(255,255,255,0.9); font-size: 1.1rem; }
+        .content { padding: 3rem 0; }
+        h2 { font-size: 1.8rem; color: var(--accent-warning); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+        h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
+        p { margin-bottom: 1.5rem; }
+        .task-box { background: rgba(255, 107, 53, 0.1); border: 1px solid var(--accent-warning); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .task-title { color: var(--accent-warning); font-weight: 700; margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
+        .nav-btn:hover { border-color: var(--accent-warning); transform: translateY(-3px); }
+        .checklist { list-style: none; margin-right: 0; }
+        .checklist li { padding: 0.5rem 0; padding-right: 2rem; position: relative; }
+        .checklist li::before { content: '☐'; position: absolute; right: 0; color: var(--accent-warning); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">→ חזרה לתפריט הראשי</a>
+    </nav>
+
+    <header class="chapter-header">
+        <div class="chapter-number">🔧 Lab 4</div>
+        <h1>ניתוח PE</h1>
+        <p class="subtitle">בדיקת מבנה קובץ EXE אמיתי</p>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            
+            <h2>🎯 מטרות התרגול</h2>
+            <ul>
+                <li>הבנה מעשית של פורמט PE</li>
+                <li>זיהוי מאפיינים חשובים</li>
+                <li>זיהוי סימנים חשודים</li>
+            </ul>
+
+            <h2>📦 חלק 1: ניתוח עם PE-bear</h2>
+
+            <p>בחר קובץ EXE כלשהו (מומלץ: <code>notepad.exe</code> או כל תוכנית רגילה).</p>
+
+            <div class="task-box">
+                <div class="task-title">משימה 1.1 - DOS Header</div>
+                <p>פתח את הקובץ ב-PE-bear ומצא:</p>
+                <ul class="checklist">
+                    <li>מה ה-Magic Number? (צריך להיות MZ = 0x5A4D)</li>
+                    <li>מה הערך של <code>e_lfanew</code>?</li>
+                    <li>מה נמצא ב-offset הזה? (צריך להיות PE)</li>
+                </ul>
+            </div>
+
+            <div class="task-box">
+                <div class="task-title">משימה 1.2 - File Header</div>
+                <p>בטאב File Hdr, מצא:</p>
+                <ul class="checklist">
+                    <li><strong>Machine:</strong> 0x14C (i386) או 0x8664 (AMD64)?</li>
+                    <li><strong>NumberOfSections:</strong> כמה sections יש?</li>
+                    <li><strong>TimeDateStamp:</strong> מתי הקובץ נוצר?</li>
+                    <li><strong>Characteristics:</strong> האם זה EXE או DLL?</li>
+                </ul>
+            </div>
+
+            <div class="task-box">
+                <div class="task-title">משימה 1.3 - Optional Header</div>
+                <p>מצא את הערכים הבאים:</p>
+                <ul class="checklist">
+                    <li><strong>Magic:</strong> 0x10B (PE32) או 0x20B (PE32+)?</li>
+                    <li><strong>AddressOfEntryPoint:</strong> מה ה-RVA של נקודת הכניסה?</li>
+                    <li><strong>ImageBase:</strong> מה הכתובת המועדפת לטעינה?</li>
+                    <li><strong>Subsystem:</strong> GUI (2) או Console (3)?</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 חישוב כתובת Entry Point</div>
+                <p>
+                    הכתובת האמיתית = <code>ImageBase + AddressOfEntryPoint</code><br><br>
+                    לדוגמה:<br>
+                    ImageBase = 0x00400000<br>
+                    EntryPoint RVA = 0x00001000<br>
+                    כתובת אמיתית = 0x00401000
+                </p>
+            </div>
+
+            <h2>📦 חלק 2: ניתוח Sections</h2>
+
+            <div class="task-box">
+                <div class="task-title">משימה 2.1 - בדוק Sections</div>
+                <p>לכל section, רשום:</p>
+                <table>
+                    <tr>
+                        <th>שם</th>
+                        <th>VirtualSize</th>
+                        <th>VirtualAddress</th>
+                        <th>הרשאות</th>
+                    </tr>
+                    <tr>
+                        <td>.text</td>
+                        <td>____</td>
+                        <td>____</td>
+                        <td>____</td>
+                    </tr>
+                    <tr>
+                        <td>.data</td>
+                        <td>____</td>
+                        <td>____</td>
+                        <td>____</td>
+                    </tr>
+                    <tr>
+                        <td>.rdata</td>
+                        <td>____</td>
+                        <td>____</td>
+                        <td>____</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="task-box">
+                <div class="task-title">משימה 2.2 - זיהוי הרשאות</div>
+                <p>הרשאות Sections (Characteristics):</p>
+                <ul>
+                    <li><code>0x20000000</code> = Execute (X)</li>
+                    <li><code>0x40000000</code> = Read (R)</li>
+                    <li><code>0x80000000</code> = Write (W)</li>
+                </ul>
+                <p>בדוק: האם יש section עם RWX? (זה יכול להיות חשוד!)</p>
+            </div>
+
+            <h2>📦 חלק 3: ניתוח Imports</h2>
+
+            <div class="task-box">
+                <div class="task-title">משימה 3.1 - בדוק Imports</div>
+                <p>בטאב Imports, ענה על השאלות:</p>
+                <ul class="checklist">
+                    <li>מאילו DLLs התוכנית מייבאת?</li>
+                    <li>כמה פונקציות מיובאות בסה"כ?</li>
+                    <li>האם יש פונקציות מעניינות? (ראה רשימה למטה)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">🔍 פונקציות חשודות לחיפוש</div>
+                <table>
+                    <tr>
+                        <th>קטגוריה</th>
+                        <th>פונקציות</th>
+                    </tr>
+                    <tr>
+                        <td>קבצים</td>
+                        <td>CreateFile, WriteFile, DeleteFile</td>
+                    </tr>
+                    <tr>
+                        <td>רשת</td>
+                        <td>socket, connect, send, recv, InternetOpen</td>
+                    </tr>
+                    <tr>
+                        <td>Registry</td>
+                        <td>RegOpenKey, RegSetValue, RegCreateKey</td>
+                    </tr>
+                    <tr>
+                        <td>תהליכים</td>
+                        <td>CreateProcess, CreateThread, OpenProcess</td>
+                    </tr>
+                    <tr>
+                        <td>זיכרון</td>
+                        <td>VirtualAlloc, VirtualProtect, WriteProcessMemory</td>
+                    </tr>
+                    <tr>
+                        <td>הצפנה</td>
+                        <td>CryptEncrypt, CryptDecrypt</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>🔬 חלק 4: השוואה בין קבצים</h2>
+
+            <div class="task-box">
+                <div class="task-title">משימה 4.1 - השווה</div>
+                <p>פתח שני קבצים שונים (למשל notepad.exe ו-calc.exe) והשווה:</p>
+                <ul class="checklist">
+                    <li>מי גדול יותר?</li>
+                    <li>למי יש יותר sections?</li>
+                    <li>למי יש יותר imports?</li>
+                    <li>האם יש הבדל בזמן הקומפילציה?</li>
+                </ul>
+            </div>
+
+            <h2>🚨 חלק 5: סימנים חשודים</h2>
+
+            <div class="info-box">
+                <div class="info-box-title">⚠️ Red Flags בניתוח PE</div>
+                <ul>
+                    <li><strong>Section עם RWX</strong> - קוד שיכול לשנות את עצמו</li>
+                    <li><strong>שמות sections מוזרים</strong> - UPX0, .packed, וכו'</li>
+                    <li><strong>Entropy גבוה</strong> - יכול להצביע על הצפנה/דחיסה</li>
+                    <li><strong>מעט imports</strong> - יכול להצביע על dynamic loading</li>
+                    <li><strong>TimeDateStamp עתידי/עבר רחוק</strong> - זיוף</li>
+                    <li><strong>Entry Point לא ב-.text</strong> - חשוד!</li>
+                    <li><strong>VirtualSize >> SizeOfRawData</strong> - unpacking</li>
+                </ul>
+            </div>
+
+            <div class="task-box">
+                <div class="task-title">משימה 5.1 - בדוק את הקובץ שלך</div>
+                <ul class="checklist">
+                    <li>האם Entry Point נמצא בתוך .text?</li>
+                    <li>האם יש sections עם הרשאות RWX?</li>
+                    <li>האם יש sections עם שמות לא סטנדרטיים?</li>
+                    <li>האם TimeDateStamp הגיוני?</li>
+                </ul>
+            </div>
+
+            <h2>🐍 בונוס: ניתוח עם Python</h2>
+
+            <pre>
+# pip install pefile
+
+import pefile
+
+pe = pefile.PE("sample.exe")
+
+print(f"Machine: {hex(pe.FILE_HEADER.Machine)}")
+print(f"Entry Point: {hex(pe.OPTIONAL_HEADER.AddressOfEntryPoint)}")
+print(f"Image Base: {hex(pe.OPTIONAL_HEADER.ImageBase)}")
+
+print("\n=== Sections ===")
+for section in pe.sections:
+    print(f"{section.Name.decode().strip(chr(0))}: "
+          f"VA={hex(section.VirtualAddress)}, "
+          f"Size={section.Misc_VirtualSize}")
+
+print("\n=== Imports ===")
+for entry in pe.DIRECTORY_ENTRY_IMPORT:
+    print(f"\n{entry.dll.decode()}:")
+    for imp in entry.imports[:5]:  # first 5
+        print(f"  {imp.name.decode() if imp.name else 'ordinal'}")
+            </pre>
+
+            <div class="nav-buttons">
+                <a href="lab3.html" class="nav-btn">→ Lab 3: Crackme</a>
+                <a href="lab5.html" class="nav-btn">Lab 5: Debugging מתקדם ←</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

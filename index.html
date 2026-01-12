@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קורס Reverse Engineering - מההתחלה</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+            --gradient-cyber: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0, 180, 216, 0.08) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ctext x='10' y='20' fill='%2300ff88' font-family='monospace' font-size='12'%3E01001%3C/text%3E%3Ctext x='50' y='40' fill='%2300ff88' font-family='monospace' font-size='12'%3E11010%3C/text%3E%3Ctext x='20' y='60' fill='%2300ff88' font-family='monospace' font-size='12'%3E00110%3C/text%3E%3Ctext x='60' y='80' fill='%2300ff88' font-family='monospace' font-size='12'%3E10101%3C/text%3E%3C/svg%3E");
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-cyber);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3)); }
+            to { filter: drop-shadow(0 0 40px rgba(0, 255, 136, 0.6)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Course Overview */
+        .course-overview {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 40px;
+            background: var(--gradient-cyber);
+            border-radius: 5px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .overview-item {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .overview-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
+        }
+
+        .overview-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .overview-item h3 {
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Chapters Grid */
+        .chapters-section {
+            margin-bottom: 4rem;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .chapter-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-cyber);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .chapter-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.15);
+            border-color: var(--accent-primary);
+        }
+
+        .chapter-number {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-cyber);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--bg-primary);
+        }
+
+        .chapter-content {
+            padding-right: 4rem;
+        }
+
+        .chapter-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .chapter-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chapter-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .topic-tag {
+            background: var(--bg-secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .chapter-card .arrow {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .chapter-card:hover .arrow {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        /* Prerequisites */
+        .prerequisites {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .prereq-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .prereq-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .prereq-icon {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="matrix-rain"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🔬</div>
+                <span class="logo-text">RE Academy</span>
+            </div>
+            <nav>
+                <span style="color: var(--text-secondary);">קורס Reverse Engineering מקיף</span>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>🔓 Reverse Engineering</h1>
+        <p class="hero-subtitle">
+            קורס מקיף מההתחלה ללימוד הנדסה לאחור - מתיאוריה ועד תרגול מעשי.
+            מיועד לאנשי סייבר שרוצים להבין לעומק איך תוכנות עובדות מבפנים.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number">10</div>
+                <div class="stat-label">פרקים תיאורטיים</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">תרגולים מעשיים</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">ידע חדש</div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <!-- Course Overview -->
+        <section class="course-overview">
+            <h2 class="section-title">מה תלמד בקורס?</h2>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <div class="overview-icon">🏗️</div>
+                    <h3>ארכיטקטורת מחשבים</h3>
+                    <p>הבנת CPU, זיכרון, רגיסטרים וכיצד המחשב מריץ קוד</p>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-icon">📝</div>
+                    <h3>שפת Assembly</h3>
+                    <p>קריאה והבנה של שפת מכונה - השפה הקרובה ביותר לחומרה</p>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-icon">📦</div>
+                    <h3>פורמט PE</h3>
+                    <p>מבנה קבצי הרצה ב-Windows וכיצד לנתח אותם</p>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-icon">🐛</div>
+                    <h3>Debugging</h3>
+                    <p>שימוש ב-Debuggers לניתוח תוכנות בזמן ריצה</p>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-icon">🔍</div>
+                    <h3>ניתוח סטטי</h3>
+                    <p>שימוש ב-IDA Pro ו-Ghidra לניתוח ללא הרצה</p>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-icon">🛡️</div>
+                    <h3>ניתוח Malware</h3>
+                    <p>יסודות ניתוח נוזקות ותוכנות זדוניות</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prerequisites -->
+        <section class="prerequisites">
+            <h2 class="section-title">דרישות קדם</h2>
+            <ul class="prereq-list">
+                <li>
+                    <span class="prereq-icon">✅</span>
+                    <div>
+                        <strong>ידע בסיסי במערכות הפעלה</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">הבנה של תהליכים, קבצים, וניהול זיכרון</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="prereq-icon">✅</span>
+                    <div>
+                        <strong>היכרות עם תכנות (רצוי C)</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">משתנים, פונקציות, לולאות, תנאים</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="prereq-icon">✅</span>
+                    <div>
+                        <strong>הבנה בסיסית של מספרים בינאריים</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">הקורס יחזור על זה, אבל רקע עוזר</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="prereq-icon">✅</span>
+                    <div>
+                        <strong>סקרנות ורצון ללמוד!</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">RE דורש סבלנות וחשיבה אנליטית</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Chapters -->
+        <section class="chapters-section">
+            <h2 class="section-title">תוכן הקורס</h2>
+            
+            <h3 style="color: var(--accent-primary); margin: 2rem 0 1.5rem; font-size: 1.3rem;">📚 חלק א' - תיאוריה</h3>
+            <div class="chapters-grid">
+                <a href="chapter1.html" class="chapter-card">
+                    <div class="chapter-number">1</div>
+                    <div class="chapter-content">
+                        <h3>מבוא ל-Reverse Engineering</h3>
+                        <p>מהו RE, למה לומדים אותו, ומהם השימושים בתעשייה</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">הגדרות</span>
+                            <span class="topic-tag">שימושים</span>
+                            <span class="topic-tag">כלים</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter2.html" class="chapter-card">
+                    <div class="chapter-number">2</div>
+                    <div class="chapter-content">
+                        <h3>מערכות מספרים</h3>
+                        <p>בינארי, הקסדצימלי, המרות, וייצוג מספרים במחשב</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">Binary</span>
+                            <span class="topic-tag">Hex</span>
+                            <span class="topic-tag">ASCII</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter3.html" class="chapter-card">
+                    <div class="chapter-number">3</div>
+                    <div class="chapter-content">
+                        <h3>ארכיטקטורת x86/x64</h3>
+                        <p>מבנה המעבד, רגיסטרים, ומחזור הפקודות</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">CPU</span>
+                            <span class="topic-tag">Registers</span>
+                            <span class="topic-tag">Pipeline</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter4.html" class="chapter-card">
+                    <div class="chapter-number">4</div>
+                    <div class="chapter-content">
+                        <h3>ניהול זיכרון</h3>
+                        <p>Stack, Heap, Virtual Memory, וכיצד תוכניות משתמשות בזיכרון</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">Stack</span>
+                            <span class="topic-tag">Heap</span>
+                            <span class="topic-tag">Segments</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter5.html" class="chapter-card">
+                    <div class="chapter-number">5</div>
+                    <div class="chapter-content">
+                        <h3>Assembly - יסודות</h3>
+                        <p>הוראות בסיסיות, תנועת נתונים, ופעולות אריתמטיות</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">MOV</span>
+                            <span class="topic-tag">ADD/SUB</span>
+                            <span class="topic-tag">Operands</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter6.html" class="chapter-card">
+                    <div class="chapter-number">6</div>
+                    <div class="chapter-content">
+                        <h3>Assembly - בקרת זרימה</h3>
+                        <p>קפיצות, תנאים, לולאות, וקריאות לפונקציות</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">JMP</span>
+                            <span class="topic-tag">CMP</span>
+                            <span class="topic-tag">CALL/RET</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter7.html" class="chapter-card">
+                    <div class="chapter-number">7</div>
+                    <div class="chapter-content">
+                        <h3>פורמט PE</h3>
+                        <p>מבנה קבצי EXE ו-DLL ב-Windows</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">Headers</span>
+                            <span class="topic-tag">Sections</span>
+                            <span class="topic-tag">Imports</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter8.html" class="chapter-card">
+                    <div class="chapter-number">8</div>
+                    <div class="chapter-content">
+                        <h3>Calling Conventions</h3>
+                        <p>איך פונקציות מקבלות פרמטרים ומחזירות ערכים</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">cdecl</span>
+                            <span class="topic-tag">stdcall</span>
+                            <span class="topic-tag">fastcall</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter9.html" class="chapter-card">
+                    <div class="chapter-number">9</div>
+                    <div class="chapter-content">
+                        <h3>כלי ניתוח סטטי</h3>
+                        <p>עבודה עם IDA Pro ו-Ghidra</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">IDA</span>
+                            <span class="topic-tag">Ghidra</span>
+                            <span class="topic-tag">Decompiler</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="chapter10.html" class="chapter-card">
+                    <div class="chapter-number">10</div>
+                    <div class="chapter-content">
+                        <h3>Debugging</h3>
+                        <p>ניתוח דינמי עם x64dbg ו-WinDbg</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag">Breakpoints</span>
+                            <span class="topic-tag">Stepping</span>
+                            <span class="topic-tag">Tracing</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+            </div>
+
+            <h3 style="color: var(--accent-warning); margin: 3rem 0 1.5rem; font-size: 1.3rem;">🔧 חלק ב' - תרגול מעשי</h3>
+            <div class="chapters-grid">
+                <a href="lab1.html" class="chapter-card" style="border-color: var(--accent-warning);">
+                    <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L1</div>
+                    <div class="chapter-content">
+                        <h3>Lab 1: הכרת הכלים</h3>
+                        <p>התקנה ועבודה ראשונית עם IDA, Ghidra, x64dbg</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag" style="color: var(--accent-warning);">Hands-on</span>
+                            <span class="topic-tag" style="color: var(--accent-warning);">Setup</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="lab2.html" class="chapter-card" style="border-color: var(--accent-warning);">
+                    <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L2</div>
+                    <div class="chapter-content">
+                        <h3>Lab 2: קריאת Assembly</h3>
+                        <p>ניתוח תוכניות פשוטות והבנת הקוד</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag" style="color: var(--accent-warning);">Hands-on</span>
+                            <span class="topic-tag" style="color: var(--accent-warning);">Analysis</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="lab3.html" class="chapter-card" style="border-color: var(--accent-warning);">
+                    <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L3</div>
+                    <div class="chapter-content">
+                        <h3>Lab 3: Crackme Challenge</h3>
+                        <p>פתרון אתגר RE קלאסי - מציאת סיסמה</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag" style="color: var(--accent-warning);">Challenge</span>
+                            <span class="topic-tag" style="color: var(--accent-warning);">Patching</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="lab4.html" class="chapter-card" style="border-color: var(--accent-warning);">
+                    <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L4</div>
+                    <div class="chapter-content">
+                        <h3>Lab 4: ניתוח PE</h3>
+                        <p>בדיקת מבנה קובץ EXE אמיתי</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag" style="color: var(--accent-warning);">PE</span>
+                            <span class="topic-tag" style="color: var(--accent-warning);">Headers</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+
+                <a href="lab5.html" class="chapter-card" style="border-color: var(--accent-warning);">
+                    <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L5</div>
+                    <div class="chapter-content">
+                        <h3>Lab 5: Debugging מתקדם</h3>
+                        <p>מעקב אחר ביצוע, שינוי זיכרון, ו-patching</p>
+                        <div class="chapter-topics">
+                            <span class="topic-tag" style="color: var(--accent-warning);">Debug</span>
+                            <span class="topic-tag" style="color: var(--accent-warning);">Modify</span>
+                        </div>
+                    </div>
+                    <div class="arrow">←</div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>🔓 RE Academy - קורס Reverse Engineering מקיף בעברית</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">נבנה עבור לומדים מתחילים בתחום</p>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 10: Debugging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--accent-primary); text-decoration: none; }
+        .chapter-header { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .chapter-number { display: inline-block; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); color: var(--bg-primary); padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 700; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .content { padding: 3rem 0; }
+        h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+        h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
+        p { margin-bottom: 1.5rem; }
+        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
+        .warning-box { background: rgba(255, 107, 53, 0.1); border: 1px solid var(--accent-warning); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .warning-box-title { color: var(--accent-warning); font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
+        .nav-btn:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
+        .tool-card { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; border: 1px solid var(--border-color); }
+        .tool-name { color: var(--accent-primary); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .tool-type { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .shortcut-table td:first-child { font-family: 'Fira Code', monospace; color: var(--accent-secondary); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">→ חזרה לתפריט הראשי</a>
+    </nav>
+
+    <header class="chapter-header">
+        <div class="chapter-number">פרק 10</div>
+        <h1>Debugging</h1>
+        <p class="subtitle">ניתוח דינמי עם x64dbg ו-WinDbg</p>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            
+            <h2>🔬 מהו ניתוח דינמי?</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Dynamic Analysis</div>
+                <p>ניתוח תוכנה <strong>תוך כדי הרצה</strong>. מאפשר לראות ערכים בזמן אמת, לעקוב אחרי התנהגות, ולשנות ריצה.</p>
+            </div>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Debugger</div>
+                <p>תוכנה שמאפשרת להריץ תוכנה אחרת צעד אחר צעד, לעצור בנקודות מסוימות, ולבדוק/לשנות זיכרון ורגיסטרים.</p>
+            </div>
+
+            <p>יתרונות:</p>
+            <ul>
+                <li>רואים ערכים אמיתיים בזמן ריצה</li>
+                <li>אפשר לעקוף בדיקות ותנאים</li>
+                <li>מגלים קוד שנפרס דינמית (unpacking)</li>
+                <li>קל לעקוב אחרי לוגיקה מסובכת</li>
+            </ul>
+
+            <div class="warning-box">
+                <div class="warning-box-title">⚠️ אזהרה</div>
+                <p>
+                    כשמנתחים נוזקות, <strong>תמיד</strong> השתמש ב-VM מבודד!<br>
+                    הקוד רץ באמת ויכול לגרום נזק.
+                </p>
+            </div>
+
+            <h2>🛠️ כלי Debugging</h2>
+
+            <div class="tool-card">
+                <div class="tool-name">🔧 x64dbg</div>
+                <div class="tool-type">User-mode debugger - חינמי ופופולרי</div>
+                <p>
+                    הדיבאגר הפופולרי ביותר ל-Windows RE. חינמי, פתוח, ועם ממשק נוח.
+                </p>
+                <ul>
+                    <li>תומך ב-32-bit (x32dbg) ו-64-bit (x64dbg)</li>
+                    <li>ממשק גרפי נוח</li>
+                    <li>תמיכה בפלאגינים</li>
+                    <li>מומלץ למתחילים!</li>
+                </ul>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-name">🔧 WinDbg</div>
+                <div class="tool-type">Microsoft's debugger - לkernel ו-user mode</div>
+                <p>
+                    הדיבאגר הרשמי של Microsoft. חזק מאוד אבל עם עקומת למידה תלולה.
+                </p>
+                <ul>
+                    <li>יכול לדבג kernel drivers</li>
+                    <li>גישה לsymbols של Windows</li>
+                    <li>ממשק CLI (יש גרסה חדשה עם GUI)</li>
+                </ul>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-name">🔧 OllyDbg</div>
+                <div class="tool-type">קלאסיקה - 32-bit בלבד</div>
+                <p>
+                    היה הכלי הכי פופולרי לפני x64dbg. עדיין טוב אבל לא מתעדכן.
+                </p>
+            </div>
+
+            <h2>🚀 התחלה עם x64dbg</h2>
+
+            <h3>ממשק המשתמש</h3>
+
+            <table>
+                <tr>
+                    <th>חלון</th>
+                    <th>תוכן</th>
+                </tr>
+                <tr>
+                    <td><strong>CPU</strong></td>
+                    <td>קוד Assembly - התצוגה העיקרית</td>
+                </tr>
+                <tr>
+                    <td><strong>Registers</strong></td>
+                    <td>ערכי הרגיסטרים בזמן אמת</td>
+                </tr>
+                <tr>
+                    <td><strong>Stack</strong></td>
+                    <td>תוכן ה-Stack</td>
+                </tr>
+                <tr>
+                    <td><strong>Dump</strong></td>
+                    <td>תצוגת זיכרון (hex)</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory Map</strong></td>
+                    <td>מפת אזורי הזיכרון</td>
+                </tr>
+                <tr>
+                    <td><strong>Breakpoints</strong></td>
+                    <td>רשימת נקודות עצירה</td>
+                </tr>
+            </table>
+
+            <h3>קיצורי מקלדת</h3>
+
+            <table class="shortcut-table">
+                <tr>
+                    <th>קיצור</th>
+                    <th>פעולה</th>
+                </tr>
+                <tr>
+                    <td>F2</td>
+                    <td>Toggle Breakpoint - הפעלה/כיבוי BP</td>
+                </tr>
+                <tr>
+                    <td>F7</td>
+                    <td>Step Into - צעד פנימה (נכנס לפונקציות)</td>
+                </tr>
+                <tr>
+                    <td>F8</td>
+                    <td>Step Over - צעד מעל (לא נכנס)</td>
+                </tr>
+                <tr>
+                    <td>F9</td>
+                    <td>Run - הרץ עד ה-BP הבא</td>
+                </tr>
+                <tr>
+                    <td>Ctrl+F9</td>
+                    <td>Run until Return - הרץ עד סוף הפונקציה</td>
+                </tr>
+                <tr>
+                    <td>Ctrl+G</td>
+                    <td>Go to Address - קפיצה לכתובת</td>
+                </tr>
+                <tr>
+                    <td>G</td>
+                    <td>Go to Expression</td>
+                </tr>
+                <tr>
+                    <td>;</td>
+                    <td>הוספת הערה</td>
+                </tr>
+                <tr>
+                    <td>:</td>
+                    <td>שינוי שם (Label)</td>
+                </tr>
+            </table>
+
+            <h2>🔴 Breakpoints</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Breakpoint (BP)</div>
+                <p>נקודה בקוד שבה הדיבאגר יעצור את הריצה. מאפשר לבדוק מצב בנקודה ספציפית.</p>
+            </div>
+
+            <h3>סוגי Breakpoints</h3>
+
+            <table>
+                <tr>
+                    <th>סוג</th>
+                    <th>שימוש</th>
+                    <th>איך</th>
+                </tr>
+                <tr>
+                    <td><strong>Software BP</strong></td>
+                    <td>עצירה בפקודה ספציפית</td>
+                    <td>F2 על השורה</td>
+                </tr>
+                <tr>
+                    <td><strong>Hardware BP</strong></td>
+                    <td>עצירה על גישה לזיכרון</td>
+                    <td>ימני → Breakpoint → Hardware</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory BP</strong></td>
+                    <td>עצירה כשקוראים/כותבים לאזור</td>
+                    <td>ימני על dump → Breakpoint</td>
+                </tr>
+                <tr>
+                    <td><strong>Conditional BP</strong></td>
+                    <td>עצירה רק אם תנאי מתקיים</td>
+                    <td>ימני → Edit condition</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 טיפ: BP על API</div>
+                <p>
+                    אפשר לשים BP על פונקציות Windows API!<br>
+                    <code>bp kernel32.CreateFileA</code><br>
+                    <code>bp ws2_32.connect</code><br>
+                    זה עוזר לתפוס פעולות מעניינות.
+                </p>
+            </div>
+
+            <h2>👣 Stepping</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Step Into (F7)</div>
+                <p>מבצע פקודה אחת. אם זה CALL, נכנס לתוך הפונקציה.</p>
+            </div>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Step Over (F8)</div>
+                <p>מבצע פקודה אחת. אם זה CALL, מריץ את כל הפונקציה ועוצר אחריה.</p>
+            </div>
+
+            <pre>
+00401000: mov eax, 5
+00401005: call func      ; F7 יכנס ל-func, F8 ירוץ וימשיך
+0040100A: add eax, 1     ; נעצור כאן אחרי F8
+            </pre>
+
+            <h2>🔧 שינוי בזמן ריצה</h2>
+
+            <h3>שינוי רגיסטרים</h3>
+            <p>דאבל קליק על ערך רגיסטר בחלון Registers ושנה.</p>
+
+            <h3>שינוי זיכרון</h3>
+            <p>בחלון Dump, דאבל קליק על byte ושנה.</p>
+
+            <h3>שינוי פקודה (Patching)</h3>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Patching</div>
+                <p>שינוי bytes בקוד כדי לשנות התנהגות. למשל, להפוך JE ל-JNE.</p>
+            </div>
+
+            <pre>
+; קוד מקורי - בודק סיסמה
+cmp eax, 1
+je  valid_password    ; קופץ אם נכון
+
+; אחרי patch - תמיד קופץ
+cmp eax, 1
+jmp valid_password    ; JE (0x74) → JMP (0xEB)
+            </pre>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 ב-x64dbg</div>
+                <p>
+                    לשנות פקודה: Space על השורה, או ימני → Assemble<br>
+                    לשמור שינויים לקובץ: ימני → Patches → Patch File
+                </p>
+            </div>
+
+            <h2>🔍 טכניקות RE</h2>
+
+            <h3>מציאת הסיסמה הנכונה</h3>
+
+            <pre>
+; קוד טיפוסי של בדיקת סיסמה
+call get_input        ; קבלת קלט מהמשתמש
+push eax              ; הסיסמה שהוזנה
+push correct_password ; הסיסמה הנכונה
+call strcmp           ; השוואה
+test eax, eax
+jnz  wrong_password   ; אם לא שווה - כישלון
+jmp  success
+            </pre>
+
+            <p>אפשרויות:</p>
+            <ol>
+                <li><strong>BP על strcmp</strong> - לראות מה מושווה</li>
+                <li><strong>לשנות ZF</strong> - אחרי TEST, לשנות את Zero Flag</li>
+                <li><strong>Patch</strong> - לשנות JNZ ל-JZ (או NOP)</li>
+            </ol>
+
+            <h3>Tracing</h3>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Trace</div>
+                <p>הרצת הקוד ורישום כל פקודה שמתבצעת. שימושי להבנת flow.</p>
+            </div>
+
+            <p>ב-x64dbg: Debug → Trace over / Trace into</p>
+
+            <h2>📋 סיכום הפרק</h2>
+            
+            <ul>
+                <li><strong>Dynamic Analysis</strong> - ניתוח תוך כדי הרצה</li>
+                <li><strong>x64dbg</strong> - דיבאגר מומלץ למתחילים</li>
+                <li><strong>Breakpoints</strong> - נקודות עצירה (F2)</li>
+                <li><strong>F7</strong> = Step Into, <strong>F8</strong> = Step Over</li>
+                <li><strong>F9</strong> = Run until next breakpoint</li>
+                <li>אפשר לשנות רגיסטרים, זיכרון, ופקודות בזמן ריצה</li>
+                <li><strong>Patching</strong> - שינוי קוד לשינוי התנהגות</li>
+            </ul>
+
+            <div class="info-box">
+                <div class="info-box-title">🎉 סיימת את החלק התיאורטי!</div>
+                <p>
+                    עכשיו הגיע הזמן לתרגול מעשי.<br>
+                    עבור ל-Labs כדי ליישם את מה שלמדת!
+                </p>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="chapter9.html" class="nav-btn">→ פרק 9: כלי ניתוח</a>
+                <a href="lab1.html" class="nav-btn">🔧 Lab 1: הכרת הכלים ←</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

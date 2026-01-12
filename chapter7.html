@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 7: פורמט PE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --accent-purple: #a855f7;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--accent-primary); text-decoration: none; }
+        .chapter-header { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .chapter-number { display: inline-block; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); color: var(--bg-primary); padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 700; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .content { padding: 3rem 0; }
+        h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+        h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
+        p { margin-bottom: 1.5rem; }
+        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
+        .nav-btn:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">→ חזרה לתפריט הראשי</a>
+    </nav>
+
+    <header class="chapter-header">
+        <div class="chapter-number">פרק 7</div>
+        <h1>פורמט PE</h1>
+        <p class="subtitle">מבנה קבצי EXE ו-DLL ב-Windows</p>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            
+            <h2>📦 מהו PE?</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: PE (Portable Executable)</div>
+                <p>פורמט קבצי הרצה של Windows. כולל קבצי <code>.exe</code>, <code>.dll</code>, <code>.sys</code>, <code>.ocx</code> ועוד.<br>
+                "Portable" כי אותו פורמט עובד על כל גרסאות Windows.</p>
+            </div>
+
+            <p>
+                כשאתה פותח קובץ EXE ב-Hex Editor או בכלי RE, אתה רואה את מבנה ה-PE.
+                הבנה של הפורמט הזה חיונית לניתוח נוזקות וקבצים חשודים.
+            </p>
+
+            <h2>🗂️ מבנה כללי של PE</h2>
+
+            <div class="diagram">
+                <svg viewBox="0 0 400 450" xmlns="http://www.w3.org/2000/svg">
+                    <!-- DOS Header -->
+                    <rect x="100" y="20" width="200" height="50" rx="5" fill="#1a2235" stroke="#ff6b35" stroke-width="2"/>
+                    <text x="200" y="50" text-anchor="middle" fill="#ff6b35" font-size="13" font-weight="bold" font-family="Heebo">DOS Header</text>
+                    <text x="320" y="50" fill="#a0a0a0" font-size="9" font-family="Heebo">64 bytes</text>
+                    
+                    <!-- DOS Stub -->
+                    <rect x="100" y="75" width="200" height="40" rx="5" fill="#1a2235" stroke="#a0a0a0" stroke-width="1"/>
+                    <text x="200" y="100" text-anchor="middle" fill="#a0a0a0" font-size="11" font-family="Heebo">DOS Stub (אופציונלי)</text>
+                    
+                    <!-- PE Signature -->
+                    <rect x="100" y="120" width="200" height="35" rx="5" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
+                    <text x="200" y="143" text-anchor="middle" fill="#00ff88" font-size="12" font-weight="bold" font-family="Fira Code">"PE\0\0"</text>
+                    <text x="320" y="143" fill="#a0a0a0" font-size="9" font-family="Heebo">4 bytes</text>
+                    
+                    <!-- File Header -->
+                    <rect x="100" y="160" width="200" height="50" rx="5" fill="#1a2235" stroke="#00b4d8" stroke-width="2"/>
+                    <text x="200" y="190" text-anchor="middle" fill="#00b4d8" font-size="13" font-weight="bold" font-family="Heebo">File Header (COFF)</text>
+                    <text x="320" y="190" fill="#a0a0a0" font-size="9" font-family="Heebo">20 bytes</text>
+                    
+                    <!-- Optional Header -->
+                    <rect x="100" y="215" width="200" height="60" rx="5" fill="#1a2235" stroke="#a855f7" stroke-width="2"/>
+                    <text x="200" y="245" text-anchor="middle" fill="#a855f7" font-size="13" font-weight="bold" font-family="Heebo">Optional Header</text>
+                    <text x="200" y="262" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Heebo">(למרות השם, הוא חובה!)</text>
+                    <text x="320" y="250" fill="#a0a0a0" font-size="9" font-family="Heebo">~240 bytes</text>
+                    
+                    <!-- Section Headers -->
+                    <rect x="100" y="280" width="200" height="50" rx="5" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
+                    <text x="200" y="310" text-anchor="middle" fill="#00ff88" font-size="13" font-weight="bold" font-family="Heebo">Section Headers</text>
+                    <text x="320" y="310" fill="#a0a0a0" font-size="9" font-family="Heebo">40 bytes × n</text>
+                    
+                    <!-- Sections -->
+                    <rect x="100" y="340" width="200" height="35" rx="5" fill="#1a2235" stroke="#00b4d8" stroke-width="1"/>
+                    <text x="200" y="362" text-anchor="middle" fill="#00b4d8" font-size="11" font-family="Heebo">.text (קוד)</text>
+                    
+                    <rect x="100" y="378" width="200" height="35" rx="5" fill="#1a2235" stroke="#ff6b35" stroke-width="1"/>
+                    <text x="200" y="400" text-anchor="middle" fill="#ff6b35" font-size="11" font-family="Heebo">.data (נתונים)</text>
+                    
+                    <rect x="100" y="416" width="200" height="35" rx="5" fill="#1a2235" stroke="#a855f7" stroke-width="1"/>
+                    <text x="200" y="438" text-anchor="middle" fill="#a855f7" font-size="11" font-family="Heebo">.rsrc, .rdata, ...</text>
+                    
+                    <!-- Labels -->
+                    <text x="60" y="65" text-anchor="end" fill="#a0a0a0" font-size="10" font-family="Heebo">Headers</text>
+                    <line x1="65" y1="60" x2="95" y2="60" stroke="#a0a0a0" stroke-width="1"/>
+                    <line x1="65" y1="60" x2="65" y2="310" stroke="#a0a0a0" stroke-width="1"/>
+                    <line x1="65" y1="310" x2="95" y2="310" stroke="#a0a0a0" stroke-width="1"/>
+                    
+                    <text x="60" y="390" text-anchor="end" fill="#a0a0a0" font-size="10" font-family="Heebo">Sections</text>
+                </svg>
+            </div>
+
+            <h2>📋 DOS Header</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: DOS Header</div>
+                <p>ה-64 bytes הראשונים של כל PE. מתחיל ב-<code>MZ</code> (0x4D5A) - ראשי תיבות של Mark Zbikowski, מתכנת ב-Microsoft.</p>
+            </div>
+
+            <p>השדות החשובים:</p>
+            <ul>
+                <li><code>e_magic</code> - תמיד <code>MZ</code> (0x5A4D בLittle Endian)</li>
+                <li><code>e_lfanew</code> - offset ל-PE Header (בbyte 0x3C)</li>
+            </ul>
+
+            <pre>
+Offset 0x00: 4D 5A ...           ; "MZ" - magic
+Offset 0x3C: XX XX XX XX         ; e_lfanew - מצביע ל-PE signature
+            </pre>
+
+            <h2>📋 PE Signature & File Header</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: PE Signature</div>
+                <p>4 bytes: <code>PE\0\0</code> (0x50450000). מופיע מיד אחרי ה-DOS Header/Stub.</p>
+            </div>
+
+            <p>File Header (COFF Header) - 20 bytes:</p>
+
+            <table>
+                <tr>
+                    <th>שדה</th>
+                    <th>גודל</th>
+                    <th>תיאור</th>
+                </tr>
+                <tr>
+                    <td><code>Machine</code></td>
+                    <td>2</td>
+                    <td>סוג מעבד (0x14c=i386, 0x8664=AMD64)</td>
+                </tr>
+                <tr>
+                    <td><code>NumberOfSections</code></td>
+                    <td>2</td>
+                    <td>כמה sections יש בקובץ</td>
+                </tr>
+                <tr>
+                    <td><code>TimeDateStamp</code></td>
+                    <td>4</td>
+                    <td>זמן קומפילציה (Unix timestamp)</td>
+                </tr>
+                <tr>
+                    <td><code>SizeOfOptionalHeader</code></td>
+                    <td>2</td>
+                    <td>גודל ה-Optional Header</td>
+                </tr>
+                <tr>
+                    <td><code>Characteristics</code></td>
+                    <td>2</td>
+                    <td>דגלים (EXE, DLL, וכו')</td>
+                </tr>
+            </table>
+
+            <h2>📋 Optional Header</h2>
+
+            <p>למרות השם, הוא <strong>חובה</strong> ל-EXE ו-DLL! מכיל מידע חיוני:</p>
+
+            <table>
+                <tr>
+                    <th>שדה</th>
+                    <th>תיאור</th>
+                </tr>
+                <tr>
+                    <td><code>Magic</code></td>
+                    <td>0x10b = PE32, 0x20b = PE32+ (64-bit)</td>
+                </tr>
+                <tr>
+                    <td><code>AddressOfEntryPoint</code></td>
+                    <td><strong>RVA של נקודת הכניסה - מאיפה הקוד מתחיל!</strong></td>
+                </tr>
+                <tr>
+                    <td><code>ImageBase</code></td>
+                    <td>כתובת טעינה מועדפת (בד"כ 0x00400000)</td>
+                </tr>
+                <tr>
+                    <td><code>SectionAlignment</code></td>
+                    <td>יישור sections בזיכרון</td>
+                </tr>
+                <tr>
+                    <td><code>FileAlignment</code></td>
+                    <td>יישור sections בקובץ</td>
+                </tr>
+                <tr>
+                    <td><code>SizeOfImage</code></td>
+                    <td>גודל הכולל בזיכרון</td>
+                </tr>
+                <tr>
+                    <td><code>Subsystem</code></td>
+                    <td>GUI (2), Console (3), Driver (1)</td>
+                </tr>
+                <tr>
+                    <td><code>DataDirectory</code></td>
+                    <td>מערך של 16 כניסות - imports, exports, resources...</td>
+                </tr>
+            </table>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: RVA (Relative Virtual Address)</div>
+                <p>כתובת יחסית ל-ImageBase. הכתובת האמיתית בזיכרון = ImageBase + RVA.</p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Entry Point</div>
+                <p>
+                    <code>AddressOfEntryPoint</code> הוא RVA של הפקודה הראשונה שתרוץ.<br>
+                    <strong>זה המקום הראשון שכדאי להסתכל עליו ב-RE!</strong><br><br>
+                    כתובת אמיתית = ImageBase + EntryPoint<br>
+                    למשל: 0x00400000 + 0x1000 = 0x00401000
+                </p>
+            </div>
+
+            <h2>📦 Sections</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Section</div>
+                <p>אזור בקובץ עם תפקיד מסוים - קוד, נתונים, resources, וכו'. לכל section יש שם, גודל, והרשאות.</p>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Section</th>
+                    <th>תוכן</th>
+                    <th>הרשאות טיפוסיות</th>
+                </tr>
+                <tr>
+                    <td><code>.text</code></td>
+                    <td>קוד התוכנית</td>
+                    <td>Read + Execute</td>
+                </tr>
+                <tr>
+                    <td><code>.data</code></td>
+                    <td>משתנים גלובליים מאותחלים</td>
+                    <td>Read + Write</td>
+                </tr>
+                <tr>
+                    <td><code>.rdata</code></td>
+                    <td>נתונים לקריאה בלבד, strings, imports</td>
+                    <td>Read only</td>
+                </tr>
+                <tr>
+                    <td><code>.bss</code></td>
+                    <td>משתנים לא מאותחלים</td>
+                    <td>Read + Write</td>
+                </tr>
+                <tr>
+                    <td><code>.rsrc</code></td>
+                    <td>Resources (icons, dialogs, strings)</td>
+                    <td>Read only</td>
+                </tr>
+                <tr>
+                    <td><code>.reloc</code></td>
+                    <td>Relocation info (לטעינה בכתובת אחרת)</td>
+                    <td>Read only</td>
+                </tr>
+            </table>
+
+            <h3>Section Header</h3>
+
+            <p>כל section מתואר ע"י header בגודל 40 bytes:</p>
+
+            <pre>
+struct IMAGE_SECTION_HEADER {
+    char  Name[8];           // שם (.text, .data...)
+    DWORD VirtualSize;       // גודל בזיכרון
+    DWORD VirtualAddress;    // RVA בזיכרון
+    DWORD SizeOfRawData;     // גודל בקובץ
+    DWORD PointerToRawData;  // offset בקובץ
+    ...
+    DWORD Characteristics;   // דגלים (R/W/X)
+};
+            </pre>
+
+            <h2>📥 Import Table</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Import Table</div>
+                <p>רשימה של פונקציות שהתוכנית מייבאת מ-DLLs אחרים. Windows ממלא את הכתובות בזמן טעינה.</p>
+            </div>
+
+            <p>
+                ה-Import Table נמצא ב-<code>DataDirectory[1]</code>.<br>
+                ב-RE, זה אומר לנו אילו API functions התוכנית משתמשת:
+            </p>
+
+            <ul>
+                <li><code>CreateFile</code>, <code>ReadFile</code> - גישה לקבצים</li>
+                <li><code>RegOpenKey</code> - גישה ל-Registry</li>
+                <li><code>socket</code>, <code>connect</code> - תקשורת רשת</li>
+                <li><code>VirtualAlloc</code> - הקצאת זיכרון</li>
+                <li><code>CreateProcess</code> - הרצת תוכניות</li>
+            </ul>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 חשוב ב-RE</div>
+                <p>
+                    סריקת ה-Imports נותנת רמז חשוב למה התוכנית עושה!<br>
+                    נוזקות מנסות לפעמים להסתיר imports (dynamic loading, obfuscation).
+                </p>
+            </div>
+
+            <h2>📤 Export Table</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Export Table</div>
+                <p>רשימה של פונקציות שהקובץ מייצא לשימוש אחרים. נפוץ ב-DLL.</p>
+            </div>
+
+            <h2>🔧 כלים לניתוח PE</h2>
+
+            <ul>
+                <li><strong>PE-bear</strong> - כלי גרפי מעולה לניתוח PE</li>
+                <li><strong>CFF Explorer</strong> - עורך PE מתקדם</li>
+                <li><strong>pestudio</strong> - ניתוח PE לזיהוי נוזקות</li>
+                <li><strong>Detect It Easy (DIE)</strong> - זיהוי packers ו-compilers</li>
+                <li><strong>pefile (Python)</strong> - ספרייה לניתוח PE בקוד</li>
+            </ul>
+
+            <h2>📋 סיכום הפרק</h2>
+            
+            <ul>
+                <li><strong>PE</strong> - פורמט קבצי הרצה של Windows</li>
+                <li><strong>DOS Header</strong> - מתחיל ב-MZ, מצביע ל-PE Header</li>
+                <li><strong>File Header</strong> - סוג מעבד, מספר sections</li>
+                <li><strong>Optional Header</strong> - Entry Point, ImageBase, imports</li>
+                <li><strong>Sections</strong> - .text (קוד), .data (נתונים), .rsrc (resources)</li>
+                <li><strong>Import Table</strong> - פונקציות מיובאות (חשוב מאוד לניתוח!)</li>
+                <li><strong>RVA</strong> - כתובת יחסית, צריך להוסיף ImageBase</li>
+            </ul>
+
+            <div class="nav-buttons">
+                <a href="chapter6.html" class="nav-btn">→ פרק 6: Assembly בקרת זרימה</a>
+                <a href="chapter8.html" class="nav-btn">פרק 8: Calling Conventions ←</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

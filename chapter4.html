@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 4: ניהול זיכרון</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --accent-purple: #a855f7;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--accent-primary); text-decoration: none; }
+        .chapter-header { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .chapter-number { display: inline-block; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); color: var(--bg-primary); padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 700; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .content { padding: 3rem 0; }
+        h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+        h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
+        p { margin-bottom: 1.5rem; }
+        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
+        .warning-box { background: rgba(255, 107, 53, 0.1); border: 1px solid var(--accent-warning); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .warning-box-title { color: var(--accent-warning); font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; }
+        .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
+        .nav-btn:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">→ חזרה לתפריט הראשי</a>
+    </nav>
+
+    <header class="chapter-header">
+        <div class="chapter-number">פרק 4</div>
+        <h1>ניהול זיכרון</h1>
+        <p class="subtitle">Stack, Heap, ואיך תוכניות מאחסנות נתונים</p>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            
+            <h2>🗺️ מבנה הזיכרון של תהליך</h2>
+
+            <p>
+                כשתוכנית רצה, מערכת ההפעלה נותנת לה מרחב זיכרון וירטואלי משלה.
+                המרחב הזה מחולק לאזורים עם תפקידים שונים:
+            </p>
+
+            <div class="diagram">
+                <svg viewBox="0 0 400 450" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Memory layout -->
+                    <rect x="100" y="20" width="200" height="50" rx="5" fill="#1a2235" stroke="#ff6b35" stroke-width="2"/>
+                    <text x="200" y="50" text-anchor="middle" fill="#ff6b35" font-size="14" font-weight="bold" font-family="Heebo">Stack ↓</text>
+                    <text x="320" y="50" text-anchor="start" fill="#a0a0a0" font-size="10" font-family="Heebo">כתובות גבוהות</text>
+                    
+                    <text x="200" y="90" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Heebo">↓ גדל למטה</text>
+                    
+                    <rect x="100" y="100" width="200" height="40" rx="5" fill="#0a0e17" stroke="#2a3548" stroke-width="1" stroke-dasharray="5,5"/>
+                    <text x="200" y="125" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Heebo">מקום פנוי</text>
+                    
+                    <text x="200" y="165" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Heebo">↑ גדל למעלה</text>
+                    
+                    <rect x="100" y="175" width="200" height="50" rx="5" fill="#1a2235" stroke="#a855f7" stroke-width="2"/>
+                    <text x="200" y="205" text-anchor="middle" fill="#a855f7" font-size="14" font-weight="bold" font-family="Heebo">Heap ↑</text>
+                    
+                    <rect x="100" y="245" width="200" height="50" rx="5" fill="#1a2235" stroke="#00b4d8" stroke-width="2"/>
+                    <text x="200" y="275" text-anchor="middle" fill="#00b4d8" font-size="14" font-weight="bold" font-family="Heebo">.bss (לא מאותחל)</text>
+                    
+                    <rect x="100" y="305" width="200" height="50" rx="5" fill="#1a2235" stroke="#00b4d8" stroke-width="2"/>
+                    <text x="200" y="335" text-anchor="middle" fill="#00b4d8" font-size="14" font-weight="bold" font-family="Heebo">.data (נתונים)</text>
+                    
+                    <rect x="100" y="365" width="200" height="50" rx="5" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
+                    <text x="200" y="395" text-anchor="middle" fill="#00ff88" font-size="14" font-weight="bold" font-family="Heebo">.text (קוד)</text>
+                    <text x="320" y="395" text-anchor="start" fill="#a0a0a0" font-size="10" font-family="Heebo">כתובות נמוכות</text>
+                </svg>
+            </div>
+
+            <h3>האזורים העיקריים</h3>
+
+            <table>
+                <tr>
+                    <th>אזור</th>
+                    <th>תוכן</th>
+                    <th>הרשאות</th>
+                </tr>
+                <tr>
+                    <td><code>.text</code></td>
+                    <td>הקוד של התוכנית (פקודות Assembly)</td>
+                    <td>Read + Execute</td>
+                </tr>
+                <tr>
+                    <td><code>.data</code></td>
+                    <td>משתנים גלובליים מאותחלים</td>
+                    <td>Read + Write</td>
+                </tr>
+                <tr>
+                    <td><code>.bss</code></td>
+                    <td>משתנים גלובליים לא מאותחלים</td>
+                    <td>Read + Write</td>
+                </tr>
+                <tr>
+                    <td><strong>Heap</strong></td>
+                    <td>הקצאות דינמיות (malloc, new)</td>
+                    <td>Read + Write</td>
+                </tr>
+                <tr>
+                    <td><strong>Stack</strong></td>
+                    <td>משתנים מקומיים, כתובות חזרה</td>
+                    <td>Read + Write</td>
+                </tr>
+            </table>
+
+            <h2>📚 ה-Stack (מחסנית)</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Stack</div>
+                <p>מבנה נתונים מסוג LIFO (Last In, First Out) - האחרון שנכנס הוא הראשון שיוצא.<br>
+                משמש לאחסון משתנים מקומיים, פרמטרים לפונקציות, וכתובות חזרה.</p>
+            </div>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: ESP / RSP</div>
+                <p>רגיסטר שמצביע תמיד על ראש ה-Stack (הכתובת הנמוכה ביותר בשימוש).</p>
+            </div>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: EBP / RBP</div>
+                <p>רגיסטר שמצביע על בסיס ה-Stack Frame הנוכחי. משמש לגישה לפרמטרים ומשתנים מקומיים.</p>
+            </div>
+
+            <h3>פעולות Stack</h3>
+
+            <pre>
+PUSH EAX     ; שם את הערך של EAX על ה-Stack
+             ; ESP יורד (פחות) ב-4
+
+POP EBX      ; לוקח ערך מה-Stack ושם ב-EBX  
+             ; ESP עולה (יותר) ב-4
+            </pre>
+
+            <div class="warning-box">
+                <div class="warning-box-title">⚠️ חשוב להבין</div>
+                <p>
+                    ה-Stack <strong>גדל למטה!</strong> כלומר כשמוסיפים נתונים, הכתובות <strong>קטנות</strong>.<br>
+                    זה נראה הפוך אבל ככה x86 עובד.
+                </p>
+            </div>
+
+            <div class="diagram">
+                <svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Before PUSH -->
+                    <text x="100" y="20" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Heebo">לפני PUSH</text>
+                    
+                    <rect x="30" y="30" width="140" height="30" fill="#1a2235" stroke="#2a3548" stroke-width="1"/>
+                    <text x="100" y="50" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">0xFFFF0010</text>
+                    
+                    <rect x="30" y="60" width="140" height="30" fill="#1a2235" stroke="#2a3548" stroke-width="1"/>
+                    <text x="100" y="80" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">0xFFFF000C</text>
+                    
+                    <rect x="30" y="90" width="140" height="30" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
+                    <text x="100" y="110" text-anchor="middle" fill="#00ff88" font-size="10" font-family="Fira Code">0xFFFF0008 ← ESP</text>
+                    
+                    <!-- Arrow -->
+                    <text x="250" y="100" text-anchor="middle" fill="#00b4d8" font-size="20" font-family="Heebo">→</text>
+                    <text x="250" y="120" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Heebo">PUSH EAX</text>
+                    
+                    <!-- After PUSH -->
+                    <text x="400" y="20" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Heebo">אחרי PUSH</text>
+                    
+                    <rect x="330" y="30" width="140" height="30" fill="#1a2235" stroke="#2a3548" stroke-width="1"/>
+                    <text x="400" y="50" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">0xFFFF0010</text>
+                    
+                    <rect x="330" y="60" width="140" height="30" fill="#1a2235" stroke="#2a3548" stroke-width="1"/>
+                    <text x="400" y="80" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">0xFFFF000C</text>
+                    
+                    <rect x="330" y="90" width="140" height="30" fill="#1a2235" stroke="#2a3548" stroke-width="1"/>
+                    <text x="400" y="110" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">0xFFFF0008</text>
+                    
+                    <rect x="330" y="120" width="140" height="30" fill="#ff6b35" stroke="#00ff88" stroke-width="2"/>
+                    <text x="400" y="140" text-anchor="middle" fill="#1a2235" font-size="10" font-family="Fira Code">0xFFFF0004 ← ESP</text>
+                    
+                    <text x="400" y="170" text-anchor="middle" fill="#ff6b35" font-size="10" font-family="Heebo">(ערך EAX כאן)</text>
+                </svg>
+            </div>
+
+            <h2>🔲 Stack Frame</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Stack Frame</div>
+                <p>אזור ב-Stack ששייך לפונקציה ספציפית. מכיל את המשתנים המקומיים, הפרמטרים, וכתובת החזרה של אותה פונקציה.</p>
+            </div>
+
+            <p>כשפונקציה נקראת, נוצר Stack Frame חדש:</p>
+
+            <pre>
+; קוד טיפוסי בתחילת פונקציה (prologue):
+push ebp          ; שומר את EBP הישן
+mov ebp, esp      ; EBP מצביע לבסיס החדש
+sub esp, 0x10     ; מקצה מקום למשתנים מקומיים (16 bytes)
+
+; קוד טיפוסי בסוף פונקציה (epilogue):
+mov esp, ebp      ; משחזר ESP
+pop ebp           ; משחזר EBP הישן
+ret               ; חוזר לקורא
+            </pre>
+
+            <div class="diagram">
+                <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+                    <text x="200" y="20" text-anchor="middle" fill="#00ff88" font-size="14" font-weight="bold" font-family="Heebo">Stack Frame</text>
+                    
+                    <!-- Higher addresses -->
+                    <text x="50" y="50" text-anchor="end" fill="#a0a0a0" font-size="10" font-family="Heebo">כתובות גבוהות</text>
+                    
+                    <!-- Parameters -->
+                    <rect x="100" y="55" width="200" height="35" fill="#1a2235" stroke="#a855f7" stroke-width="2"/>
+                    <text x="200" y="78" text-anchor="middle" fill="#a855f7" font-size="12" font-family="Heebo">פרמטר 2</text>
+                    <text x="320" y="78" text-anchor="start" fill="#a0a0a0" font-size="9" font-family="Fira Code">[EBP+0xC]</text>
+                    
+                    <rect x="100" y="90" width="200" height="35" fill="#1a2235" stroke="#a855f7" stroke-width="2"/>
+                    <text x="200" y="113" text-anchor="middle" fill="#a855f7" font-size="12" font-family="Heebo">פרמטר 1</text>
+                    <text x="320" y="113" text-anchor="start" fill="#a0a0a0" font-size="9" font-family="Fira Code">[EBP+0x8]</text>
+                    
+                    <!-- Return address -->
+                    <rect x="100" y="125" width="200" height="35" fill="#1a2235" stroke="#ff6b35" stroke-width="2"/>
+                    <text x="200" y="148" text-anchor="middle" fill="#ff6b35" font-size="12" font-family="Heebo">כתובת חזרה (Return Address)</text>
+                    <text x="320" y="148" text-anchor="start" fill="#a0a0a0" font-size="9" font-family="Fira Code">[EBP+0x4]</text>
+                    
+                    <!-- Saved EBP -->
+                    <rect x="100" y="160" width="200" height="35" fill="#1a2235" stroke="#00b4d8" stroke-width="2"/>
+                    <text x="200" y="183" text-anchor="middle" fill="#00b4d8" font-size="12" font-family="Heebo">EBP ישן (Saved EBP)</text>
+                    <text x="320" y="183" text-anchor="start" fill="#00ff88" font-size="9" font-family="Fira Code">← EBP</text>
+                    
+                    <!-- Local variables -->
+                    <rect x="100" y="195" width="200" height="35" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
+                    <text x="200" y="218" text-anchor="middle" fill="#00ff88" font-size="12" font-family="Heebo">משתנה מקומי 1</text>
+                    <text x="320" y="218" text-anchor="start" fill="#a0a0a0" font-size="9" font-family="Fira Code">[EBP-0x4]</text>
+                    
+                    <rect x="100" y="230" width="200" height="35" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
+                    <text x="200" y="253" text-anchor="middle" fill="#00ff88" font-size="12" font-family="Heebo">משתנה מקומי 2</text>
+                    <text x="320" y="253" text-anchor="start" fill="#00ff88" font-size="9" font-family="Fira Code">← ESP</text>
+                    
+                    <!-- Lower addresses -->
+                    <text x="50" y="285" text-anchor="end" fill="#a0a0a0" font-size="10" font-family="Heebo">כתובות נמוכות</text>
+                </svg>
+            </div>
+
+            <h2>🏔️ ה-Heap (ערימה)</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Heap</div>
+                <p>אזור זיכרון להקצאות דינמיות - כשלא יודעים מראש כמה זיכרון צריך.<br>
+                ב-C: <code>malloc()</code>, <code>free()</code><br>
+                ב-C++: <code>new</code>, <code>delete</code></p>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Stack</th>
+                    <th>Heap</th>
+                </tr>
+                <tr>
+                    <td>הקצאה אוטומטית</td>
+                    <td>הקצאה ידנית</td>
+                </tr>
+                <tr>
+                    <td>משתחרר אוטומטית בסוף פונקציה</td>
+                    <td>צריך לשחרר ידנית!</td>
+                </tr>
+                <tr>
+                    <td>מהיר</td>
+                    <td>איטי יותר</td>
+                </tr>
+                <tr>
+                    <td>גודל מוגבל</td>
+                    <td>גודל גדול יותר</td>
+                </tr>
+                <tr>
+                    <td>גדל למטה (כתובות יורדות)</td>
+                    <td>גדל למעלה (כתובות עולות)</td>
+                </tr>
+            </table>
+
+            <h2>🌐 Virtual Memory</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Virtual Memory (זיכרון וירטואלי)</div>
+                <p>כל תהליך מקבל מרחב כתובות וירטואלי משלו. מערכת ההפעלה ממפה את הכתובות הוירטואליות לכתובות פיזיות אמיתיות ב-RAM.</p>
+            </div>
+
+            <p>יתרונות:</p>
+            <ul>
+                <li><strong>בידוד:</strong> תהליך אחד לא יכול לגשת לזיכרון של אחר</li>
+                <li><strong>פשטות:</strong> כל תהליך "חושב" שיש לו את כל הזיכרון</li>
+                <li><strong>הגנה:</strong> אזורים עם הרשאות שונות (R/W/X)</li>
+            </ul>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 ב-RE</div>
+                <p>
+                    כשתראה כתובת כמו <code>0x00401000</code>, זו כתובת <strong>וירטואלית</strong>.<br>
+                    אותה כתובת וירטואלית בשני תהליכים שונים מצביעה על מקומות פיזיים שונים לגמרי.
+                </p>
+            </div>
+
+            <h2>📋 סיכום הפרק</h2>
+            
+            <ul>
+                <li><strong>Stack</strong> - משתנים מקומיים, גדל למטה, LIFO</li>
+                <li><strong>Heap</strong> - הקצאות דינמיות, גדל למעלה</li>
+                <li><strong>ESP</strong> - מצביע לראש ה-Stack</li>
+                <li><strong>EBP</strong> - מצביע לבסיס ה-Stack Frame</li>
+                <li><strong>Stack Frame</strong> - אזור של פונקציה (פרמטרים + כתובת חזרה + משתנים)</li>
+                <li><strong>Virtual Memory</strong> - כל תהליך מקבל מרחב כתובות משלו</li>
+            </ul>
+
+            <div class="nav-buttons">
+                <a href="chapter3.html" class="nav-btn">→ פרק 3: ארכיטקטורה</a>
+                <a href="chapter5.html" class="nav-btn">פרק 5: Assembly יסודות ←</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

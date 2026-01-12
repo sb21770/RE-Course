@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 5: Assembly - יסודות</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--accent-primary); text-decoration: none; }
+        .chapter-header { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .chapter-number { display: inline-block; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); color: var(--bg-primary); padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 700; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .content { padding: 3rem 0; }
+        h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+        h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
+        p { margin-bottom: 1.5rem; }
+        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
+        .nav-btn:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
+        .instruction { background: var(--bg-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; border-right: 4px solid var(--accent-secondary); }
+        .instruction-name { color: var(--accent-secondary); font-family: 'Fira Code', monospace; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .instruction-syntax { color: var(--accent-primary); font-family: 'Fira Code', monospace; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">→ חזרה לתפריט הראשי</a>
+    </nav>
+
+    <header class="chapter-header">
+        <div class="chapter-number">פרק 5</div>
+        <h1>Assembly - יסודות</h1>
+        <p class="subtitle">הוראות בסיסיות, תנועת נתונים, ופעולות אריתמטיות</p>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            
+            <h2>📝 מבנה הוראת Assembly</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Assembly Language</div>
+                <p>שפה שמייצגת פקודות מכונה בצורה קריאה לאדם. כל הוראה מתורגמת ישירות לקוד מכונה שהמעבד מבין.</p>
+            </div>
+
+            <p>מבנה בסיסי של הוראה:</p>
+
+            <pre>
+INSTRUCTION  DEST, SRC     ; comment
+
+דוגמאות:
+MOV  EAX, 5               ; שם 5 ב-EAX
+ADD  EBX, ECX             ; מוסיף ECX ל-EBX
+            </pre>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Intel Syntax vs AT&T Syntax</div>
+                <p>יש 2 סגנונות כתיבה. <strong>Intel</strong> (נפוץ ב-Windows): DEST, SRC.<br>
+                <strong>AT&T</strong> (נפוץ ב-Linux): SRC, DEST עם סימנים נוספים.<br>
+                <strong>אנחנו נשתמש ב-Intel Syntax!</strong></p>
+            </div>
+
+            <h2>📦 סוגי Operands (אופרנדים)</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Operand</div>
+                <p>הפרמטר של הוראה - יכול להיות רגיסטר, ערך קבוע, או כתובת בזיכרון.</p>
+            </div>
+
+            <table>
+                <tr>
+                    <th>סוג</th>
+                    <th>דוגמה</th>
+                    <th>הסבר</th>
+                </tr>
+                <tr>
+                    <td><strong>Register</strong></td>
+                    <td><code>EAX</code></td>
+                    <td>רגיסטר</td>
+                </tr>
+                <tr>
+                    <td><strong>Immediate</strong></td>
+                    <td><code>5</code>, <code>0x10</code></td>
+                    <td>ערך קבוע ("מיידי")</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory</strong></td>
+                    <td><code>[EAX]</code></td>
+                    <td>הכתובת שב-EAX (כמו pointer)</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory + Offset</strong></td>
+                    <td><code>[EBP-4]</code></td>
+                    <td>כתובת עם הזזה</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 סוגריים מרובעים</div>
+                <p>
+                    <code>EAX</code> = הערך שנמצא <strong>בתוך</strong> הרגיסטר<br>
+                    <code>[EAX]</code> = הערך שנמצא <strong>בכתובת</strong> שבתוך EAX (dereference)
+                </p>
+            </div>
+
+            <h2>📤 הוראות תנועת נתונים (Data Movement)</h2>
+
+            <div class="instruction">
+                <div class="instruction-name">MOV</div>
+                <div class="instruction-syntax">MOV dest, src</div>
+                <p>מעתיק ערך מ-src ל-dest. ההוראה הנפוצה ביותר!</p>
+            </div>
+
+            <pre>
+MOV EAX, 10          ; EAX = 10
+MOV EBX, EAX         ; EBX = EAX (שניהם 10 עכשיו)
+MOV ECX, [EBP-4]     ; ECX = ערך מהזיכרון בכתובת EBP-4
+MOV [EBP-8], EDX     ; שומר EDX בזיכרון בכתובת EBP-8
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">LEA</div>
+                <div class="instruction-syntax">LEA dest, [address]</div>
+                <p><strong>Load Effective Address</strong> - מחשב כתובת ושם אותה ב-dest (לא את הערך שבכתובת!).</p>
+            </div>
+
+            <pre>
+LEA EAX, [EBP-8]     ; EAX = הכתובת EBP-8 (לא הערך!)
+
+; ההבדל:
+MOV EAX, [EBP-8]     ; EAX = הערך שבכתובת EBP-8
+LEA EAX, [EBP-8]     ; EAX = הכתובת עצמה (EBP מינוס 8)
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">PUSH & POP</div>
+                <div class="instruction-syntax">PUSH src / POP dest</div>
+                <p>שם/לוקח ערך מה-Stack.</p>
+            </div>
+
+            <pre>
+PUSH EAX             ; שם EAX על ה-Stack, ESP -= 4
+POP EBX              ; לוקח מה-Stack ל-EBX, ESP += 4
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">XCHG</div>
+                <div class="instruction-syntax">XCHG op1, op2</div>
+                <p>מחליף בין 2 ערכים.</p>
+            </div>
+
+            <pre>
+XCHG EAX, EBX        ; מחליף בין EAX ו-EBX
+            </pre>
+
+            <h2>➕ הוראות אריתמטיות</h2>
+
+            <div class="instruction">
+                <div class="instruction-name">ADD</div>
+                <div class="instruction-syntax">ADD dest, src</div>
+                <p>dest = dest + src</p>
+            </div>
+
+            <pre>
+ADD EAX, 5           ; EAX = EAX + 5
+ADD EBX, ECX         ; EBX = EBX + ECX
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">SUB</div>
+                <div class="instruction-syntax">SUB dest, src</div>
+                <p>dest = dest - src</p>
+            </div>
+
+            <pre>
+SUB EAX, 3           ; EAX = EAX - 3
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">INC & DEC</div>
+                <div class="instruction-syntax">INC op / DEC op</div>
+                <p>מוסיף/מוריד 1.</p>
+            </div>
+
+            <pre>
+INC EAX              ; EAX = EAX + 1  (כמו EAX++)
+DEC EBX              ; EBX = EBX - 1  (כמו EBX--)
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">MUL & IMUL</div>
+                <div class="instruction-syntax">MUL src / IMUL src</div>
+                <p>כפל. MUL = unsigned, IMUL = signed.<br>
+                התוצאה ב-EDX:EAX (64 bits).</p>
+            </div>
+
+            <pre>
+; EAX = 5
+MUL EBX              ; EDX:EAX = EAX * EBX
+
+; גרסה עם 3 אופרנדים (נוחה יותר):
+IMUL EAX, EBX, 10    ; EAX = EBX * 10
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">DIV & IDIV</div>
+                <div class="instruction-syntax">DIV src / IDIV src</div>
+                <p>חילוק. EDX:EAX חלקי src.<br>
+                מנה → EAX, שארית → EDX.</p>
+            </div>
+
+            <pre>
+; לחלק EAX ב-ECX:
+XOR EDX, EDX         ; מאפס EDX (חייבים לפני DIV!)
+DIV ECX              ; EAX = EAX/ECX, EDX = שארית
+            </pre>
+
+            <div class="instruction">
+                <div class="instruction-name">NEG</div>
+                <div class="instruction-syntax">NEG op</div>
+                <p>הופך סימן (מינוס). op = -op</p>
+            </div>
+
+            <pre>
+NEG EAX              ; EAX = -EAX
+            </pre>
+
+            <h2>🔣 הוראות לוגיות (Bitwise)</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Bitwise Operations</div>
+                <p>פעולות שפועלות על כל bit בנפרד. AND, OR, XOR, NOT.</p>
+            </div>
+
+            <table>
+                <tr>
+                    <th>פעולה</th>
+                    <th>0 op 0</th>
+                    <th>0 op 1</th>
+                    <th>1 op 0</th>
+                    <th>1 op 1</th>
+                </tr>
+                <tr>
+                    <td><strong>AND</strong></td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td><strong>OR</strong></td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td><strong>XOR</strong></td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>0</td>
+                </tr>
+            </table>
+
+            <pre>
+AND EAX, 0xFF        ; משאיר רק byte תחתון (mask)
+OR  EBX, 0x80        ; מדליק bit 7
+XOR ECX, ECX         ; מאפס ECX (דרך מהירה!)
+NOT EDX              ; הופך כל bit
+            </pre>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 טריקים נפוצים</div>
+                <p>
+                    <code>XOR EAX, EAX</code> - דרך מהירה לאפס רגיסטר<br>
+                    <code>AND EAX, 0</code> - גם מאפס, אבל פחות נפוץ<br>
+                    <code>TEST EAX, EAX</code> - בודק אם EAX שווה 0
+                </p>
+            </div>
+
+            <h2>↔️ הוראות הזזה (Shift)</h2>
+
+            <div class="instruction">
+                <div class="instruction-name">SHL / SHR</div>
+                <div class="instruction-syntax">SHL dest, count / SHR dest, count</div>
+                <p>Shift Left / Shift Right - מזיז bits שמאלה/ימינה.<br>
+                SHL × 2 מכפיל ב-2. SHR ÷ 2 מחלק ב-2.</p>
+            </div>
+
+            <pre>
+SHL EAX, 1           ; EAX = EAX * 2
+SHL EAX, 3           ; EAX = EAX * 8  (2³)
+SHR EBX, 2           ; EBX = EBX / 4  (2²)
+            </pre>
+
+            <div class="diagram">
+                <svg viewBox="0 0 450 100" xmlns="http://www.w3.org/2000/svg">
+                    <text x="225" y="20" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Heebo">SHL (Shift Left) - הזזה שמאלה</text>
+                    
+                    <!-- Before -->
+                    <text x="50" y="50" fill="#a0a0a0" font-size="10" font-family="Heebo">לפני:</text>
+                    <rect x="90" y="35" width="25" height="25" fill="#00ff88" stroke="#00ff88"/>
+                    <rect x="115" y="35" width="25" height="25" fill="#1a2235" stroke="#00ff88"/>
+                    <rect x="140" y="35" width="25" height="25" fill="#00ff88" stroke="#00ff88"/>
+                    <rect x="165" y="35" width="25" height="25" fill="#1a2235" stroke="#00ff88"/>
+                    <text x="102" y="53" fill="#1a2235" font-size="12" font-family="Fira Code">1</text>
+                    <text x="127" y="53" fill="#00ff88" font-size="12" font-family="Fira Code">0</text>
+                    <text x="152" y="53" fill="#1a2235" font-size="12" font-family="Fira Code">1</text>
+                    <text x="177" y="53" fill="#00ff88" font-size="12" font-family="Fira Code">0</text>
+                    
+                    <!-- Arrow -->
+                    <text x="225" y="55" fill="#00b4d8" font-size="16">→</text>
+                    
+                    <!-- After (SHL 1) -->
+                    <text x="265" y="50" fill="#a0a0a0" font-size="10" font-family="Heebo">אחרי SHL 1:</text>
+                    <rect x="320" y="35" width="25" height="25" fill="#1a2235" stroke="#00ff88"/>
+                    <rect x="345" y="35" width="25" height="25" fill="#00ff88" stroke="#00ff88"/>
+                    <rect x="370" y="35" width="25" height="25" fill="#1a2235" stroke="#00ff88"/>
+                    <rect x="395" y="35" width="25" height="25" fill="#ff6b35" stroke="#ff6b35"/>
+                    <text x="332" y="53" fill="#00ff88" font-size="12" font-family="Fira Code">0</text>
+                    <text x="357" y="53" fill="#1a2235" font-size="12" font-family="Fira Code">1</text>
+                    <text x="382" y="53" fill="#00ff88" font-size="12" font-family="Fira Code">0</text>
+                    <text x="407" y="53" fill="#1a2235" font-size="12" font-family="Fira Code">0</text>
+                    
+                    <text x="405" y="80" fill="#ff6b35" font-size="10" font-family="Heebo">נכנס 0</text>
+                </svg>
+            </div>
+
+            <h2>🔍 דוגמה - קריאת קוד</h2>
+
+            <p>בואו נקרא קטע Assembly פשוט:</p>
+
+            <pre>
+push ebp              ; שומר EBP הישן
+mov ebp, esp          ; מגדיר Stack Frame חדש
+sub esp, 8            ; מקצה 8 bytes למשתנים מקומיים
+
+mov dword [ebp-4], 5  ; משתנה מקומי 1 = 5
+mov dword [ebp-8], 10 ; משתנה מקומי 2 = 10
+
+mov eax, [ebp-4]      ; EAX = 5
+add eax, [ebp-8]      ; EAX = 5 + 10 = 15
+
+mov esp, ebp          ; מנקה Stack Frame
+pop ebp               ; משחזר EBP
+ret                   ; חוזר
+            </pre>
+
+            <p>הקוד הזה שקול ל-C:</p>
+
+            <pre>
+int function() {
+    int a = 5;
+    int b = 10;
+    return a + b;  // returns 15
+}
+            </pre>
+
+            <h2>📋 סיכום הפרק</h2>
+            
+            <ul>
+                <li><strong>MOV</strong> - העתקת נתונים</li>
+                <li><strong>LEA</strong> - טעינת כתובת (לא ערך)</li>
+                <li><strong>PUSH/POP</strong> - עבודה עם Stack</li>
+                <li><strong>ADD/SUB</strong> - חיבור/חיסור</li>
+                <li><strong>AND/OR/XOR</strong> - פעולות bitwise</li>
+                <li><strong>SHL/SHR</strong> - הזזת bits (כפל/חילוק ב-2)</li>
+                <li><code>[reg]</code> - גישה לזיכרון בכתובת שברגיסטר</li>
+            </ul>
+
+            <div class="nav-buttons">
+                <a href="chapter4.html" class="nav-btn">→ פרק 4: זיכרון</a>
+                <a href="chapter6.html" class="nav-btn">פרק 6: Assembly בקרת זרימה ←</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

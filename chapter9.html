@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 9: כלי ניתוח סטטי</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131a2b;
+            --bg-card: #1a2235;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00b4d8;
+            --accent-warning: #ff6b35;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --border-color: #2a3548;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--accent-primary); text-decoration: none; }
+        .chapter-header { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .chapter-number { display: inline-block; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); color: var(--bg-primary); padding: 0.5rem 1.5rem; border-radius: 30px; font-weight: 700; margin-bottom: 1rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .content { padding: 3rem 0; }
+        h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+        h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
+        p { margin-bottom: 1.5rem; }
+        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+        .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
+        .nav-btn:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
+        .tool-card { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; border: 1px solid var(--border-color); }
+        .tool-name { color: var(--accent-primary); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .tool-type { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .shortcut-table td:first-child { font-family: 'Fira Code', monospace; color: var(--accent-secondary); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">→ חזרה לתפריט הראשי</a>
+    </nav>
+
+    <header class="chapter-header">
+        <div class="chapter-number">פרק 9</div>
+        <h1>כלי ניתוח סטטי</h1>
+        <p class="subtitle">עבודה עם IDA Pro ו-Ghidra</p>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            
+            <h2>🔬 מהו ניתוח סטטי?</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Static Analysis</div>
+                <p>ניתוח תוכנה <strong>בלי להריץ אותה</strong>. קריאת הקוד, הבנת המבנה, וזיהוי פונקציות ומשתנים.</p>
+            </div>
+
+            <p>יתרונות:</p>
+            <ul>
+                <li>בטוח - אין סיכון מהרצת קוד זדוני</li>
+                <li>רואים את כל הקוד, גם חלקים שלא רצים תמיד</li>
+                <li>מאפשר להבין את המבנה הכללי</li>
+            </ul>
+
+            <p>חסרונות:</p>
+            <ul>
+                <li>קוד יכול להיות מוצפן או דחוס (packed)</li>
+                <li>לא רואים ערכים בזמן ריצה</li>
+                <li>קשה לעקוב אחרי קוד דינמי</li>
+            </ul>
+
+            <div class="tool-card">
+                <div class="tool-name">🔷 IDA Pro</div>
+                <div class="tool-type">Interactive DisAssembler - התעשייתי הסטנדרטי</div>
+                <p>
+                    הכלי הפופולרי ביותר לניתוח סטטי. יקר (~$2000+) אבל עוצמתי מאוד.
+                    יש גרסה חינמית (<strong>IDA Free</strong>) עם יכולות מוגבלות.
+                </p>
+                <ul>
+                    <li>Disassembler מעולה עם זיהוי אוטומטי</li>
+                    <li>Decompiler (Hex-Rays) - ממיר ל-C</li>
+                    <li>תמיכה בהרבה ארכיטקטורות</li>
+                    <li>סקריפטים ב-Python (IDAPython)</li>
+                </ul>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-name">🐉 Ghidra</div>
+                <div class="tool-type">NSA's Reverse Engineering Tool - חינמי ופתוח!</div>
+                <p>
+                    פורסם ב-2019 ע"י ה-NSA. <strong>חינמי לחלוטין</strong> ומתחרה ב-IDA.
+                </p>
+                <ul>
+                    <li>Decompiler מובנה (בניגוד ל-IDA Free)</li>
+                    <li>קוד פתוח - אפשר להרחיב</li>
+                    <li>תמיכה במגוון פורמטים וארכיטקטורות</li>
+                    <li>סקריפטים ב-Java ו-Python</li>
+                    <li><strong>מומלץ למתחילים!</strong></li>
+                </ul>
+            </div>
+
+            <h2>🚀 התחלה עם Ghidra</h2>
+
+            <h3>התקנה</h3>
+            <ol>
+                <li>התקן Java JDK 17+</li>
+                <li>הורד מ-<code>ghidra-sre.org</code></li>
+                <li>חלץ והרץ <code>ghidraRun.bat</code> (Windows)</li>
+            </ol>
+
+            <h3>ייבוא קובץ</h3>
+            <ol>
+                <li>צור Project חדש: File → New Project</li>
+                <li>ייבא קובץ: File → Import File</li>
+                <li>Ghidra יזהה את הפורמט אוטומטית</li>
+                <li>לחץ Yes לניתוח אוטומטי (Auto Analysis)</li>
+                <li>פתח ב-CodeBrowser (דאבל קליק)</li>
+            </ol>
+
+            <h3>החלונות העיקריים</h3>
+
+            <table>
+                <tr>
+                    <th>חלון</th>
+                    <th>תפקיד</th>
+                </tr>
+                <tr>
+                    <td><strong>Listing</strong></td>
+                    <td>קוד Assembly - התצוגה העיקרית</td>
+                </tr>
+                <tr>
+                    <td><strong>Decompiler</strong></td>
+                    <td>קוד C משוחזר - קריא יותר!</td>
+                </tr>
+                <tr>
+                    <td><strong>Symbol Tree</strong></td>
+                    <td>רשימת פונקציות, imports, exports</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Type Manager</strong></td>
+                    <td>סוגי נתונים ומבנים</td>
+                </tr>
+                <tr>
+                    <td><strong>Functions</strong></td>
+                    <td>רשימת כל הפונקציות</td>
+                </tr>
+            </table>
+
+            <h3>קיצורי מקלדת חשובים</h3>
+
+            <table class="shortcut-table">
+                <tr>
+                    <th>קיצור</th>
+                    <th>פעולה</th>
+                </tr>
+                <tr>
+                    <td>G</td>
+                    <td>Go to Address - קפיצה לכתובת</td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td>Rename - שינוי שם</td>
+                </tr>
+                <tr>
+                    <td>;</td>
+                    <td>הוספת הערה</td>
+                </tr>
+                <tr>
+                    <td>X</td>
+                    <td>Cross References - איפה משתמשים בזה</td>
+                </tr>
+                <tr>
+                    <td>Ctrl+Shift+E</td>
+                    <td>חיפוש טקסט</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>המרה ל-Data</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>המרה ל-Code</td>
+                </tr>
+            </table>
+
+            <h2>🔷 התחלה עם IDA</h2>
+
+            <h3>קיצורי מקלדת IDA</h3>
+
+            <table class="shortcut-table">
+                <tr>
+                    <th>קיצור</th>
+                    <th>פעולה</th>
+                </tr>
+                <tr>
+                    <td>G</td>
+                    <td>Jump to address</td>
+                </tr>
+                <tr>
+                    <td>N</td>
+                    <td>Rename</td>
+                </tr>
+                <tr>
+                    <td>;</td>
+                    <td>הוספת הערה</td>
+                </tr>
+                <tr>
+                    <td>X</td>
+                    <td>Cross References</td>
+                </tr>
+                <tr>
+                    <td>Space</td>
+                    <td>מעבר בין Graph ו-Text view</td>
+                </tr>
+                <tr>
+                    <td>F5</td>
+                    <td>Decompile (אם יש Hex-Rays)</td>
+                </tr>
+                <tr>
+                    <td>Esc</td>
+                    <td>חזרה אחורה</td>
+                </tr>
+                <tr>
+                    <td>Ctrl+E</td>
+                    <td>Entry Points</td>
+                </tr>
+            </table>
+
+            <h2>🎯 טיפים לניתוח</h2>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 שלבי ניתוח מומלצים</div>
+                <ol>
+                    <li><strong>Imports</strong> - מה התוכנית משתמשת? (CreateFile, socket, RegOpenKey...)</li>
+                    <li><strong>Strings</strong> - חפש טקסטים מעניינים (URLs, שגיאות, הודעות)</li>
+                    <li><strong>Entry Point</strong> - התחל מנקודת הכניסה</li>
+                    <li><strong>Cross References</strong> - עקוב אחרי קריאות לפונקציות מעניינות</li>
+                    <li><strong>שנה שמות</strong> - תן שמות משמעותיים לפונקציות</li>
+                    <li><strong>הערות</strong> - תעד את מה שהבנת</li>
+                </ol>
+            </div>
+
+            <h3>חיפוש Strings</h3>
+
+            <p><strong>Ghidra:</strong> Search → For Strings</p>
+            <p><strong>IDA:</strong> View → Open Subviews → Strings (או Shift+F12)</p>
+
+            <p>חפש:</p>
+            <ul>
+                <li>URLs, IPs, Domain names</li>
+                <li>נתיבי קבצים</li>
+                <li>הודעות שגיאה</li>
+                <li>מפתחות Registry</li>
+                <li>שמות פונקציות API</li>
+            </ul>
+
+            <h3>Cross References (XRefs)</h3>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Cross Reference</div>
+                <p>קישור בין מקומות בקוד. "מאיפה קוראים לפונקציה הזו?" או "איפה משתמשים במשתנה הזה?"</p>
+            </div>
+
+            <pre>
+; נניח שיש לנו פונקציה decrypt()
+; XRefs יראו לנו כל המקומות שקוראים לה:
+
+00401100: call decrypt     ; XRef #1
+00401250: call decrypt     ; XRef #2
+00401380: call decrypt     ; XRef #3
+            </pre>
+
+            <h2>🔄 Decompiler</h2>
+
+            <div class="definition">
+                <div class="definition-title">📖 הגדרה: Decompiler</div>
+                <p>כלי שממיר Assembly חזרה לקוד C (בקירוב). מקל מאוד על הבנת הלוגיקה!</p>
+            </div>
+
+            <p>ב-Ghidra ה-Decompiler מובנה. ב-IDA צריך Hex-Rays plugin (יקר).</p>
+
+            <pre>
+; Assembly
+push ebp
+mov ebp, esp
+sub esp, 8
+mov dword [ebp-4], 0
+jmp check
+loop:
+    mov eax, [ebp-4]
+    add eax, 1
+    mov [ebp-4], eax
+check:
+    cmp dword [ebp-4], 10
+    jl loop
+...
+
+// Decompiled C
+int counter = 0;
+while (counter < 10) {
+    counter++;
+}
+            </pre>
+
+            <div class="info-box">
+                <div class="info-box-title">⚠️ חשוב לזכור</div>
+                <p>
+                    Decompiler לא מושלם! הקוד המשוחזר:<br>
+                    - לא תמיד מדויק 100%<br>
+                    - שמות משתנים הם גנריים (var1, param_1)<br>
+                    - מבנים וטיפוסים לא תמיד מזוהים נכון<br>
+                    - כדאי לאמת מול ה-Assembly
+                </p>
+            </div>
+
+            <h2>📋 סיכום הפרק</h2>
+            
+            <ul>
+                <li><strong>Static Analysis</strong> - ניתוח בלי הרצה</li>
+                <li><strong>IDA Pro</strong> - הכלי המקצועי (יקר)</li>
+                <li><strong>Ghidra</strong> - חינמי ומומלץ למתחילים!</li>
+                <li><strong>Decompiler</strong> - המרה ל-C לקריאות קלה</li>
+                <li>התחל מ-Imports ו-Strings</li>
+                <li>השתמש ב-XRefs לעקוב אחרי הקוד</li>
+                <li>תן שמות והוסף הערות!</li>
+            </ul>
+
+            <div class="nav-buttons">
+                <a href="chapter8.html" class="nav-btn">→ פרק 8: Calling Conventions</a>
+                <a href="chapter10.html" class="nav-btn">פרק 10: Debugging ←</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
