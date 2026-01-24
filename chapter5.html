@@ -37,7 +37,11 @@
         ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
         li { margin-bottom: 0.8rem; }
         code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
-        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        .code-block { margin: 1.5rem 0; }
+        .code-label { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .code-explanation { background: var(--bg-secondary); padding: 1rem 1.5rem; border-radius: 0 0 10px 10px; border: 1px solid var(--border-color); border-top: none; direction: ltr; text-align: left; }
+        .code-explanation p { margin: 0.5rem 0; font-size: 0.95rem; }
         .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
         th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
@@ -73,13 +77,19 @@
 
             <p>מבנה בסיסי של הוראה:</p>
 
-            <pre>
-INSTRUCTION  DEST, SRC     ; comment
+            <div class="code-block">
+                <div class="code-label">Structure:</div>
+                <pre>INSTRUCTION  DEST, SRC
+; INSTRUCTION = command name (MOV, ADD, SUB...)
+; DEST = destination (where to put result)
+; SRC = source (where to get value from)</pre>
+            </div>
 
-דוגמאות:
-MOV  EAX, 5               ; שם 5 ב-EAX
-ADD  EBX, ECX             ; מוסיף ECX ל-EBX
-            </pre>
+            <div class="code-block">
+                <div class="code-label">Examples:</div>
+                <pre>MOV EAX, 5      ; EAX = 5
+ADD EBX, ECX   ; EBX = EBX + ECX</pre>
+            </div>
 
             <div class="definition">
                 <div class="definition-title">📖 הגדרה: Intel Syntax vs AT&T Syntax</div>
@@ -139,12 +149,12 @@ ADD  EBX, ECX             ; מוסיף ECX ל-EBX
                 <p>מעתיק ערך מ-src ל-dest. ההוראה הנפוצה ביותר!</p>
             </div>
 
-            <pre>
-MOV EAX, 10          ; EAX = 10
-MOV EBX, EAX         ; EBX = EAX (שניהם 10 עכשיו)
-MOV ECX, [EBP-4]     ; ECX = ערך מהזיכרון בכתובת EBP-4
-MOV [EBP-8], EDX     ; שומר EDX בזיכרון בכתובת EBP-8
-            </pre>
+            <div class="code-block">
+                <pre>MOV EAX, 10         ; EAX = 10
+MOV EBX, EAX        ; EBX = EAX (both are 10 now)
+MOV ECX, [EBP-4]    ; ECX = value from memory at address EBP-4
+MOV [EBP-8], EDX    ; Store EDX in memory at address EBP-8</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">LEA</div>
@@ -152,13 +162,11 @@ MOV [EBP-8], EDX     ; שומר EDX בזיכרון בכתובת EBP-8
                 <p><strong>Load Effective Address</strong> - מחשב כתובת ושם אותה ב-dest (לא את הערך שבכתובת!).</p>
             </div>
 
-            <pre>
-LEA EAX, [EBP-8]     ; EAX = הכתובת EBP-8 (לא הערך!)
-
-; ההבדל:
-MOV EAX, [EBP-8]     ; EAX = הערך שבכתובת EBP-8
-LEA EAX, [EBP-8]     ; EAX = הכתובת עצמה (EBP מינוס 8)
-            </pre>
+            <div class="code-block">
+                <div class="code-label">MOV vs LEA:</div>
+                <pre>MOV EAX, [EBP-8]    ; EAX = VALUE at address EBP-8
+LEA EAX, [EBP-8]    ; EAX = ADDRESS itself (EBP minus 8)</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">PUSH & POP</div>
@@ -166,10 +174,10 @@ LEA EAX, [EBP-8]     ; EAX = הכתובת עצמה (EBP מינוס 8)
                 <p>שם/לוקח ערך מה-Stack.</p>
             </div>
 
-            <pre>
-PUSH EAX             ; שם EAX על ה-Stack, ESP -= 4
-POP EBX              ; לוקח מה-Stack ל-EBX, ESP += 4
-            </pre>
+            <div class="code-block">
+                <pre>PUSH EAX    ; Put EAX on Stack, ESP decreases by 4
+POP EBX     ; Take value from Stack to EBX, ESP increases by 4</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">XCHG</div>
@@ -177,9 +185,9 @@ POP EBX              ; לוקח מה-Stack ל-EBX, ESP += 4
                 <p>מחליף בין 2 ערכים.</p>
             </div>
 
-            <pre>
-XCHG EAX, EBX        ; מחליף בין EAX ו-EBX
-            </pre>
+            <div class="code-block">
+                <pre>XCHG EAX, EBX   ; Swap values of EAX and EBX</pre>
+            </div>
 
             <h2>➕ הוראות אריתמטיות</h2>
 
@@ -189,10 +197,10 @@ XCHG EAX, EBX        ; מחליף בין EAX ו-EBX
                 <p>dest = dest + src</p>
             </div>
 
-            <pre>
-ADD EAX, 5           ; EAX = EAX + 5
-ADD EBX, ECX         ; EBX = EBX + ECX
-            </pre>
+            <div class="code-block">
+                <pre>ADD EAX, 5      ; EAX = EAX + 5
+ADD EBX, ECX    ; EBX = EBX + ECX</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">SUB</div>
@@ -200,9 +208,9 @@ ADD EBX, ECX         ; EBX = EBX + ECX
                 <p>dest = dest - src</p>
             </div>
 
-            <pre>
-SUB EAX, 3           ; EAX = EAX - 3
-            </pre>
+            <div class="code-block">
+                <pre>SUB EAX, 3      ; EAX = EAX - 3</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">INC & DEC</div>
@@ -210,10 +218,10 @@ SUB EAX, 3           ; EAX = EAX - 3
                 <p>מוסיף/מוריד 1.</p>
             </div>
 
-            <pre>
-INC EAX              ; EAX = EAX + 1  (כמו EAX++)
-DEC EBX              ; EBX = EBX - 1  (כמו EBX--)
-            </pre>
+            <div class="code-block">
+                <pre>INC EAX     ; EAX = EAX + 1 (like EAX++ in C)
+DEC EBX     ; EBX = EBX - 1 (like EBX-- in C)</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">MUL & IMUL</div>
@@ -222,13 +230,11 @@ DEC EBX              ; EBX = EBX - 1  (כמו EBX--)
                 התוצאה ב-EDX:EAX (64 bits).</p>
             </div>
 
-            <pre>
-; EAX = 5
-MUL EBX              ; EDX:EAX = EAX * EBX
-
-; גרסה עם 3 אופרנדים (נוחה יותר):
-IMUL EAX, EBX, 10    ; EAX = EBX * 10
-            </pre>
+            <div class="code-block">
+                <div class="code-label">Example (assume EAX = 5):</div>
+                <pre>MUL EBX             ; EDX:EAX = EAX * EBX (result is 64-bit)
+IMUL EAX, EBX, 10   ; EAX = EBX * 10 (convenient 3-operand form)</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">DIV & IDIV</div>
@@ -237,11 +243,11 @@ IMUL EAX, EBX, 10    ; EAX = EBX * 10
                 מנה → EAX, שארית → EDX.</p>
             </div>
 
-            <pre>
-; לחלק EAX ב-ECX:
-XOR EDX, EDX         ; מאפס EDX (חייבים לפני DIV!)
-DIV ECX              ; EAX = EAX/ECX, EDX = שארית
-            </pre>
+            <div class="code-block">
+                <div class="code-label">Example - divide EAX by ECX:</div>
+                <pre>XOR EDX, EDX    ; Zero EDX (REQUIRED before DIV!)
+DIV ECX         ; EAX = quotient, EDX = remainder</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">NEG</div>
@@ -249,9 +255,9 @@ DIV ECX              ; EAX = EAX/ECX, EDX = שארית
                 <p>הופך סימן (מינוס). op = -op</p>
             </div>
 
-            <pre>
-NEG EAX              ; EAX = -EAX
-            </pre>
+            <div class="code-block">
+                <pre>NEG EAX     ; Negate: EAX = -EAX</pre>
+            </div>
 
             <h2>🔣 הוראות לוגיות (Bitwise)</h2>
 
@@ -291,12 +297,12 @@ NEG EAX              ; EAX = -EAX
                 </tr>
             </table>
 
-            <pre>
-AND EAX, 0xFF        ; משאיר רק byte תחתון (mask)
-OR  EBX, 0x80        ; מדליק bit 7
-XOR ECX, ECX         ; מאפס ECX (דרך מהירה!)
-NOT EDX              ; הופך כל bit
-            </pre>
+            <div class="code-block">
+                <pre>AND EAX, 0xFF   ; Keep only lower byte (mask)
+OR  EBX, 0x80   ; Set bit 7 to 1
+XOR ECX, ECX    ; Zero ECX (fast trick!)
+NOT EDX         ; Flip all bits (0 to 1, 1 to 0)</pre>
+            </div>
 
             <div class="info-box">
                 <div class="info-box-title">💡 טריקים נפוצים</div>
@@ -316,11 +322,11 @@ NOT EDX              ; הופך כל bit
                 SHL × 2 מכפיל ב-2. SHR ÷ 2 מחלק ב-2.</p>
             </div>
 
-            <pre>
-SHL EAX, 1           ; EAX = EAX * 2
-SHL EAX, 3           ; EAX = EAX * 8  (2³)
-SHR EBX, 2           ; EBX = EBX / 4  (2²)
-            </pre>
+            <div class="code-block">
+                <pre>SHL EAX, 1  ; EAX = EAX * 2  (shift left by 1)
+SHL EAX, 3  ; EAX = EAX * 8  (shift left by 3, because 2^3=8)
+SHR EBX, 2  ; EBX = EBX / 4  (shift right by 2, because 2^2=4)</pre>
+            </div>
 
             <div class="diagram">
                 <svg viewBox="0 0 450 100" xmlns="http://www.w3.org/2000/svg">
@@ -359,31 +365,37 @@ SHR EBX, 2           ; EBX = EBX / 4  (2²)
 
             <p>בואו נקרא קטע Assembly פשוט:</p>
 
-            <pre>
-push ebp              ; שומר EBP הישן
-mov ebp, esp          ; מגדיר Stack Frame חדש
-sub esp, 8            ; מקצה 8 bytes למשתנים מקומיים
+            <div class="code-block">
+                <div class="code-label">Assembly:</div>
+                <pre>; PROLOGUE - create stack frame, allocate 8 bytes
+push ebp
+mov ebp, esp
+sub esp, 8
 
-mov dword [ebp-4], 5  ; משתנה מקומי 1 = 5
-mov dword [ebp-8], 10 ; משתנה מקומי 2 = 10
+; LOCAL VARIABLES
+mov dword [ebp-4], 5    ; local_var_1 = 5
+mov dword [ebp-8], 10   ; local_var_2 = 10
 
-mov eax, [ebp-4]      ; EAX = 5
-add eax, [ebp-8]      ; EAX = 5 + 10 = 15
+; CALCULATION
+mov eax, [ebp-4]        ; EAX = 5
+add eax, [ebp-8]        ; EAX = 5 + 10 = 15
 
-mov esp, ebp          ; מנקה Stack Frame
-pop ebp               ; משחזר EBP
-ret                   ; חוזר
-            </pre>
+; EPILOGUE - cleanup and return
+mov esp, ebp
+pop ebp
+ret                     ; Return value is in EAX (15)</pre>
+            </div>
 
             <p>הקוד הזה שקול ל-C:</p>
 
-            <pre>
-int function() {
+            <div class="code-block">
+                <div class="code-label">C equivalent:</div>
+                <pre>int function() {
     int a = 5;
     int b = 10;
     return a + b;  // returns 15
-}
-            </pre>
+}</pre>
+            </div>
 
             <h2>📋 סיכום הפרק</h2>
             

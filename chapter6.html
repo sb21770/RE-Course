@@ -37,7 +37,11 @@
         ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
         li { margin-bottom: 0.8rem; }
         code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
-        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        .code-block { margin: 1.5rem 0; }
+        .code-label { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .code-explanation { background: var(--bg-secondary); padding: 1rem 1.5rem; border-radius: 0 0 10px 10px; border: 1px solid var(--border-color); border-top: none; direction: ltr; text-align: left; }
+        .code-explanation p { margin: 0.5rem 0; font-size: 0.95rem; }
         .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
         th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
@@ -75,11 +79,11 @@
                 <p>קפיצה ללא תנאי - תמיד קופץ.</p>
             </div>
 
-            <pre>
-JMP label            ; קופץ ל-label
-JMP 0x00401050       ; קופץ לכתובת ספציפית
-JMP EAX              ; קופץ לכתובת שב-EAX
-            </pre>
+            <div class="code-block">
+                <pre>JMP label       ; Jump to label (symbolic name)
+JMP 0x00401050  ; Jump to specific address
+JMP EAX         ; Jump to address stored in EAX register</pre>
+            </div>
 
             <h2>⚖️ השוואה והשפעה על דגלים</h2>
 
@@ -89,23 +93,23 @@ JMP EAX              ; קופץ לכתובת שב-EAX
                 מעדכן את הדגלים לפי התוצאה.</p>
             </div>
 
-            <pre>
-CMP EAX, EBX         ; משווה EAX ל-EBX
-
-; אם EAX == EBX: ZF = 1
-; אם EAX < EBX:  CF = 1 (unsigned), SF ≠ OF (signed)
-; אם EAX > EBX:  CF = 0, ZF = 0
-            </pre>
+            <div class="code-block">
+                <pre>CMP EAX, EBX    ; Compare EAX to EBX (subtract without saving)
+                ; If EAX == EBX: ZF = 1
+                ; If EAX < EBX:  CF = 1 (unsigned), SF != OF (signed)
+                ; If EAX > EBX:  CF = 0 and ZF = 0</pre>
+            </div>
 
             <div class="instruction">
                 <div class="instruction-name">TEST</div>
                 <p>עושה AND בלי לשמור תוצאה. משמש לבדיקה אם ערך הוא 0.</p>
             </div>
 
-            <pre>
-TEST EAX, EAX        ; בודק אם EAX == 0
-                     ; ZF = 1 אם EAX הוא 0
-            </pre>
+            <div class="code-block">
+                <pre>TEST EAX, EAX   ; Check if EAX equals 0
+                ; If EAX == 0: ZF = 1
+                ; If EAX != 0: ZF = 0</pre>
+            </div>
 
             <h2>🚦 קפיצות מותנות (Conditional Jumps)</h2>
 
@@ -180,31 +184,32 @@ TEST EAX, EAX        ; בודק אם EAX == 0
 
             <h2>📝 דוגמה: תנאי if-else</h2>
 
-            <p>קוד C:</p>
-            <pre>
-if (a == 5) {
+            <div class="code-block">
+                <div class="code-label">קוד C:</div>
+                <pre>if (a == 5) {
     b = 10;
 } else {
     b = 20;
-}
-            </pre>
+}</pre>
+            </div>
 
-            <p>Assembly:</p>
-            <pre>
-        mov eax, [ebp-4]     ; EAX = a
-        cmp eax, 5           ; משווה a ל-5
-        jne else_branch      ; אם לא שווים, קפוץ ל-else
-        
-        ; if block (a == 5)
-        mov dword [ebp-8], 10 ; b = 10
-        jmp end_if           ; מדלג על ה-else
-        
+            <div class="code-block">
+                <div class="code-label">Assembly:</div>
+                <pre>    mov eax, [ebp-4]        ; Load 'a' into EAX
+    cmp eax, 5              ; Compare a to 5
+    jne else_branch         ; If not equal, jump to else
+
+    ; IF BLOCK (a == 5)
+    mov dword [ebp-8], 10   ; b = 10
+    jmp end_if              ; Skip else block
+
 else_branch:
-        mov dword [ebp-8], 20 ; b = 20
-        
+    ; ELSE BLOCK (a != 5)
+    mov dword [ebp-8], 20   ; b = 20
+
 end_if:
-        ; ממשיך...
-            </pre>
+    ; Continue...</pre>
+            </div>
 
             <div class="diagram">
                 <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
@@ -249,28 +254,29 @@ end_if:
 
             <h3>לולאת while</h3>
 
-            <p>קוד C:</p>
-            <pre>
-while (i < 10) {
+            <div class="code-block">
+                <div class="code-label">קוד C:</div>
+                <pre>while (i < 10) {
     sum += i;
     i++;
-}
-            </pre>
+}</pre>
+            </div>
 
-            <p>Assembly:</p>
-            <pre>
-loop_start:
-        cmp dword [ebp-4], 10  ; i < 10?
-        jge loop_end           ; אם i >= 10, צא מהלולאה
-        
-        mov eax, [ebp-4]       ; EAX = i
-        add [ebp-8], eax       ; sum += i
-        inc dword [ebp-4]      ; i++
-        
-        jmp loop_start         ; חזור להתחלה
-        
-loop_end:
-            </pre>
+            <div class="code-block">
+                <div class="code-label">Assembly:</div>
+                <pre>loop_start:
+    cmp dword [ebp-4], 10   ; Check: is i < 10?
+    jge loop_end            ; If i >= 10, exit loop
+
+    ; LOOP BODY
+    mov eax, [ebp-4]        ; EAX = i
+    add [ebp-8], eax        ; sum += i
+    inc dword [ebp-4]       ; i++
+
+    jmp loop_start          ; Jump back to start
+
+loop_end:</pre>
+            </div>
 
             <h3>לולאת for עם LOOP</h3>
 
@@ -279,14 +285,14 @@ loop_end:
                 <p>מוריד 1 מ-ECX וקופץ אם ECX ≠ 0. שימושי ללולאות!</p>
             </div>
 
-            <pre>
-        mov ecx, 10          ; 10 איטרציות
-        
+            <div class="code-block">
+                <pre>    mov ecx, 10         ; Set 10 iterations
+
 loop_start:
-        ; גוף הלולאה כאן
-        
-        loop loop_start      ; ECX--, קפוץ אם ECX != 0
-            </pre>
+    ; loop body here
+
+    loop loop_start     ; ECX--, if ECX != 0 jump back</pre>
+            </div>
 
             <h2>📞 קריאות לפונקציות</h2>
 
@@ -300,18 +306,20 @@ loop_start:
                 <p>חוזר מפונקציה: לוקח כתובת מה-Stack וקופץ אליה.</p>
             </div>
 
-            <pre>
-; קריאה לפונקציה
-CALL my_function      ; שווה ל: PUSH EIP; JMP my_function
+            <div class="code-block">
+                <div class="code-label">Calling a function:</div>
+                <pre>CALL my_function    ; = PUSH EIP (save return addr), then JMP my_function</pre>
+            </div>
 
-; בתוך הפונקציה
-my_function:
-    push ebp
-    mov ebp, esp
-    ; ... קוד ...
-    pop ebp
-    RET                  ; שווה ל: POP EIP (חוזר לקורא)
-            </pre>
+            <div class="code-block">
+                <div class="code-label">The function itself:</div>
+                <pre>my_function:
+    push ebp            ; Save old EBP
+    mov ebp, esp        ; Set up stack frame
+    ; ... code ...
+    pop ebp             ; Restore old EBP
+    RET                 ; = POP EIP (get return addr and jump to it)</pre>
+            </div>
 
             <div class="diagram">
                 <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
@@ -355,40 +363,42 @@ my_function:
 
             <h2>🎯 זיהוי מבנים ב-RE</h2>
 
-            <div class="info-box">
-                <div class="info-box-title">💡 דפוסים לזיהוי</div>
-                <p><strong>if-else:</strong></p>
-                <pre style="background: transparent; border: none; padding: 0; margin: 0.5rem 0;">
-CMP ...
-Jxx else_label    ; קפיצה מותנית
+            <h3>📌 דפוסים לזיהוי</h3>
+
+            <div class="code-block">
+                <div class="code-label">if-else pattern:</div>
+                <pre>CMP ...             ; Compare
+Jxx else_label      ; Conditional jump
 ; if code
-JMP end_label     ; מדלג על else
+JMP end_label       ; Skip else
 else_label:
 ; else code
 end_label:
-                </pre>
-                
-                <p style="margin-top: 1rem;"><strong>while loop:</strong></p>
-                <pre style="background: transparent; border: none; padding: 0; margin: 0.5rem 0;">
-loop_start:
-CMP ...
-Jxx loop_end      ; יציאה מהלולאה
+; Pattern: CMP -> conditional jump -> JMP (to skip else)</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">while loop pattern:</div>
+                <pre>loop_start:
+CMP ...             ; Check condition
+Jxx loop_end        ; Exit if condition false
 ; loop body
-JMP loop_start    ; חזרה להתחלה
+JMP loop_start      ; Jump back to start
 loop_end:
-                </pre>
-                
-                <p style="margin-top: 1rem;"><strong>for loop:</strong></p>
-                <pre style="background: transparent; border: none; padding: 0; margin: 0.5rem 0;">
-; init (i=0)
+; Pattern: CMP at start -> exit jump -> JMP back to start</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">for loop pattern:</div>
+                <pre>; init (i=0)
 loop_start:
-CMP ECX, limit    ; condition
-Jxx loop_end
+CMP ECX, limit      ; Check condition
+Jxx loop_end        ; Exit if done
 ; loop body
-INC ECX           ; i++ (או DEC)
-JMP loop_start
+INC ECX             ; i++ (or DEC)
+JMP loop_start      ; Jump back
 loop_end:
-                </pre>
+; Pattern: init -> CMP -> body -> INC/DEC -> JMP back</pre>
             </div>
 
             <h2>📋 סיכום הפרק</h2>

@@ -40,7 +40,11 @@
         ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
         li { margin-bottom: 0.8rem; }
         code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
-        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; }
+        .code-block { margin: 1.5rem 0; }
+        .code-label { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .code-explanation { background: var(--bg-secondary); padding: 1rem 1.5rem; border-radius: 0 0 10px 10px; border: 1px solid var(--border-color); border-top: none; direction: ltr; text-align: left; }
+        .code-explanation p { margin: 0.5rem 0; font-size: 0.95rem; }
         .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
         th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
@@ -155,13 +159,11 @@
 
             <h3>פעולות Stack</h3>
 
-            <pre>
-PUSH EAX     ; שם את הערך של EAX על ה-Stack
-             ; ESP יורד (פחות) ב-4
-
-POP EBX      ; לוקח ערך מה-Stack ושם ב-EBX  
-             ; ESP עולה (יותר) ב-4
-            </pre>
+            <div class="code-block">
+                <div class="code-label">Assembly:</div>
+                <pre>PUSH EAX    ; Put EAX value on Stack, ESP decreases by 4
+POP EBX     ; Take value from Stack into EBX, ESP increases by 4</pre>
+            </div>
 
             <div class="warning-box">
                 <div class="warning-box-title">⚠️ חשוב להבין</div>
@@ -217,17 +219,19 @@ POP EBX      ; לוקח ערך מה-Stack ושם ב-EBX
 
             <p>כשפונקציה נקראת, נוצר Stack Frame חדש:</p>
 
-            <pre>
-; קוד טיפוסי בתחילת פונקציה (prologue):
-push ebp          ; שומר את EBP הישן
-mov ebp, esp      ; EBP מצביע לבסיס החדש
-sub esp, 0x10     ; מקצה מקום למשתנים מקומיים (16 bytes)
+            <div class="code-block">
+                <div class="code-label">Prologue (Function Start):</div>
+                <pre>push ebp        ; Save old EBP on Stack
+mov ebp, esp    ; EBP now points to new Frame base  
+sub esp, 0x10   ; Allocate 16 bytes for local variables</pre>
+            </div>
 
-; קוד טיפוסי בסוף פונקציה (epilogue):
-mov esp, ebp      ; משחזר ESP
-pop ebp           ; משחזר EBP הישן
-ret               ; חוזר לקורא
-            </pre>
+            <div class="code-block">
+                <div class="code-label">Epilogue (Function End):</div>
+                <pre>mov esp, ebp    ; Restore ESP to original state
+pop ebp         ; Restore old EBP
+ret             ; Return to caller function</pre>
+            </div>
 
             <div class="diagram">
                 <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
