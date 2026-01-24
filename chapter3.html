@@ -221,12 +221,12 @@
             </ul>
 
             <div class="info-box">
-                <div class="info-box-title">💡 איך לזהות 32 vs 64 bit</div>
-                <p>
-                    <strong>32-bit:</strong> E בהתחלה → EAX, EBX, ECX...<br>
-                    <strong>64-bit:</strong> R בהתחלה → RAX, RBX, RCX...<br>
-                    <strong>16-bit:</strong> בלי קידומת → AX, BX, CX...
-                </p>
+                <div class="info-box-title">💡 How to identify 32 vs 64 bit</div>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+32-bit: E prefix  --> EAX, EBX, ECX, EDX...
+64-bit: R prefix  --> RAX, RBX, RCX, RDX...
+16-bit: no prefix --> AX, BX, CX, DX...
+                </pre>
             </div>
 
             <h2>🚩 רגיסטר הדגלים (FLAGS)</h2>
@@ -267,10 +267,10 @@
             </table>
 
             <div class="info-box">
-                <div class="info-box-title">💡 דוגמה לשימוש בדגלים</div>
+                <div class="info-box-title">💡 Example: Using Flags</div>
                 <pre style="background: transparent; padding: 0; border: none; margin: 0;">
-CMP EAX, EBX    ; משווה בין EAX ל-EBX (מחסר בלי לשמור)
-JE  somewhere   ; Jump if Equal - קופץ אם ZF=1 (הם שווים)
+CMP EAX, EBX    ; Compare EAX to EBX (subtract without saving)
+JE  somewhere   ; Jump if Equal - jumps if ZF=1 (they are equal)
                 </pre>
             </div>
 
@@ -352,16 +352,16 @@ JE  somewhere   ; Jump if Equal - קופץ אם ZF=1 (הם שווים)
             </div>
 
             <div class="info-box">
-                <div class="info-box-title">💡 דוגמה</div>
-                <p>המספר <code>0x12345678</code> בזיכרון (Little Endian):</p>
+                <div class="info-box-title">💡 Example: Little Endian</div>
+                <p>The number <code>0x12345678</code> stored in memory:</p>
                 <pre style="background: transparent; padding: 0; border: none; margin: 0;">
-כתובת:  0x100  0x101  0x102  0x103
-ערך:    0x78   0x56   0x34   0x12
-        ↑
-        הbyte הנמוך ביותר קודם!
+Address: 0x100  0x101  0x102  0x103
+Value:   0x78   0x56   0x34   0x12
+         ↑
+         Lowest byte comes FIRST!
                 </pre>
                 <p style="margin-bottom: 0; margin-top: 1rem;">
-                    <strong>חשוב!</strong> תראה את זה הרבה ב-debuggers ו-hex editors.
+                    <strong>Important!</strong> You'll see this often in debuggers and hex editors.
                 </p>
             </div>
 
