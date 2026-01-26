@@ -147,6 +147,36 @@
                 משמש לאחסון משתנים מקומיים, פרמטרים לפונקציות, וכתובות חזרה.</p>
             </div>
 
+            <div class="info-box">
+                <div class="info-box-title">❓ What "enters" the Stack?</div>
+                <p>מה בעצם "נכנס" ל-Stack? <strong>נתונים (Data)</strong> - ערכים, מספרים, כתובות:</p>
+                <table style="margin: 1rem 0; font-size: 0.9rem;">
+                    <tr>
+                        <th>What enters</th>
+                        <th>Example</th>
+                        <th>Explanation</th>
+                    </tr>
+                    <tr>
+                        <td>Register value</td>
+                        <td><code>PUSH EAX</code></td>
+                        <td>The value inside EAX enters the Stack</td>
+                    </tr>
+                    <tr>
+                        <td>Constant number</td>
+                        <td><code>PUSH 5</code></td>
+                        <td>The number 5 enters the Stack</td>
+                    </tr>
+                    <tr>
+                        <td>Return address</td>
+                        <td><code>CALL func</code></td>
+                        <td>Address of next instruction enters</td>
+                    </tr>
+                </table>
+                <p style="margin-bottom: 0;">
+                    <strong>בקיצור:</strong> "נכנס" = הערך ש-PUSH שומר ב-Stack. "יוצא" = הערך ש-POP מוציא.
+                </p>
+            </div>
+
             <h3>🎯 שני מושגים חשובים - אל תבלבלו ביניהם!</h3>
 
             <table>
