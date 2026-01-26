@@ -147,30 +147,92 @@
                 משמש לאחסון משתנים מקומיים, פרמטרים לפונקציות, וכתובות חזרה.</p>
             </div>
 
+            <h3>🎯 שני מושגים חשובים - אל תבלבלו ביניהם!</h3>
+
+            <table>
+                <tr>
+                    <th>מושג</th>
+                    <th>משמעות</th>
+                </tr>
+                <tr>
+                    <td><strong>LIFO</strong></td>
+                    <td>סדר ההכנסה וההוצאה: האחרון שנכנס = הראשון שיוצא</td>
+                </tr>
+                <tr>
+                    <td><strong>Grows Downward</strong></td>
+                    <td>כיוון הכתובות: כשמוסיפים נתון, מספר הכתובת קטן</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Analogy: Stack of Plates</div>
+                <p>דמיינו ערימת צלחות:</p>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+    ┌─────────┐
+    │ Plate 3 │  ← Last in, First out!
+    ├─────────┤
+    │ Plate 2 │
+    ├─────────┤
+    │ Plate 1 │  ← First in, Last out
+    └─────────┘
+                </pre>
+                <p style="margin-bottom: 0; margin-top: 1rem;">
+                    הצלחת האחרונה שהנחתם היא הראשונה שתורידו. זה LIFO.
+                </p>
+            </div>
+
+            <h3>📍 What "Grows Downward" Means</h3>
+            
+            <p>
+                בזיכרון, כתובות גבוהות נמצאות "למעלה" וכתובות נמוכות "למטה".
+                כשעושים PUSH, הכתובת של ESP <strong>יורדת</strong> (מספר קטן יותר):
+            </p>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Example: PUSH Operation</div>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+High addresses (top)
+┌─────────────────────┐ 0xFFFF0010
+│       empty         │
+├─────────────────────┤ 0xFFFF000C
+│       empty         │
+├─────────────────────┤ 0xFFFF0008  ← ESP was here BEFORE push
+│     OLD DATA        │
+├─────────────────────┤ 0xFFFF0004  ← ESP is here AFTER push
+│     NEW VALUE       │  (the pushed value)
+└─────────────────────┘
+Low addresses (bottom)
+
+PUSH = Store value + ESP goes DOWN (address decreases)
+POP  = Retrieve value + ESP goes UP (address increases)
+                </pre>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-box-title">⚠️ Why is it still LIFO?</div>
+                <p>
+                    ESP always points to the LAST item that was pushed.<br>
+                    When you POP, you get that last item first.<br>
+                    <strong>The direction of addresses doesn't change the order of operations!</strong>
+                </p>
+            </div>
+
             <div class="definition">
                 <div class="definition-title">📖 הגדרה: ESP / RSP</div>
-                <p>רגיסטר שמצביע תמיד על ראש ה-Stack (הכתובת הנמוכה ביותר בשימוש).</p>
+                <p>Stack Pointer - רגיסטר שמצביע תמיד על ראש ה-Stack (האיבר האחרון שנכנס).</p>
             </div>
 
             <div class="definition">
                 <div class="definition-title">📖 הגדרה: EBP / RBP</div>
-                <p>רגיסטר שמצביע על בסיס ה-Stack Frame הנוכחי. משמש לגישה לפרמטרים ומשתנים מקומיים.</p>
+                <p>Base Pointer - רגיסטר שמצביע על בסיס ה-Stack Frame הנוכחי. משמש לגישה לפרמטרים ומשתנים מקומיים.</p>
             </div>
 
             <h3>פעולות Stack</h3>
 
             <div class="code-block">
                 <div class="code-label">Assembly:</div>
-                <pre>PUSH EAX    ; Put EAX value on Stack, ESP decreases by 4
-POP EBX     ; Take value from Stack into EBX, ESP increases by 4</pre>
-            </div>
-
-            <div class="warning-box">
-                <div class="warning-box-title">⚠️ חשוב להבין</div>
-                <p>
-                    ה-Stack <strong>גדל למטה!</strong> כלומר כשמוסיפים נתונים, הכתובות <strong>קטנות</strong>.<br>
-                    זה נראה הפוך אבל ככה x86 עובד.
-                </p>
+                <pre>PUSH EAX    ; Store EAX on Stack, ESP decreases by 4
+POP EBX     ; Load value from Stack into EBX, ESP increases by 4</pre>
             </div>
 
             <div class="diagram">
