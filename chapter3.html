@@ -456,6 +456,48 @@ Value:   0x78   0x56   0x34   0x12
                 </tr>
             </table>
 
+            <h3>🔍 איך מזהים את סוג הנתון?</h3>
+            
+            <p>שאלה טובה! הרי הכל נראה כמו hex. הנה הדרכים העיקריות:</p>
+
+            <p><strong>1. ההוראה אומרת לך את הגודל:</strong></p>
+            <pre style="direction: ltr; text-align: left;">
+mov eax, [0x401000]    ; EAX = 32-bit  →  4 bytes  →  להפוך!
+mov al, [0x401000]     ; AL = 8-bit    →  1 byte   →  לא להפוך
+mov rax, [0x401000]    ; RAX = 64-bit  →  8 bytes  →  להפוך!
+            </pre>
+
+            <p><strong>2. סוג ההוראה מגלה שזו כתובת:</strong></p>
+            <pre style="direction: ltr; text-align: left;">
+call [0x401000]        ; CALL → זו כתובת של פונקציה
+jmp [0x401000]         ; JMP → זו כתובת לקפוץ אליה
+lea eax, [0x401000]    ; LEA = Load Address → זו כתובת
+            </pre>
+
+            <p><strong>3. זיהוי String לפי תבנית:</strong></p>
+            <pre style="direction: ltr; text-align: left;">
+48 65 6C 6C 6F 00  →  "Hello" + null terminator
+│                │
+│                └── 00 בסוף = סוף המחרוזת
+└── ערכים 0x20-0x7E = תווים קריאים (ASCII)
+            </pre>
+
+            <p><strong>4. זיהוי Pointer לפי טווח כתובות:</strong></p>
+            <pre style="direction: ltr; text-align: left;">
+00 10 40 00  →  הפוך  →  0x00401000  ← בטווח כתובות תקין!
+78 56 34 12  →  הפוך  →  0x12345678  ← לא נראה כמו כתובת
+            </pre>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                כתובות ב-Windows 32-bit: בדרך כלל בטווח <code>0x00400000</code> - <code>0x7FFFFFFF</code>
+            </p>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 טיפ מעשי</div>
+                <p style="margin-bottom: 0;">
+                    לא תמיד יודעים 100% מה סוג הנתון - וזה בסדר! מסתכלים על ההוראות שמשתמשות בו, עוקבים לאן הערך הולך, ולומדים מההקשר. זה חלק מהאומנות של RE.
+                </p>
+            </div>
+
             <div class="info-box" style="background: rgba(255, 107, 53, 0.1); border-color: var(--accent-warning);">
                 <div class="info-box-title" style="color: var(--accent-warning);">🎯 הכלל הפשוט</div>
                 <pre style="background: transparent; padding: 0; border: none; margin: 0;">
@@ -477,7 +519,8 @@ Value:   0x78   0x56   0x34   0x12
                 <li><strong>רגיסטרים כלליים:</strong> EAX, EBX, ECX, EDX, ESI, EDI, EBP, ESP</li>
                 <li><strong>EIP/RIP</strong> = מצביע לפקודה הבאה</li>
                 <li><strong>FLAGS</strong> = דגלים שמציינים תוצאות (ZF, SF, CF, OF)</li>
-                <li><strong>Little Endian</strong> = byte נמוך מאוחסן ראשון. כדי להבין מה המעבד רואה - הפוך את סדר ה-bytes של מספרים וכתובות!</li>
+                <li><strong>Little Endian</strong> = byte נמוך מאוחסן ראשון. הפוך bytes של מספרים וכתובות כדי לראות מה ה-CPU רואה!</li>
+                <li><strong>זיהוי סוג נתון:</strong> מסתכלים על ההוראה (גודל רגיסטר), סוג הפעולה (call/jmp = כתובת), ותבניות (ASCII + null = string)</li>
                 <li>מחזור: Fetch → Decode → Execute → חזור</li>
             </ul>
 
