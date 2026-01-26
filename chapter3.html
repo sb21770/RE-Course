@@ -347,21 +347,126 @@ JE  somewhere   ; Jump if Equal - jumps if ZF=1 (they are equal)
             <div class="definition">
                 <div class="definition-title">📖 הגדרה: Endianness</div>
                 <p>הסדר שבו bytes מאוחסנים בזיכרון.<br>
-                <strong>Little Endian:</strong> ה-byte הנמוך קודם (x86 משתמש בזה!)<br>
-                <strong>Big Endian:</strong> ה-byte הגבוה קודם</p>
+                <strong>Little Endian:</strong> ה-byte הנמוך נשמר ראשון בכתובת הנמוכה (x86/x64 משתמשים בזה!)<br>
+                <strong>Big Endian:</strong> ה-byte הגבוה נשמר ראשון</p>
             </div>
+
+            <h3>מה זה אומר בפועל?</h3>
+            
+            <p>
+                כשיש לנו מספר שתופס יותר מ-byte אחד (למשל 4 bytes), המעבד צריך להחליט באיזה סדר לשמור אותו בזיכרון.
+                ב-Little Endian, החלק ה"קטן" (הנמוך) של המספר נשמר קודם.
+            </p>
 
             <div class="info-box">
                 <div class="info-box-title">💡 Example: Little Endian</div>
-                <p>The number <code>0x12345678</code> stored in memory:</p>
+                <p>נניח שיש לנו את הערך <code>0x12345678</code> (מספר של 4 bytes) ואנחנו רוצים לשמור אותו בכתובת <code>0x100</code>:</p>
+                
+                <p style="margin: 1rem 0;"><strong>פירוק המספר ל-4 bytes:</strong></p>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+0x12345678
+  ││││││││
+  ││││││└└── 0x78 (Least Significant Byte - LSB - הבית הנמוך)
+  ││││└└──── 0x56
+  ││└└────── 0x34
+  └└──────── 0x12 (Most Significant Byte - MSB - הבית הגבוה)
+                </pre>
+
+                <p style="margin: 1rem 0;"><strong>איך זה נראה בזיכרון (Little Endian):</strong></p>
                 <pre style="background: transparent; padding: 0; border: none; margin: 0;">
 Address: 0x100  0x101  0x102  0x103
 Value:   0x78   0x56   0x34   0x12
          ↑
-         Lowest byte comes FIRST!
+         LSB נשמר בכתובת הנמוכה ביותר!
+                </pre>
+                
+                <p style="margin-bottom: 0; margin-top: 1rem;">
+                    <strong>שים לב:</strong> הכתובות 0x100-0x103 הן רק 4 תאים רצופים בזיכרון - כל תא מחזיק byte אחד.
+                </p>
+            </div>
+
+            <h3>🔧 למה זה חשוב ב-RE?</h3>
+            
+            <p>
+                כשאתה מסתכל על זיכרון ב-debugger, אתה רואה את הסדר ש<strong>נשמר בזיכרון</strong>.
+                אבל כדי להבין את <strong>הערך האמיתי</strong> שהמעבד רואה, צריך להפוך את סדר ה-bytes!
+            </p>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 דוגמה מעשית</div>
+                <p>אתה רואה ב-debugger את הזיכרון הבא:</p>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+0x401000: 78 56 34 12 48 65 6C 6C 6F 00
+                </pre>
+                
+                <table style="margin: 1rem 0; font-size: 0.9rem;">
+                    <tr>
+                        <th>Bytes</th>
+                        <th>סוג</th>
+                        <th>מה רואים</th>
+                        <th>הערך האמיתי</th>
+                    </tr>
+                    <tr>
+                        <td><code>78 56 34 12</code></td>
+                        <td>מספר 4-byte</td>
+                        <td>78563412</td>
+                        <td><strong>0x12345678</strong> (להפוך!)</td>
+                    </tr>
+                    <tr>
+                        <td><code>48 65 6C 6C 6F 00</code></td>
+                        <td>String</td>
+                        <td>-</td>
+                        <td><strong>"Hello"</strong> (לא להפוך!)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>📋 מתי להפוך ומתי לא?</h3>
+            
+            <table>
+                <tr>
+                    <th>סוג הנתון</th>
+                    <th>להפוך?</th>
+                    <th>הסבר</th>
+                </tr>
+                <tr>
+                    <td>Pointers / כתובות</td>
+                    <td>✅ כן</td>
+                    <td>מספר של 4/8 bytes</td>
+                </tr>
+                <tr>
+                    <td>Integers (מספרים שלמים)</td>
+                    <td>✅ כן</td>
+                    <td>מספר של 2/4/8 bytes</td>
+                </tr>
+                <tr>
+                    <td>Strings (מחרוזות)</td>
+                    <td>❌ לא</td>
+                    <td>כל תו הוא byte בודד - קוראים משמאל לימין</td>
+                </tr>
+                <tr>
+                    <td>Byte בודד</td>
+                    <td>❌ לא</td>
+                    <td>אין מה להפוך</td>
+                </tr>
+                <tr>
+                    <td>מערך של bytes</td>
+                    <td>❌ לא</td>
+                    <td>קוראים כמו שרואים</td>
+                </tr>
+            </table>
+
+            <div class="info-box" style="background: rgba(255, 107, 53, 0.1); border-color: var(--accent-warning);">
+                <div class="info-box-title" style="color: var(--accent-warning);">🎯 הכלל הפשוט</div>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+מה שאתה רואה בזיכרון:    78 56 34 12
+                              ↓
+הפוך את סדר ה-bytes:     0x12345678
+                              ↓
+זה הערך שה-CPU באמת רואה ועובד איתו!
                 </pre>
                 <p style="margin-bottom: 0; margin-top: 1rem;">
-                    <strong>Important!</strong> You'll see this often in debuggers and hex editors.
+                    <strong>בקיצור:</strong> הפיכת הבתים מאפשרת לך "לחשוב כמו המעבד" - וזה בדיוק מה שעושים ב-Reverse Engineering!
                 </p>
             </div>
 
@@ -372,7 +477,7 @@ Value:   0x78   0x56   0x34   0x12
                 <li><strong>רגיסטרים כלליים:</strong> EAX, EBX, ECX, EDX, ESI, EDI, EBP, ESP</li>
                 <li><strong>EIP/RIP</strong> = מצביע לפקודה הבאה</li>
                 <li><strong>FLAGS</strong> = דגלים שמציינים תוצאות (ZF, SF, CF, OF)</li>
-                <li><strong>Little Endian</strong> = byte נמוך מאוחסן ראשון</li>
+                <li><strong>Little Endian</strong> = byte נמוך מאוחסן ראשון. כדי להבין מה המעבד רואה - הפוך את סדר ה-bytes של מספרים וכתובות!</li>
                 <li>מחזור: Fetch → Decode → Execute → חזור</li>
             </ul>
 
