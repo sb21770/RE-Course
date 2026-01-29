@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 5: Debugging מתקדם</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Lab 5: Advanced Debugging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -41,169 +41,169 @@
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
         .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
         .nav-btn:hover { border-color: var(--accent-warning); transform: translateY(-3px); }
-        .checklist { list-style: none; margin-right: 0; }
-        .checklist li { padding: 0.5rem 0; padding-right: 2rem; position: relative; }
-        .checklist li::before { content: '☐'; position: absolute; right: 0; color: var(--accent-warning); }
+        .checklist { list-style: none; margin-left: 0; }
+        .checklist li { padding: 0.5rem 0; padding-left: 2rem; position: relative; }
+        .checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--accent-warning); }
         .success-box { background: rgba(0, 255, 136, 0.1); border: 2px solid var(--accent-primary); border-radius: 10px; padding: 2rem; margin: 2rem 0; text-align: center; }
     </style>
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
         <div class="chapter-number">🔧 Lab 5</div>
-        <h1>Debugging מתקדם</h1>
-        <p class="subtitle">מעקב אחר ביצוע, שינוי זיכרון, ו-Patching</p>
+        <h1>Advanced Debugging</h1>
+        <p class="subtitle">Execution tracing, memory modification, and Patching</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🎯 מטרות התרגול</h2>
+            <h2>🎯 Lab Objectives</h2>
             <ul>
-                <li>שימוש מתקדם ב-breakpoints</li>
-                <li>שינוי ערכים בזמן ריצה</li>
-                <li>Patching - שינוי קוד קבוע</li>
-                <li>עקיפת בדיקות אבטחה</li>
+                <li>Advanced use of breakpoints</li>
+                <li>Modifying values at runtime</li>
+                <li>Patching - permanent code modification</li>
+                <li>Bypassing security checks</li>
             </ul>
 
-            <h2>🔴 חלק 1: סוגי Breakpoints</h2>
+            <h2>🔴 Part 1: Types of Breakpoints</h2>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.1 - Software Breakpoint</div>
+                <div class="task-title">Task 1.1 - Software Breakpoint</div>
                 <ol>
-                    <li>פתח תוכנית ב-x64dbg</li>
-                    <li>מצא את Entry Point (Ctrl+E)</li>
-                    <li>שים BP על השורה הראשונה (F2)</li>
-                    <li>הרץ (F9) - התוכנית תעצור ב-BP</li>
-                    <li>בדוק שה-byte הראשון של הפקודה הוחלף ל-<code>0xCC</code> (INT 3)</li>
+                    <li>Open a program in x64dbg</li>
+                    <li>Find the Entry Point (Ctrl+E)</li>
+                    <li>Set a BP on the first line (F2)</li>
+                    <li>Run (F9) - the program will stop at the BP</li>
+                    <li>Check that the first byte of the instruction was replaced with <code>0xCC</code> (INT 3)</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.2 - Hardware Breakpoint</div>
-                <p>Hardware BP לא משנה את הקוד - יותר "שקט":</p>
+                <div class="task-title">Task 1.2 - Hardware Breakpoint</div>
+                <p>Hardware BP doesn't modify the code - more "stealthy":</p>
                 <ol>
-                    <li>ימני על פקודה → Breakpoint → Hardware → Execute</li>
-                    <li>הרץ ובדוק שעוצר</li>
-                    <li>יתרון: תוכנות anti-debug פחות מזהות את זה</li>
+                    <li>Right-click on an instruction → Breakpoint → Hardware → Execute</li>
+                    <li>Run and verify it stops</li>
+                    <li>Advantage: anti-debug programs are less likely to detect it</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.3 - Memory Breakpoint</div>
-                <p>עצירה על גישה לזיכרון:</p>
+                <div class="task-title">Task 1.3 - Memory Breakpoint</div>
+                <p>Stop on memory access:</p>
                 <ol>
-                    <li>בחלון Dump, מצא כתובת מעניינת</li>
-                    <li>ימני → Breakpoint → Memory, Access</li>
-                    <li>הרץ - יעצור כשמישהו קורא/כותב לכתובת הזו</li>
+                    <li>In the Dump window, find an interesting address</li>
+                    <li>Right-click → Breakpoint → Memory, Access</li>
+                    <li>Run - will stop when something reads/writes to that address</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.4 - Conditional Breakpoint</div>
-                <p>עצירה רק כשתנאי מתקיים:</p>
+                <div class="task-title">Task 1.4 - Conditional Breakpoint</div>
+                <p>Stop only when a condition is met:</p>
                 <ol>
-                    <li>שים BP רגיל (F2)</li>
-                    <li>ימני על ה-BP → Edit</li>
-                    <li>הוסף תנאי: <code>eax == 5</code></li>
-                    <li>הרץ - יעצור רק כש-EAX שווה 5</li>
+                    <li>Set a regular BP (F2)</li>
+                    <li>Right-click on the BP → Edit</li>
+                    <li>Add condition: <code>eax == 5</code></li>
+                    <li>Run - will stop only when EAX equals 5</li>
                 </ol>
             </div>
 
-            <h2>✏️ חלק 2: שינוי ערכים בזמן ריצה</h2>
+            <h2>✏️ Part 2: Modifying Values at Runtime</h2>
 
             <div class="task-box">
-                <div class="task-title">משימה 2.1 - שינוי רגיסטר</div>
+                <div class="task-title">Task 2.1 - Modify Register</div>
                 <ol>
-                    <li>עצור על פקודת CMP</li>
-                    <li>בחלון Registers, דאבל קליק על EAX</li>
-                    <li>שנה את הערך</li>
-                    <li>המשך (F8) וראה איך זה משפיע על ה-jump</li>
-                </ol>
-            </div>
-
-            <div class="task-box">
-                <div class="task-title">משימה 2.2 - שינוי דגלים</div>
-                <p>שינוי ה-Zero Flag (ZF) כדי לשנות קפיצה:</p>
-                <ol>
-                    <li>עצור אחרי פקודת CMP או TEST</li>
-                    <li>בחלון Registers, מצא את ZF</li>
-                    <li>דאבל קליק כדי להפוך (0↔1)</li>
-                    <li>JE/JNE עכשיו יתנהגו הפוך!</li>
+                    <li>Stop on a CMP instruction</li>
+                    <li>In the Registers window, double-click on EAX</li>
+                    <li>Change the value</li>
+                    <li>Continue (F8) and see how it affects the jump</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 2.3 - שינוי זיכרון</div>
+                <div class="task-title">Task 2.2 - Modify Flags</div>
+                <p>Changing the Zero Flag (ZF) to change a jump:</p>
                 <ol>
-                    <li>בחלון Dump, מצא את הכתובת שרוצים לשנות</li>
-                    <li>דאבל קליק על byte</li>
-                    <li>הקלד ערך חדש</li>
-                    <li>או: ימני → Binary → Edit</li>
+                    <li>Stop after a CMP or TEST instruction</li>
+                    <li>In the Registers window, find ZF</li>
+                    <li>Double-click to toggle (0↔1)</li>
+                    <li>JE/JNE will now behave opposite!</li>
                 </ol>
             </div>
 
-            <h2>🔧 חלק 3: Patching</h2>
+            <div class="task-box">
+                <div class="task-title">Task 2.3 - Modify Memory</div>
+                <ol>
+                    <li>In the Dump window, find the address you want to change</li>
+                    <li>Double-click on a byte</li>
+                    <li>Type a new value</li>
+                    <li>Or: Right-click → Binary → Edit</li>
+                </ol>
+            </div>
+
+            <h2>🔧 Part 3: Patching</h2>
 
             <div class="info-box">
-                <div class="info-box-title">📝 מהו Patching?</div>
+                <div class="info-box-title">📝 What is Patching?</div>
                 <p>
-                    שינוי bytes בקוד כדי לשנות התנהגות לצמיתות.<br>
-                    נפוץ: הפיכת JE ל-JNE, או החלפה ב-NOP.
+                    Modifying bytes in the code to permanently change behavior.<br>
+                    Common: flipping JE to JNE, or replacing with NOP.
                 </p>
             </div>
 
-            <h3>טבלת Opcodes חשובים</h3>
+            <h3>Important Opcodes Table</h3>
             <pre>
 Instruction    Opcode     Notes
 -----------    ------     -----
-NOP            90         No Operation - לא עושה כלום
-JMP short      EB XX      קפיצה קצרה (127 bytes קדימה/אחורה)
+NOP            90         No Operation - does nothing
+JMP short      EB XX      Short jump (127 bytes forward/backward)
 JE short       74 XX      Jump if Equal
 JNE short      75 XX      Jump if Not Equal
-JMP near       E9 XX XX   קפיצה ארוכה (32-bit offset)
-CALL           E8 XX XX   קריאה לפונקציה
+JMP near       E9 XX XX   Long jump (32-bit offset)
+CALL           E8 XX XX   Call function
 RET            C3         Return
             </pre>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.1 - הפוך JE ל-JNE</div>
+                <div class="task-title">Task 3.1 - Flip JE to JNE</div>
                 <ol>
-                    <li>מצא פקודת JE (74 XX)</li>
-                    <li>Space על הפקודה (או ימני → Assemble)</li>
-                    <li>שנה ל-JNE</li>
-                    <li>או: שנה ידנית 74 → 75</li>
+                    <li>Find a JE instruction (74 XX)</li>
+                    <li>Press Space on the instruction (or right-click → Assemble)</li>
+                    <li>Change to JNE</li>
+                    <li>Or: manually change 74 → 75</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.2 - NOP Out</div>
-                <p>החלפת פקודות ב-NOP (ביטול):</p>
+                <div class="task-title">Task 3.2 - NOP Out</div>
+                <p>Replacing instructions with NOP (canceling):</p>
                 <ol>
-                    <li>סמן את הפקודה/פקודות שרוצים לבטל</li>
-                    <li>ימני → Binary → Fill with NOPs</li>
-                    <li>או: Ctrl+9</li>
+                    <li>Select the instruction(s) you want to cancel</li>
+                    <li>Right-click → Binary → Fill with NOPs</li>
+                    <li>Or: Ctrl+9</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.3 - שמירת Patch</div>
-                <p>לשמור את השינויים לקובץ:</p>
+                <div class="task-title">Task 3.3 - Save Patch</div>
+                <p>To save the changes to the file:</p>
                 <ol>
-                    <li>ימני → Patches (או Ctrl+P)</li>
-                    <li>ראה רשימת כל השינויים</li>
-                    <li>Patch File - שומר לקובץ חדש</li>
+                    <li>Right-click → Patches (or Ctrl+P)</li>
+                    <li>See the list of all changes</li>
+                    <li>Patch File - saves to a new file</li>
                 </ol>
             </div>
 
-            <h2>🎯 חלק 4: תרגיל מסכם</h2>
+            <h2>🎯 Part 4: Summary Exercise</h2>
 
             <div class="task-box">
-                <div class="task-title">אתגר: עקוף בדיקת סיסמה</div>
-                <p>הקוד הבא בודק סיסמה. מצא 3 דרכים לעקוף:</p>
+                <div class="task-title">Challenge: Bypass Password Check</div>
+                <p>The following code checks a password. Find 3 ways to bypass:</p>
                 <pre>
 00401000: push ebp
 00401001: mov ebp, esp
@@ -222,101 +222,100 @@ RET            C3         Return
 0040102B: ret
                 </pre>
 
-                <p><strong>דרך 1 - שינוי רגיסטר:</strong></p>
+                <p><strong>Method 1 - Modify Register:</strong></p>
                 <ul class="checklist">
-                    <li>שים BP על TEST</li>
-                    <li>אחרי ה-TEST, שנה EAX ל-0</li>
+                    <li>Set BP on TEST</li>
+                    <li>After TEST, change EAX to 0</li>
                 </ul>
 
-                <p><strong>דרך 2 - שינוי דגל:</strong></p>
+                <p><strong>Method 2 - Modify Flag:</strong></p>
                 <ul class="checklist">
-                    <li>שים BP אחרי TEST</li>
-                    <li>שנה את ZF ל-1 (Zero)</li>
+                    <li>Set BP after TEST</li>
+                    <li>Change ZF to 1 (Zero)</li>
                 </ul>
 
-                <p><strong>דרך 3 - Patch:</strong></p>
+                <p><strong>Method 3 - Patch:</strong></p>
                 <ul class="checklist">
-                    <li>שנה JNE ל-JE (75 → 74)</li>
-                    <li>או: שנה ל-NOP NOP (75 0D → 90 90)</li>
+                    <li>Change JNE to JE (75 → 74)</li>
+                    <li>Or: change to NOP NOP (75 0D → 90 90)</li>
                 </ul>
             </div>
 
-            <h2>🛡️ חלק 5: Anti-Debug Basics</h2>
+            <h2>🛡️ Part 5: Anti-Debug Basics</h2>
 
             <div class="info-box">
-                <div class="info-box-title">🔍 טכניקות Anti-Debug נפוצות</div>
-                <p>תוכנות מנסות לזהות debugger:</p>
+                <div class="info-box-title">🔍 Common Anti-Debug Techniques</div>
+                <p>Programs try to detect debuggers:</p>
                 <ul>
-                    <li><code>IsDebuggerPresent()</code> - בדיקה ישירה</li>
-                    <li>בדיקת PEB.BeingDebugged flag</li>
-                    <li>מדידת זמן - breakpoints מאטים</li>
-                    <li>חיפוש breakpoints (0xCC)</li>
+                    <li><code>IsDebuggerPresent()</code> - direct check</li>
+                    <li>Checking PEB.BeingDebugged flag</li>
+                    <li>Timing measurement - breakpoints slow things down</li>
+                    <li>Searching for breakpoints (0xCC)</li>
                 </ul>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 5.1 - עקיפת IsDebuggerPresent</div>
+                <div class="task-title">Task 5.1 - Bypass IsDebuggerPresent</div>
                 <ol>
-                    <li>שים BP: <code>bp kernel32.IsDebuggerPresent</code></li>
-                    <li>הרץ - כשעוצר, עשה F9 או Ctrl+F9 עד ה-RET</li>
-                    <li>לפני ה-RET, שנה EAX ל-0 (לא מדובג)</li>
-                    <li>או: Patch את הפונקציה להחזיר תמיד 0</li>
+                    <li>Set BP: <code>bp kernel32.IsDebuggerPresent</code></li>
+                    <li>Run - when stopped, do F9 or Ctrl+F9 until RET</li>
+                    <li>Before RET, change EAX to 0 (not being debugged)</li>
+                    <li>Or: Patch the function to always return 0</li>
                 </ol>
             </div>
 
-            <h2>✅ סיכום הקורס</h2>
+            <h2>✅ Course Summary</h2>
 
             <div class="success-box">
-                <h2 style="color: var(--accent-primary); margin-bottom: 1rem;">🎉 כל הכבוד!</h2>
-                <p>סיימת את כל החלק התיאורטי והמעשי של הקורס!</p>
-                <p style="margin-top: 1rem;">עכשיו יש לך את הבסיס ל:</p>
-                <ul style="text-align: right; display: inline-block; margin-top: 1rem;">
-                    <li>קריאת והבנת קוד Assembly</li>
-                    <li>ניתוח קבצי PE</li>
-                    <li>שימוש ב-Ghidra ו-x64dbg</li>
-                    <li>פתרון Crackmes פשוטים</li>
+                <h2 style="color: var(--accent-primary); margin-bottom: 1rem;">🎉 Congratulations!</h2>
+                <p>You've completed both the theory and practical parts of the course!</p>
+                <p style="margin-top: 1rem;">Now you have the foundation for:</p>
+                <ul style="text-align: left; display: inline-block; margin-top: 1rem;">
+                    <li>Reading and understanding Assembly code</li>
+                    <li>Analyzing PE files</li>
+                    <li>Using Ghidra and x64dbg</li>
+                    <li>Solving simple Crackmes</li>
                 </ul>
             </div>
 
-            <h2>📚 המשך למידה</h2>
+            <h2>📚 Continue Learning</h2>
 
             <div class="info-box">
-                <div class="info-box-title">🚀 צעדים הבאים</div>
+                <div class="info-box-title">🚀 Next Steps</div>
                 <ul>
-                    <li><strong>תרגל עוד Crackmes</strong> - crackmes.one</li>
-                    <li><strong>למד על Anti-Debug</strong> - טכניקות מתקדמות</li>
-                    <li><strong>Malware Analysis</strong> - ניתוח נוזקות (ב-VM!)</li>
-                    <li><strong>CTF Challenges</strong> - תחרויות RE</li>
-                    <li><strong>קרא קוד</strong> - נסה לקרוא ולהבין תוכנות אמיתיות</li>
+                    <li><strong>Practice more Crackmes</strong> - crackmes.one</li>
+                    <li><strong>Learn about Anti-Debug</strong> - advanced techniques</li>
+                    <li><strong>Malware Analysis</strong> - analyzing malicious software (in VM!)</li>
+                    <li><strong>CTF Challenges</strong> - RE competitions</li>
+                    <li><strong>Read code</strong> - try to read and understand real programs</li>
                 </ul>
             </div>
 
             <div class="info-box">
-                <div class="info-box-title">📖 משאבים מומלצים</div>
+                <div class="info-box-title">📖 Recommended Resources</div>
                 <ul>
-                    <li><strong>ספרים:</strong>
+                    <li><strong>Books:</strong>
                         <ul>
-                            <li>"Practical Malware Analysis" - הספר הקלאסי</li>
+                            <li>"Practical Malware Analysis" - the classic book</li>
                             <li>"Reversing: Secrets of Reverse Engineering"</li>
                             <li>"The IDA Pro Book"</li>
                         </ul>
                     </li>
-                    <li><strong>אתרים:</strong>
+                    <li><strong>Websites:</strong>
                         <ul>
-                            <li>malware.news - חדשות ניתוח נוזקות</li>
-                            <li>0xcc.re - בלוג RE</li>
-                            <li>youtube: OALabs, MalwareAnalysisForHedgehogs</li>
+                            <li>malware.news - malware analysis news</li>
+                            <li>0xcc.re - RE blog</li>
+                            <li>YouTube: OALabs, MalwareAnalysisForHedgehogs</li>
                         </ul>
                     </li>
                 </ul>
             </div>
 
             <div class="nav-buttons">
-                <a href="lab4.html" class="nav-btn">→ Lab 4: ניתוח PE</a>
-                <a href="index.html" class="nav-btn">חזרה לתפריט הראשי ←</a>
+                <a href="lab4.html" class="nav-btn">← Lab 4: PE Analysis</a>
+                <a href="index.html" class="nav-btn">Back to Main Menu →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

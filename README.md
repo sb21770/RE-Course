@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/24560313/README.md)
 # 🔓 קורס Reverse Engineering בעברית
 
 קורס מקיף ללימוד הנדסה לאחור (Reverse Engineering) מההתחלה - מתיאוריה ועד תרגול מעשי.

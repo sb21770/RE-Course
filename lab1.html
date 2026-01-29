@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 1: הכרת הכלים</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Lab 1: Getting to Know the Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -41,60 +41,60 @@
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
         .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
         .nav-btn:hover { border-color: var(--accent-warning); transform: translateY(-3px); }
-        .checklist { list-style: none; margin-right: 0; }
-        .checklist li { padding: 0.5rem 0; padding-right: 2rem; position: relative; }
-        .checklist li::before { content: '☐'; position: absolute; right: 0; color: var(--accent-warning); }
-        .step-number { display: inline-block; width: 30px; height: 30px; background: var(--accent-warning); color: var(--bg-primary); border-radius: 50%; text-align: center; line-height: 30px; font-weight: 700; margin-left: 0.5rem; }
+        .checklist { list-style: none; margin-left: 0; }
+        .checklist li { padding: 0.5rem 0; padding-left: 2rem; position: relative; }
+        .checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--accent-warning); }
+        .step-number { display: inline-block; width: 30px; height: 30px; background: var(--accent-warning); color: var(--bg-primary); border-radius: 50%; text-align: center; line-height: 30px; font-weight: 700; margin-right: 0.5rem; }
     </style>
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
         <div class="chapter-number">🔧 Lab 1</div>
-        <h1>הכרת הכלים</h1>
-        <p class="subtitle">התקנה ועבודה ראשונית עם כלי RE</p>
+        <h1>Getting to Know the Tools</h1>
+        <p class="subtitle">Installation and first steps with RE tools</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🎯 מטרות התרגול</h2>
+            <h2>🎯 Lab Objectives</h2>
             <ul>
-                <li>התקנת הכלים העיקריים</li>
-                <li>היכרות עם הממשקים</li>
-                <li>ניתוח ראשון של קובץ EXE</li>
+                <li>Install the main tools</li>
+                <li>Get familiar with the interfaces</li>
+                <li>First analysis of an EXE file</li>
             </ul>
 
-            <h2>📥 חלק 1: התקנת כלים</h2>
+            <h2>📥 Part 1: Tool Installation</h2>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.1 - התקן Ghidra</div>
+                <div class="task-title">Task 1.1 - Install Ghidra</div>
                 <ol>
-                    <li>ודא ש-Java JDK 17+ מותקן:
+                    <li>Make sure Java JDK 17+ is installed:
                         <pre>java -version</pre>
                     </li>
-                    <li>הורד Ghidra מ: <code>https://ghidra-sre.org/</code></li>
-                    <li>חלץ את הקובץ לתיקייה (למשל <code>C:\Tools\Ghidra</code>)</li>
-                    <li>הרץ את <code>ghidraRun.bat</code></li>
-                    <li>צור Project חדש: File → New Project → Non-Shared Project</li>
+                    <li>Download Ghidra from: <code>https://ghidra-sre.org/</code></li>
+                    <li>Extract the file to a folder (e.g., <code>C:\Tools\Ghidra</code>)</li>
+                    <li>Run <code>ghidraRun.bat</code></li>
+                    <li>Create a new Project: File → New Project → Non-Shared Project</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.2 - התקן x64dbg</div>
+                <div class="task-title">Task 1.2 - Install x64dbg</div>
                 <ol>
-                    <li>הורד מ: <code>https://x64dbg.com/</code></li>
-                    <li>חלץ את הקובץ</li>
-                    <li>הרץ את <code>x96dbg.exe</code> (יבחר אוטומטית 32/64)</li>
-                    <li>או הרץ ישירות <code>x32dbg.exe</code> / <code>x64dbg.exe</code></li>
+                    <li>Download from: <code>https://x64dbg.com/</code></li>
+                    <li>Extract the file</li>
+                    <li>Run <code>x96dbg.exe</code> (will automatically choose 32/64-bit)</li>
+                    <li>Or run directly <code>x32dbg.exe</code> / <code>x64dbg.exe</code></li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 1.3 - התקן כלי עזר</div>
+                <div class="task-title">Task 1.3 - Install Helper Tools</div>
                 <ol>
                     <li><strong>PE-bear:</strong> <code>https://github.com/hasherezade/pe-bear</code></li>
                     <li><strong>Detect It Easy (DIE):</strong> <code>https://github.com/horsicq/Detect-It-Easy</code></li>
@@ -102,145 +102,144 @@
                 </ol>
             </div>
 
-            <h2>🔬 חלק 2: ניתוח ראשון עם Ghidra</h2>
+            <h2>🔬 Part 2: First Analysis with Ghidra</h2>
 
-            <p>נשתמש ב-<code>calc.exe</code> או <code>notepad.exe</code> כדוגמה בטוחה.</p>
+            <p>We'll use <code>calc.exe</code> or <code>notepad.exe</code> as a safe example.</p>
 
             <div class="task-box">
-                <div class="task-title">משימה 2.1 - פתח קובץ ב-Ghidra</div>
+                <div class="task-title">Task 2.1 - Open a File in Ghidra</div>
                 <ol>
                     <li>File → Import File</li>
-                    <li>נווט ל-<code>C:\Windows\System32\calc.exe</code></li>
-                    <li>לחץ OK על ההגדרות הדיפולטיות</li>
-                    <li>כשנשאל לגבי Analysis, לחץ <strong>Yes</strong></li>
-                    <li>חכה שה-Analysis יסתיים (שורת הסטטוס)</li>
+                    <li>Navigate to <code>C:\Windows\System32\calc.exe</code></li>
+                    <li>Click OK on the default settings</li>
+                    <li>When asked about Analysis, click <strong>Yes</strong></li>
+                    <li>Wait for the Analysis to finish (check status bar)</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 2.2 - סייר בממשק</div>
+                <div class="task-title">Task 2.2 - Explore the Interface</div>
                 <ul class="checklist">
-                    <li>מצא את חלון <strong>Symbol Tree</strong> - פתח את Imports</li>
-                    <li>מצא את חלון <strong>Functions</strong> - כמה פונקציות יש?</li>
-                    <li>מצא את <strong>entry</strong> (נקודת הכניסה)</li>
-                    <li>לחץ על פונקציה כלשהי - ראה את הקוד בחלון Listing</li>
-                    <li>ראה את ה-Decompiler בצד (קוד C)</li>
+                    <li>Find the <strong>Symbol Tree</strong> window - open Imports</li>
+                    <li>Find the <strong>Functions</strong> window - how many functions are there?</li>
+                    <li>Find the <strong>entry</strong> (entry point)</li>
+                    <li>Click on any function - see the code in the Listing window</li>
+                    <li>See the Decompiler on the side (C code)</li>
                 </ul>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 2.3 - חפש Strings</div>
+                <div class="task-title">Task 2.3 - Search for Strings</div>
                 <ol>
                     <li>Search → For Strings</li>
-                    <li>סמן את כל סוגי ה-Strings</li>
-                    <li>לחץ Search</li>
-                    <li>דפדף ברשימה - מה מעניין?</li>
-                    <li>לחץ דאבל קליק על string לקפוץ אליו בקוד</li>
+                    <li>Check all String types</li>
+                    <li>Click Search</li>
+                    <li>Browse the list - what's interesting?</li>
+                    <li>Double-click on a string to jump to it in the code</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 2.4 - בדוק Imports</div>
-                <p>פתח Symbol Tree → Imports ומצא:</p>
+                <div class="task-title">Task 2.4 - Check Imports</div>
+                <p>Open Symbol Tree → Imports and find:</p>
                 <ul class="checklist">
-                    <li>מאילו DLLs התוכנית מייבאת?</li>
-                    <li>האם יש פונקציות של קבצים? (CreateFile, ReadFile...)</li>
-                    <li>האם יש פונקציות רשת? (socket, connect...)</li>
-                    <li>האם יש פונקציות Registry?</li>
+                    <li>Which DLLs does the program import from?</li>
+                    <li>Are there file functions? (CreateFile, ReadFile...)</li>
+                    <li>Are there network functions? (socket, connect...)</li>
+                    <li>Are there Registry functions?</li>
                 </ul>
             </div>
 
-            <h2>🐛 חלק 3: עבודה ראשונה עם x64dbg</h2>
+            <h2>🐛 Part 3: First Steps with x64dbg</h2>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.1 - פתח תוכנית לדיבוג</div>
+                <div class="task-title">Task 3.1 - Open a Program for Debugging</div>
                 <ol>
-                    <li>פתח את x64dbg (או x32dbg ל-32-bit)</li>
+                    <li>Open x64dbg (or x32dbg for 32-bit)</li>
                     <li>File → Open</li>
-                    <li>בחר <code>C:\Windows\System32\notepad.exe</code></li>
-                    <li>התוכנית תעצור ב-Entry Point</li>
+                    <li>Select <code>C:\Windows\System32\notepad.exe</code></li>
+                    <li>The program will stop at the Entry Point</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.2 - הכר את הממשק</div>
+                <div class="task-title">Task 3.2 - Get Familiar with the Interface</div>
                 <ul class="checklist">
-                    <li>זהה את חלון ה-<strong>CPU</strong> (קוד Assembly)</li>
-                    <li>זהה את חלון ה-<strong>Registers</strong></li>
-                    <li>זהה את חלון ה-<strong>Stack</strong></li>
-                    <li>זהה את חלון ה-<strong>Dump</strong> (זיכרון)</li>
+                    <li>Identify the <strong>CPU</strong> window (Assembly code)</li>
+                    <li>Identify the <strong>Registers</strong> window</li>
+                    <li>Identify the <strong>Stack</strong> window</li>
+                    <li>Identify the <strong>Dump</strong> window (memory)</li>
                 </ul>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.3 - נסה את הקיצורים</div>
+                <div class="task-title">Task 3.3 - Try the Shortcuts</div>
                 <ol>
-                    <li>לחץ <strong>F8</strong> (Step Over) כמה פעמים - ראה את EIP מתקדם</li>
-                    <li>לחץ <strong>F7</strong> (Step Into) - נכנס לפונקציה</li>
-                    <li>לחץ <strong>F2</strong> על שורה - שים Breakpoint</li>
-                    <li>לחץ <strong>F9</strong> - הרץ עד ה-BP</li>
-                    <li>לחץ <strong>Ctrl+G</strong> - קפוץ לכתובת</li>
+                    <li>Press <strong>F8</strong> (Step Over) several times - see EIP advancing</li>
+                    <li>Press <strong>F7</strong> (Step Into) - enters a function</li>
+                    <li>Press <strong>F2</strong> on a line - set Breakpoint</li>
+                    <li>Press <strong>F9</strong> - run until the BP</li>
+                    <li>Press <strong>Ctrl+G</strong> - jump to address</li>
                 </ol>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 3.4 - בדוק רגיסטרים</div>
-                <p>בחלון Registers:</p>
+                <div class="task-title">Task 3.4 - Check Registers</div>
+                <p>In the Registers window:</p>
                 <ul class="checklist">
-                    <li>מה הערך של EIP/RIP?</li>
-                    <li>מה הערך של ESP/RSP?</li>
-                    <li>לחץ F8 וראה את EIP משתנה</li>
-                    <li>דאבל קליק על EAX ושנה את הערך</li>
+                    <li>What is the value of EIP/RIP?</li>
+                    <li>What is the value of ESP/RSP?</li>
+                    <li>Press F8 and watch EIP change</li>
+                    <li>Double-click on EAX and change its value</li>
                 </ul>
             </div>
 
-            <h2>📦 חלק 4: ניתוח PE עם PE-bear</h2>
+            <h2>📦 Part 4: PE Analysis with PE-bear</h2>
 
             <div class="task-box">
-                <div class="task-title">משימה 4.1 - בדוק מבנה PE</div>
+                <div class="task-title">Task 4.1 - Check PE Structure</div>
                 <ol>
-                    <li>פתח PE-bear</li>
-                    <li>גרור לתוכו קובץ EXE כלשהו</li>
-                    <li>בדוק את ה-Headers:</li>
+                    <li>Open PE-bear</li>
+                    <li>Drag an EXE file into it</li>
+                    <li>Check the Headers:</li>
                 </ol>
                 <ul class="checklist">
-                    <li>מצא את ה-DOS Header (מתחיל ב-MZ)</li>
-                    <li>מצא את ה-PE Signature</li>
-                    <li>מה ה-Entry Point?</li>
-                    <li>מה ה-ImageBase?</li>
-                    <li>כמה Sections יש?</li>
+                    <li>Find the DOS Header (starts with MZ)</li>
+                    <li>Find the PE Signature</li>
+                    <li>What is the Entry Point?</li>
+                    <li>What is the ImageBase?</li>
+                    <li>How many Sections are there?</li>
                 </ul>
             </div>
 
             <div class="task-box">
-                <div class="task-title">משימה 4.2 - בדוק Sections</div>
+                <div class="task-title">Task 4.2 - Check Sections</div>
                 <ul class="checklist">
-                    <li>זהה את ה-.text section</li>
-                    <li>מה ההרשאות שלו? (R/W/X)</li>
-                    <li>זהה את ה-.data section</li>
-                    <li>האם יש sections חשודים? (שמות מוזרים, הרשאות RWX)</li>
+                    <li>Identify the .text section</li>
+                    <li>What are its permissions? (R/W/X)</li>
+                    <li>Identify the .data section</li>
+                    <li>Are there suspicious sections? (strange names, RWX permissions)</li>
                 </ul>
             </div>
 
-            <h2>✅ צ'קליסט סיום</h2>
+            <h2>✅ Completion Checklist</h2>
 
             <div class="info-box">
-                <div class="info-box-title">בסוף התרגול, וודא שאתה יודע:</div>
+                <div class="info-box-title">At the end of this lab, make sure you know how to:</div>
                 <ul class="checklist">
-                    <li>לפתוח קובץ ב-Ghidra ולנווט בו</li>
-                    <li>לחפש Strings ו-Imports</li>
-                    <li>לפתוח תוכנית ב-x64dbg</li>
-                    <li>להשתמש ב-F7, F8, F9, F2</li>
-                    <li>לזהות את חלקי ה-PE ב-PE-bear</li>
+                    <li>Open a file in Ghidra and navigate it</li>
+                    <li>Search for Strings and Imports</li>
+                    <li>Open a program in x64dbg</li>
+                    <li>Use F7, F8, F9, F2</li>
+                    <li>Identify PE parts in PE-bear</li>
                 </ul>
             </div>
 
             <div class="nav-buttons">
-                <a href="chapter10.html" class="nav-btn">→ פרק 10: Debugging</a>
-                <a href="lab2.html" class="nav-btn">Lab 2: קריאת Assembly ←</a>
+                <a href="chapter10.html" class="nav-btn">← Chapter 10: Debugging</a>
+                <a href="lab2.html" class="nav-btn">Lab 2: Reading Assembly →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

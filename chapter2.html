@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פרק 2: מערכות מספרים</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Chapter 2: Number Systems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -31,14 +31,14 @@
         h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
         h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
         p { margin-bottom: 1.5rem; }
-        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition { background: var(--bg-card); border-left: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
         .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
         .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
         .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
         ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
         li { margin-bottom: 0.8rem; }
         code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
-        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); }
         .diagram { background: var(--bg-card); border-radius: 15px; padding: 2rem; margin: 2rem 0; text-align: center; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
         th, td { padding: 1rem; text-align: center; border-bottom: 1px solid var(--border-color); }
@@ -48,7 +48,7 @@
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
         .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
         .nav-btn:hover { border-color: var(--accent-primary); transform: translateY(-3px); }
-        .bit-display { display: flex; justify-content: center; gap: 0.5rem; margin: 1rem 0; direction: ltr; }
+        .bit-display { display: flex; justify-content: center; gap: 0.5rem; margin: 1rem 0; }
         .bit { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: 5px; font-family: 'Fira Code', monospace; font-weight: 700; }
         .bit.on { background: var(--accent-primary); color: var(--bg-primary); }
         .bit-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.3rem; }
@@ -58,39 +58,39 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
-        <div class="chapter-number">פרק 2</div>
-        <h1>מערכות מספרים</h1>
-        <p class="subtitle">בינארי, הקסדצימלי, וייצוג נתונים במחשב</p>
+        <div class="chapter-number">Chapter 2</div>
+        <h1>Number Systems</h1>
+        <p class="subtitle">Binary, hexadecimal, and data representation in computers</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🔢 למה צריך להבין מערכות מספרים?</h2>
+            <h2>🔢 Why Understand Number Systems?</h2>
             
             <p>
-                מחשבים לא מבינים מספרים כמו אנחנו. הם עובדים רק עם 
-                <strong>0 ו-1</strong> (חשמל דולק/כבוי).
-                ב-RE, תראה מספרים בבסיס 16 (הקסדצימלי) כל הזמן - בכתובות זיכרון, בקוד Assembly, ובכלי הניתוח.
+                Computers don't understand numbers like we do. They only work with 
+                <strong>0s and 1s</strong> (electricity on/off).
+                In RE, you'll see numbers in base 16 (hexadecimal) all the time - in memory addresses, Assembly code, and analysis tools.
             </p>
 
-            <h2>📊 בסיס 10 (עשרוני) - מה שאנחנו מכירים</h2>
+            <h2>📊 Base 10 (Decimal) - What We Know</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: בסיס (Base/Radix)</div>
-                <p>מספר הסימנים השונים שיש במערכת המספרים. בסיס 10 = 10 ספרות (0-9).</p>
+                <div class="definition-title">📖 Definition: Base (Radix)</div>
+                <p>The number of different symbols in a number system. Base 10 = 10 digits (0-9).</p>
             </div>
 
             <p>
-                בשיטה העשרונית, כל מיקום שווה פי 10 מהמיקום שלפניו:
+                In the decimal system, each position is worth 10× the previous one:
             </p>
 
             <pre>
-   המספר 1234 בעשרוני:
+   The number 1234 in decimal:
    
    1    2    3    4
    ↓    ↓    ↓    ↓
@@ -98,29 +98,29 @@
    1000  + 200   + 30    + 4     = 1234
             </pre>
 
-            <h2>💾 בסיס 2 (בינארי) - שפת המחשב</h2>
+            <h2>💾 Base 2 (Binary) - The Computer's Language</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Binary (בינארי)</div>
-                <p>מערכת מספרים בבסיס 2. יש רק 2 ספרות: <code>0</code> ו-<code>1</code>. כל ספרה נקראת <strong>Bit</strong>.</p>
+                <div class="definition-title">📖 Definition: Binary</div>
+                <p>A base-2 number system. Only 2 digits: <code>0</code> and <code>1</code>. Each digit is called a <strong>Bit</strong>.</p>
             </div>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Bit</div>
-                <p>יחידת המידע הקטנה ביותר במחשב. יכולה להיות 0 או 1.</p>
+                <div class="definition-title">📖 Definition: Bit</div>
+                <p>The smallest unit of information in a computer. Can be 0 or 1.</p>
             </div>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Byte</div>
-                <p>קבוצה של 8 Bits. יכולה לייצג ערכים מ-0 עד 255.</p>
+                <div class="definition-title">📖 Definition: Byte</div>
+                <p>A group of 8 bits. Can represent values from 0 to 255.</p>
             </div>
 
-            <h3>המרה מבינארי לעשרוני</h3>
+            <h3>Converting Binary to Decimal</h3>
 
-            <p>כל מיקום בבינארי שווה פי 2 מהקודם (מימין לשמאל):</p>
+            <p>Each position in binary is worth 2× the previous one (right to left):</p>
 
             <div class="diagram">
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">הבינארי <code>11010110</code> בעשרוני:</p>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Binary <code>11010110</code> in decimal:</p>
                 <div class="bit-display">
                     <div>
                         <div class="bit on">1</div>
@@ -158,43 +158,43 @@
                 <p style="margin-top: 1rem;">128 + 64 + 16 + 4 + 2 = <strong style="color: var(--accent-primary);">214</strong></p>
             </div>
 
-            <h3>המרה מעשרוני לבינארי</h3>
+            <h3>Converting Decimal to Binary</h3>
 
             <div class="example-box">
-                <div class="example-title">✏️ דוגמה: המרת 13 לבינארי</div>
-                <p>מחלקים ב-2 שוב ושוב, ורושמים את השארית:</p>
+                <div class="example-title">✏️ Example: Converting 13 to binary</div>
+                <p>Divide by 2 repeatedly and note the remainder:</p>
                 <pre style="background: transparent; padding: 0; border: none;">
-13 ÷ 2 = 6  שארית 1  ↑
- 6 ÷ 2 = 3  שארית 0  │
- 3 ÷ 2 = 1  שארית 1  │  קוראים מלמטה למעלה
- 1 ÷ 2 = 0  שארית 1  │
+13 ÷ 2 = 6  remainder 1  ↑
+ 6 ÷ 2 = 3  remainder 0  │
+ 3 ÷ 2 = 1  remainder 1  │  Read from bottom to top
+ 1 ÷ 2 = 0  remainder 1  │
                      
-התוצאה: 13 = 1101 בבינארי
+Result: 13 = 1101 in binary
                 </pre>
             </div>
 
-            <h2>🔷 בסיס 16 (הקסדצימלי) - השפה של RE</h2>
+            <h2>🔷 Base 16 (Hexadecimal) - The Language of RE</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Hexadecimal (הקסדצימלי)</div>
-                <p>מערכת מספרים בבסיס 16. משתמשת ב-16 סימנים: <code>0-9</code> ו-<code>A-F</code>.<br>
-                סימון נפוץ: <code>0x</code> בהתחלה (למשל <code>0xFF</code>) או <code>h</code> בסוף.</p>
+                <div class="definition-title">📖 Definition: Hexadecimal</div>
+                <p>A base-16 number system. Uses 16 symbols: <code>0-9</code> and <code>A-F</code>.<br>
+                Common notation: <code>0x</code> prefix (e.g., <code>0xFF</code>) or <code>h</code> suffix.</p>
             </div>
 
-            <p>למה הקסדצימלי כל כך נפוץ ב-RE?</p>
+            <p>Why is hexadecimal so common in RE?</p>
             <ul>
-                <li><strong>קיצור:</strong> 1 ספרה הקס = 4 bits בדיוק</li>
-                <li><strong>2 ספרות הקס = 1 byte בדיוק</strong> (נוח מאוד!)</li>
-                <li>קל להמיר מבינארי ולהיפך</li>
+                <li><strong>Compact:</strong> 1 hex digit = exactly 4 bits</li>
+                <li><strong>2 hex digits = exactly 1 byte</strong> (very convenient!)</li>
+                <li>Easy to convert to/from binary</li>
             </ul>
 
-            <h3>טבלת המרה חשובה</h3>
+            <h3>Important Conversion Table</h3>
 
             <table>
                 <tr>
-                    <th>עשרוני</th>
-                    <th>בינארי</th>
-                    <th>הקסדצימלי</th>
+                    <th>Decimal</th>
+                    <th>Binary</th>
+                    <th>Hexadecimal</th>
                 </tr>
                 <tr><td>0</td><td>0000</td><td>0</td></tr>
                 <tr><td>1</td><td>0001</td><td>1</td></tr>
@@ -215,41 +215,41 @@
             </table>
 
             <div class="info-box">
-                <div class="info-box-title">💡 טריק להמרה מהירה</div>
+                <div class="info-box-title">💡 Quick Conversion Trick</div>
                 <p>
-                    להמרה בין בינארי להקס: פשוט מחלקים את הבינארי לקבוצות של 4 וממירים כל קבוצה.<br><br>
+                    To convert between binary and hex: split binary into groups of 4 and convert each group.<br><br>
                     <code>1101 0110</code> → <code>D 6</code> → <code>0xD6</code>
                 </p>
             </div>
 
             <div class="example-box">
-                <div class="example-title">✏️ דוגמה: כתובת זיכרון</div>
-                <p>כתובת טיפוסית ב-Windows 32-bit:</p>
+                <div class="example-title">✏️ Example: Memory Address</div>
+                <p>A typical Windows 32-bit address:</p>
                 <pre style="background: transparent; padding: 0; border: none;">
 0x00401000
 
 00  40  10  00   (4 bytes)
 ↓   ↓   ↓   ↓
-0   64  16  0    (בעשרוני כל byte)
+0   64  16  0    (decimal value of each byte)
                 </pre>
             </div>
 
-            <h2>📝 ייצוג טקסט - ASCII</h2>
+            <h2>📝 Text Representation - ASCII</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: ASCII</div>
-                <p>תקן לייצוג תווים כמספרים. כל תו מיוצג ע"י מספר בין 0-127.<br>
-                למשל: <code>A</code> = 65, <code>a</code> = 97, <code>0</code> = 48.</p>
+                <div class="definition-title">📖 Definition: ASCII</div>
+                <p>A standard for representing characters as numbers. Each character is represented by a number between 0-127.<br>
+                For example: <code>A</code> = 65, <code>a</code> = 97, <code>0</code> = 48.</p>
             </div>
 
             <table>
                 <tr>
-                    <th>תו</th>
-                    <th>עשרוני</th>
-                    <th>הקס</th>
-                    <th>תו</th>
-                    <th>עשרוני</th>
-                    <th>הקס</th>
+                    <th>Char</th>
+                    <th>Decimal</th>
+                    <th>Hex</th>
+                    <th>Char</th>
+                    <th>Decimal</th>
+                    <th>Hex</th>
                 </tr>
                 <tr><td>A</td><td>65</td><td>0x41</td><td>a</td><td>97</td><td>0x61</td></tr>
                 <tr><td>B</td><td>66</td><td>0x42</td><td>b</td><td>98</td><td>0x62</td></tr>
@@ -259,47 +259,47 @@
             </table>
 
             <div class="example-box">
-                <div class="example-title">✏️ דוגמה: המילה "Hello" בזיכרון</div>
+                <div class="example-title">✏️ Example: The word "Hello" in memory</div>
                 <pre style="background: transparent; padding: 0; border: none;">
-H    e    l    l    o    (תווים)
-72   101  108  108  111  (עשרוני)
-0x48 0x65 0x6C 0x6C 0x6F (הקס)
+H    e    l    l    o    (characters)
+72   101  108  108  111  (decimal)
+0x48 0x65 0x6C 0x6C 0x6F (hex)
                 </pre>
             </div>
 
-            <h2>➖ מספרים שליליים</h2>
+            <h2>➖ Negative Numbers</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Two's Complement (משלים ל-2)</div>
-                <p>שיטה לייצוג מספרים שליליים בבינארי. הbit השמאלי ביותר (MSB) מציין את הסימן: 0 = חיובי, 1 = שלילי.</p>
+                <div class="definition-title">📖 Definition: Two's Complement</div>
+                <p>A method for representing negative numbers in binary. The leftmost bit (MSB) indicates the sign: 0 = positive, 1 = negative.</p>
             </div>
 
-            <p>ב-byte אחד (8 bits):</p>
+            <p>In one byte (8 bits):</p>
             <ul>
-                <li><strong>Unsigned:</strong> 0 עד 255</li>
-                <li><strong>Signed:</strong> -128 עד +127</li>
+                <li><strong>Unsigned:</strong> 0 to 255</li>
+                <li><strong>Signed:</strong> -128 to +127</li>
             </ul>
 
             <div class="example-box">
-                <div class="example-title">✏️ איך מחשבים מספר שלילי</div>
-                <p>כדי לקבל את <code>-5</code>:</p>
+                <div class="example-title">✏️ How to Calculate a Negative Number</div>
+                <p>To get <code>-5</code>:</p>
                 <pre style="background: transparent; padding: 0; border: none;">
-1. כותבים 5 בבינארי:     0000 0101
-2. הופכים כל bit:        1111 1010
-3. מוסיפים 1:            1111 1011
+1. Write 5 in binary:      0000 0101
+2. Flip all bits:          1111 1010
+3. Add 1:                  1111 1011
 
 1111 1011 = 0xFB = -5 (signed)
                        = 251 (unsigned)
                 </pre>
             </div>
 
-            <h2>📏 יחידות מידה</h2>
+            <h2>📏 Units of Measurement</h2>
 
             <table>
                 <tr>
-                    <th>יחידה</th>
-                    <th>גודל</th>
-                    <th>טווח (unsigned)</th>
+                    <th>Unit</th>
+                    <th>Size</th>
+                    <th>Range (unsigned)</th>
                 </tr>
                 <tr><td>Bit</td><td>1 bit</td><td>0-1</td></tr>
                 <tr><td>Nibble</td><td>4 bits</td><td>0-15 (0x0-0xF)</td></tr>
@@ -310,31 +310,30 @@ H    e    l    l    o    (תווים)
             </table>
 
             <div class="info-box">
-                <div class="info-box-title">💡 מונחים ב-RE</div>
+                <div class="info-box-title">💡 RE Terminology</div>
                 <p>
-                    <strong>DWORD</strong> = Double Word (נפוץ מאוד ב-32-bit)<br>
-                    <strong>QWORD</strong> = Quad Word (נפוץ ב-64-bit)<br>
-                    תראה את המונחים האלה הרבה ב-IDA וב-Assembly!
+                    <strong>DWORD</strong> = Double Word (very common in 32-bit)<br>
+                    <strong>QWORD</strong> = Quad Word (common in 64-bit)<br>
+                    You'll see these terms a lot in IDA and Assembly!
                 </p>
             </div>
 
-            <h2>📋 סיכום הפרק</h2>
+            <h2>📋 Chapter Summary</h2>
             
             <ul>
-                <li><strong>בינארי (בסיס 2)</strong> - שפת המחשב, 0 ו-1</li>
-                <li><strong>הקסדצימלי (בסיס 16)</strong> - נפוץ ב-RE, קל להמרה</li>
-                <li><strong>1 byte = 8 bits = 2 ספרות הקס</strong></li>
-                <li><strong>ASCII</strong> - ייצוג תווים כמספרים</li>
-                <li><strong>Two's Complement</strong> - מספרים שליליים</li>
-                <li>זכור את הטבלה 0-F!</li>
+                <li><strong>Binary (base 2)</strong> - computer's language, 0s and 1s</li>
+                <li><strong>Hexadecimal (base 16)</strong> - common in RE, easy to convert</li>
+                <li><strong>1 byte = 8 bits = 2 hex digits</strong></li>
+                <li><strong>ASCII</strong> - character representation as numbers</li>
+                <li><strong>Two's Complement</strong> - negative numbers</li>
+                <li>Remember the 0-F table!</li>
             </ul>
 
             <div class="nav-buttons">
-                <a href="chapter1.html" class="nav-btn">→ פרק 1: מבוא</a>
-                <a href="chapter3.html" class="nav-btn">פרק 3: ארכיטקטורה ←</a>
+                <a href="chapter1.html" class="nav-btn">← Chapter 1: Introduction</a>
+                <a href="chapter3.html" class="nav-btn">Chapter 3: Architecture →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

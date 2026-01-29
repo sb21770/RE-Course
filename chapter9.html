@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פרק 9: כלי ניתוח סטטי</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Chapter 9: Static Analysis Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -30,16 +30,16 @@
         h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
         h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
         p { margin-bottom: 1.5rem; }
-        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition { background: var(--bg-card); border-left: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
         .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
         .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
         .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
         ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
         li { margin-bottom: 0.8rem; }
         code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
-        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); line-height: 1.6; }
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
-        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
         th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
         .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
@@ -52,161 +52,161 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
-        <div class="chapter-number">פרק 9</div>
-        <h1>כלי ניתוח סטטי</h1>
-        <p class="subtitle">עבודה עם IDA Pro ו-Ghidra</p>
+        <div class="chapter-number">Chapter 9</div>
+        <h1>Static Analysis Tools</h1>
+        <p class="subtitle">Working with IDA Pro and Ghidra</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🔬 מהו ניתוח סטטי?</h2>
+            <h2>🔬 What is Static Analysis?</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Static Analysis</div>
-                <p>ניתוח תוכנה <strong>בלי להריץ אותה</strong>. קריאת הקוד, הבנת המבנה, וזיהוי פונקציות ומשתנים.</p>
+                <div class="definition-title">📖 Definition: Static Analysis</div>
+                <p>Analyzing software <strong>without running it</strong>. Reading the code, understanding the structure, and identifying functions and variables.</p>
             </div>
 
-            <p>יתרונות:</p>
+            <p>Advantages:</p>
             <ul>
-                <li>בטוח - אין סיכון מהרצת קוד זדוני</li>
-                <li>רואים את כל הקוד, גם חלקים שלא רצים תמיד</li>
-                <li>מאפשר להבין את המבנה הכללי</li>
+                <li>Safe - no risk from running malicious code</li>
+                <li>See all the code, including parts that don't always run</li>
+                <li>Allows understanding the overall structure</li>
             </ul>
 
-            <p>חסרונות:</p>
+            <p>Disadvantages:</p>
             <ul>
-                <li>קוד יכול להיות מוצפן או דחוס (packed)</li>
-                <li>לא רואים ערכים בזמן ריצה</li>
-                <li>קשה לעקוב אחרי קוד דינמי</li>
+                <li>Code can be encrypted or packed</li>
+                <li>Can't see runtime values</li>
+                <li>Hard to follow dynamic code</li>
             </ul>
 
             <div class="tool-card">
                 <div class="tool-name">🔷 IDA Pro</div>
-                <div class="tool-type">Interactive DisAssembler - התעשייתי הסטנדרטי</div>
+                <div class="tool-type">Interactive DisAssembler - The Industry Standard</div>
                 <p>
-                    הכלי הפופולרי ביותר לניתוח סטטי. יקר (~$2000+) אבל עוצמתי מאוד.
-                    יש גרסה חינמית (<strong>IDA Free</strong>) עם יכולות מוגבלות.
+                    The most popular tool for static analysis. Expensive (~$2000+) but very powerful.
+                    There's a free version (<strong>IDA Free</strong>) with limited capabilities.
                 </p>
                 <ul>
-                    <li>Disassembler מעולה עם זיהוי אוטומטי</li>
-                    <li>Decompiler (Hex-Rays) - ממיר ל-C</li>
-                    <li>תמיכה בהרבה ארכיטקטורות</li>
-                    <li>סקריפטים ב-Python (IDAPython)</li>
+                    <li>Excellent disassembler with automatic recognition</li>
+                    <li>Decompiler (Hex-Rays) - converts to C</li>
+                    <li>Support for many architectures</li>
+                    <li>Python scripting (IDAPython)</li>
                 </ul>
             </div>
 
             <div class="tool-card">
                 <div class="tool-name">🐉 Ghidra</div>
-                <div class="tool-type">NSA's Reverse Engineering Tool - חינמי ופתוח!</div>
+                <div class="tool-type">NSA's Reverse Engineering Tool - Free and Open Source!</div>
                 <p>
-                    פורסם ב-2019 ע"י ה-NSA. <strong>חינמי לחלוטין</strong> ומתחרה ב-IDA.
+                    Released in 2019 by the NSA. <strong>Completely free</strong> and competes with IDA.
                 </p>
                 <ul>
-                    <li>Decompiler מובנה (בניגוד ל-IDA Free)</li>
-                    <li>קוד פתוח - אפשר להרחיב</li>
-                    <li>תמיכה במגוון פורמטים וארכיטקטורות</li>
-                    <li>סקריפטים ב-Java ו-Python</li>
-                    <li><strong>מומלץ למתחילים!</strong></li>
+                    <li>Built-in decompiler (unlike IDA Free)</li>
+                    <li>Open source - can be extended</li>
+                    <li>Support for various formats and architectures</li>
+                    <li>Scripting in Java and Python</li>
+                    <li><strong>Recommended for beginners!</strong></li>
                 </ul>
             </div>
 
-            <h2>🚀 התחלה עם Ghidra</h2>
+            <h2>🚀 Getting Started with Ghidra</h2>
 
-            <h3>התקנה</h3>
+            <h3>Installation</h3>
             <ol>
-                <li>התקן Java JDK 17+</li>
-                <li>הורד מ-<code>ghidra-sre.org</code></li>
-                <li>חלץ והרץ <code>ghidraRun.bat</code> (Windows)</li>
+                <li>Install Java JDK 17+</li>
+                <li>Download from <code>ghidra-sre.org</code></li>
+                <li>Extract and run <code>ghidraRun.bat</code> (Windows)</li>
             </ol>
 
-            <h3>ייבוא קובץ</h3>
+            <h3>Importing a File</h3>
             <ol>
-                <li>צור Project חדש: File → New Project</li>
-                <li>ייבא קובץ: File → Import File</li>
-                <li>Ghidra יזהה את הפורמט אוטומטית</li>
-                <li>לחץ Yes לניתוח אוטומטי (Auto Analysis)</li>
-                <li>פתח ב-CodeBrowser (דאבל קליק)</li>
+                <li>Create a new Project: File → New Project</li>
+                <li>Import a file: File → Import File</li>
+                <li>Ghidra will auto-detect the format</li>
+                <li>Click Yes for Auto Analysis</li>
+                <li>Open in CodeBrowser (double-click)</li>
             </ol>
 
-            <h3>החלונות העיקריים</h3>
+            <h3>Main Windows</h3>
 
             <table>
                 <tr>
-                    <th>חלון</th>
-                    <th>תפקיד</th>
+                    <th>Window</th>
+                    <th>Purpose</th>
                 </tr>
                 <tr>
                     <td><strong>Listing</strong></td>
-                    <td>קוד Assembly - התצוגה העיקרית</td>
+                    <td>Assembly code - the main view</td>
                 </tr>
                 <tr>
                     <td><strong>Decompiler</strong></td>
-                    <td>קוד C משוחזר - קריא יותר!</td>
+                    <td>Reconstructed C code - more readable!</td>
                 </tr>
                 <tr>
                     <td><strong>Symbol Tree</strong></td>
-                    <td>רשימת פונקציות, imports, exports</td>
+                    <td>List of functions, imports, exports</td>
                 </tr>
                 <tr>
                     <td><strong>Data Type Manager</strong></td>
-                    <td>סוגי נתונים ומבנים</td>
+                    <td>Data types and structures</td>
                 </tr>
                 <tr>
                     <td><strong>Functions</strong></td>
-                    <td>רשימת כל הפונקציות</td>
+                    <td>List of all functions</td>
                 </tr>
             </table>
 
-            <h3>קיצורי מקלדת חשובים</h3>
+            <h3>Important Keyboard Shortcuts</h3>
 
             <table class="shortcut-table">
                 <tr>
-                    <th>קיצור</th>
-                    <th>פעולה</th>
+                    <th>Shortcut</th>
+                    <th>Action</th>
                 </tr>
                 <tr>
                     <td>G</td>
-                    <td>Go to Address - קפיצה לכתובת</td>
+                    <td>Go to Address - jump to address</td>
                 </tr>
                 <tr>
                     <td>L</td>
-                    <td>Rename - שינוי שם</td>
+                    <td>Rename - change name</td>
                 </tr>
                 <tr>
                     <td>;</td>
-                    <td>הוספת הערה</td>
+                    <td>Add comment</td>
                 </tr>
                 <tr>
                     <td>X</td>
-                    <td>Cross References - איפה משתמשים בזה</td>
+                    <td>Cross References - where is this used</td>
                 </tr>
                 <tr>
                     <td>Ctrl+Shift+E</td>
-                    <td>חיפוש טקסט</td>
+                    <td>Search text</td>
                 </tr>
                 <tr>
                     <td>D</td>
-                    <td>המרה ל-Data</td>
+                    <td>Convert to Data</td>
                 </tr>
                 <tr>
                     <td>C</td>
-                    <td>המרה ל-Code</td>
+                    <td>Convert to Code</td>
                 </tr>
             </table>
 
-            <h2>🔷 התחלה עם IDA</h2>
+            <h2>🔷 Getting Started with IDA</h2>
 
-            <h3>קיצורי מקלדת IDA</h3>
+            <h3>IDA Keyboard Shortcuts</h3>
 
             <table class="shortcut-table">
                 <tr>
-                    <th>קיצור</th>
-                    <th>פעולה</th>
+                    <th>Shortcut</th>
+                    <th>Action</th>
                 </tr>
                 <tr>
                     <td>G</td>
@@ -218,7 +218,7 @@
                 </tr>
                 <tr>
                     <td>;</td>
-                    <td>הוספת הערה</td>
+                    <td>Add comment</td>
                 </tr>
                 <tr>
                     <td>X</td>
@@ -226,15 +226,15 @@
                 </tr>
                 <tr>
                     <td>Space</td>
-                    <td>מעבר בין Graph ו-Text view</td>
+                    <td>Toggle between Graph and Text view</td>
                 </tr>
                 <tr>
                     <td>F5</td>
-                    <td>Decompile (אם יש Hex-Rays)</td>
+                    <td>Decompile (if Hex-Rays available)</td>
                 </tr>
                 <tr>
                     <td>Esc</td>
-                    <td>חזרה אחורה</td>
+                    <td>Go back</td>
                 </tr>
                 <tr>
                     <td>Ctrl+E</td>
@@ -242,44 +242,44 @@
                 </tr>
             </table>
 
-            <h2>🎯 טיפים לניתוח</h2>
+            <h2>🎯 Analysis Tips</h2>
 
             <div class="info-box">
-                <div class="info-box-title">💡 שלבי ניתוח מומלצים</div>
+                <div class="info-box-title">💡 Recommended Analysis Steps</div>
                 <ol>
-                    <li><strong>Imports</strong> - מה התוכנית משתמשת? (CreateFile, socket, RegOpenKey...)</li>
-                    <li><strong>Strings</strong> - חפש טקסטים מעניינים (URLs, שגיאות, הודעות)</li>
-                    <li><strong>Entry Point</strong> - התחל מנקודת הכניסה</li>
-                    <li><strong>Cross References</strong> - עקוב אחרי קריאות לפונקציות מעניינות</li>
-                    <li><strong>שנה שמות</strong> - תן שמות משמעותיים לפונקציות</li>
-                    <li><strong>הערות</strong> - תעד את מה שהבנת</li>
+                    <li><strong>Imports</strong> - What does the program use? (CreateFile, socket, RegOpenKey...)</li>
+                    <li><strong>Strings</strong> - Search for interesting text (URLs, errors, messages)</li>
+                    <li><strong>Entry Point</strong> - Start from the entry point</li>
+                    <li><strong>Cross References</strong> - Follow calls to interesting functions</li>
+                    <li><strong>Rename</strong> - Give meaningful names to functions</li>
+                    <li><strong>Comments</strong> - Document what you understand</li>
                 </ol>
             </div>
 
-            <h3>חיפוש Strings</h3>
+            <h3>Searching for Strings</h3>
 
             <p><strong>Ghidra:</strong> Search → For Strings</p>
-            <p><strong>IDA:</strong> View → Open Subviews → Strings (או Shift+F12)</p>
+            <p><strong>IDA:</strong> View → Open Subviews → Strings (or Shift+F12)</p>
 
-            <p>חפש:</p>
+            <p>Look for:</p>
             <ul>
                 <li>URLs, IPs, Domain names</li>
-                <li>נתיבי קבצים</li>
-                <li>הודעות שגיאה</li>
-                <li>מפתחות Registry</li>
-                <li>שמות פונקציות API</li>
+                <li>File paths</li>
+                <li>Error messages</li>
+                <li>Registry keys</li>
+                <li>API function names</li>
             </ul>
 
             <h3>Cross References (XRefs)</h3>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Cross Reference</div>
-                <p>קישור בין מקומות בקוד. "מאיפה קוראים לפונקציה הזו?" או "איפה משתמשים במשתנה הזה?"</p>
+                <div class="definition-title">📖 Definition: Cross Reference</div>
+                <p>A link between locations in the code. "Where is this function called from?" or "Where is this variable used?"</p>
             </div>
 
             <pre>
-; נניח שיש לנו פונקציה decrypt()
-; XRefs יראו לנו כל המקומות שקוראים לה:
+; Let's say we have a function decrypt()
+; XRefs will show us all places that call it:
 
 00401100: call decrypt     ; XRef #1
 00401250: call decrypt     ; XRef #2
@@ -289,11 +289,11 @@
             <h2>🔄 Decompiler</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Decompiler</div>
-                <p>כלי שממיר Assembly חזרה לקוד C (בקירוב). מקל מאוד על הבנת הלוגיקה!</p>
+                <div class="definition-title">📖 Definition: Decompiler</div>
+                <p>A tool that converts Assembly back to C code (approximately). Makes understanding the logic much easier!</p>
             </div>
 
-            <p>ב-Ghidra ה-Decompiler מובנה. ב-IDA צריך Hex-Rays plugin (יקר).</p>
+            <p>In Ghidra, the Decompiler is built-in. In IDA, you need the Hex-Rays plugin (expensive).</p>
 
             <pre>
 ; Assembly
@@ -319,34 +319,33 @@ while (counter < 10) {
             </pre>
 
             <div class="info-box">
-                <div class="info-box-title">⚠️ חשוב לזכור</div>
+                <div class="info-box-title">⚠️ Important to Remember</div>
                 <p>
-                    Decompiler לא מושלם! הקוד המשוחזר:<br>
-                    - לא תמיד מדויק 100%<br>
-                    - שמות משתנים הם גנריים (var1, param_1)<br>
-                    - מבנים וטיפוסים לא תמיד מזוהים נכון<br>
-                    - כדאי לאמת מול ה-Assembly
+                    Decompiler isn't perfect! The reconstructed code:<br>
+                    - Isn't always 100% accurate<br>
+                    - Variable names are generic (var1, param_1)<br>
+                    - Structures and types aren't always identified correctly<br>
+                    - Good to verify against Assembly
                 </p>
             </div>
 
-            <h2>📋 סיכום הפרק</h2>
+            <h2>📋 Chapter Summary</h2>
             
             <ul>
-                <li><strong>Static Analysis</strong> - ניתוח בלי הרצה</li>
-                <li><strong>IDA Pro</strong> - הכלי המקצועי (יקר)</li>
-                <li><strong>Ghidra</strong> - חינמי ומומלץ למתחילים!</li>
-                <li><strong>Decompiler</strong> - המרה ל-C לקריאות קלה</li>
-                <li>התחל מ-Imports ו-Strings</li>
-                <li>השתמש ב-XRefs לעקוב אחרי הקוד</li>
-                <li>תן שמות והוסף הערות!</li>
+                <li><strong>Static Analysis</strong> - analysis without running</li>
+                <li><strong>IDA Pro</strong> - the professional tool (expensive)</li>
+                <li><strong>Ghidra</strong> - free and recommended for beginners!</li>
+                <li><strong>Decompiler</strong> - conversion to C for easy reading</li>
+                <li>Start with Imports and Strings</li>
+                <li>Use XRefs to follow the code</li>
+                <li>Rename and add comments!</li>
             </ul>
 
             <div class="nav-buttons">
-                <a href="chapter8.html" class="nav-btn">→ פרק 8: Calling Conventions</a>
-                <a href="chapter10.html" class="nav-btn">פרק 10: Debugging ←</a>
+                <a href="chapter8.html" class="nav-btn">← Chapter 8: Calling Conventions</a>
+                <a href="chapter10.html" class="nav-btn">Chapter 10: Debugging →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 3: Crackme Challenge</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -50,45 +50,45 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
         <div class="chapter-number">🔧 Lab 3</div>
         <h1>Crackme Challenge</h1>
-        <p class="subtitle">פתרון אתגר RE קלאסי - מציאת סיסמה</p>
+        <p class="subtitle">Solving a classic RE challenge - finding the password</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🎯 מהו Crackme?</h2>
+            <h2>🎯 What is a Crackme?</h2>
             
             <p>
-                <strong>Crackme</strong> הוא תוכנית שנוצרה במיוחד לתרגול RE. המטרה: למצוא את הסיסמה הנכונה או לעקוף את בדיקת ההרשאה.
+                A <strong>Crackme</strong> is a program created specifically for RE practice. The goal: find the correct password or bypass the authorization check.
             </p>
             
-            <p>זה תרגול נפוץ בקהילת ה-RE ויש אלפי crackmes ברמות קושי שונות.</p>
+            <p>This is a common practice in the RE community and there are thousands of crackmes at various difficulty levels.</p>
 
-            <h2>📥 איפה למצוא Crackmes</h2>
+            <h2>📥 Where to Find Crackmes</h2>
             
             <ul>
-                <li><strong>crackmes.one</strong> - האתר הפופולרי ביותר</li>
-                <li><strong>reversing.kr</strong> - אתגרים מתקדמים</li>
-                <li><strong>challenges.re</strong> - מגוון רחב</li>
+                <li><strong>crackmes.one</strong> - The most popular site</li>
+                <li><strong>reversing.kr</strong> - Advanced challenges</li>
+                <li><strong>challenges.re</strong> - Wide variety</li>
             </ul>
 
             <div class="warning-box">
-                <div class="warning-title">⚠️ אזהרה</div>
+                <div class="warning-title">⚠️ Warning</div>
                 <p>
-                    תמיד הורד crackmes ממקורות מהימנים בלבד!<br>
-                    מומלץ להריץ ב-VM למקרה שמישהו הסתיר malware.
+                    Always download crackmes only from trusted sources!<br>
+                    It's recommended to run in a VM in case someone hid malware.
                 </p>
             </div>
 
-            <h2>🔬 Crackme לדוגמה</h2>
+            <h2>🔬 Example Crackme</h2>
 
-            <p>בואו ננתח את הפסאודו-קוד הבא (הקוד שתראה ב-Ghidra):</p>
+            <p>Let's analyze the following pseudo-code (the code you'll see in Ghidra):</p>
 
             <pre>
 int main() {
@@ -122,63 +122,63 @@ int check_password(char* password) {
             </pre>
 
             <div class="task-box">
-                <div class="task-title">משימה: מצא את הסיסמה!</div>
-                <p>מה הסיסמה הנכונה?</p>
+                <div class="task-title">Task: Find the Password!</div>
+                <p>What is the correct password?</p>
                 <div class="hint-box">
                     <div class="hint-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        💡 הצג תשובה
+                        💡 Show Answer
                     </div>
                     <div class="hint-content">
-                        הסיסמה היא: <code>SECRET12</code>
+                        The password is: <code>SECRET12</code>
                     </div>
                 </div>
             </div>
 
-            <h2>🔍 גישות לפתרון Crackme</h2>
+            <h2>🔍 Approaches to Solving Crackmes</h2>
 
-            <h3>גישה 1: ניתוח סטטי (Ghidra)</h3>
+            <h3>Approach 1: Static Analysis (Ghidra)</h3>
             <ol>
-                <li>פתח את הקובץ ב-Ghidra</li>
-                <li>מצא את <code>main</code> או את Entry Point</li>
-                <li>חפש קריאות ל-<code>strcmp</code>, <code>memcmp</code></li>
-                <li>חפש strings מעניינים ("password", "correct"...)</li>
-                <li>עקוב אחרי הלוגיקה של בדיקת הסיסמה</li>
+                <li>Open the file in Ghidra</li>
+                <li>Find <code>main</code> or the Entry Point</li>
+                <li>Search for calls to <code>strcmp</code>, <code>memcmp</code></li>
+                <li>Search for interesting strings ("password", "correct"...)</li>
+                <li>Follow the logic of the password check</li>
             </ol>
 
-            <h3>גישה 2: ניתוח דינמי (x64dbg)</h3>
+            <h3>Approach 2: Dynamic Analysis (x64dbg)</h3>
             <ol>
-                <li>פתח את הקובץ ב-x64dbg</li>
-                <li>שים BP על פונקציות השוואה:
+                <li>Open the file in x64dbg</li>
+                <li>Set BP on comparison functions:
                     <pre>bp strcmp
 bp memcmp
 bp lstrcmpA</pre>
                 </li>
-                <li>הרץ (F9) והזן סיסמה כלשהי</li>
-                <li>כשעוצר ב-BP, בדוק את הפרמטרים על ה-Stack</li>
-                <li>הסיסמה הנכונה תהיה באחד הפרמטרים!</li>
+                <li>Run (F9) and enter any password</li>
+                <li>When stopped at BP, check the parameters on the Stack</li>
+                <li>The correct password will be in one of the parameters!</li>
             </ol>
 
-            <h3>גישה 3: Patching</h3>
-            <p>במקום למצוא את הסיסמה, אפשר לשנות את הקוד:</p>
+            <h3>Approach 3: Patching</h3>
+            <p>Instead of finding the password, you can modify the code:</p>
             
             <pre>
-; לפני patch
+; before patch
 cmp eax, 0
 jne wrong_password    ; JNE = 0x75
 
-; אחרי patch - תמיד מצליח
+; after patch - always succeeds
 cmp eax, 0
 je  wrong_password    ; JE = 0x74
-; או:
+; or:
 nop                   ; NOP = 0x90
 nop
             </pre>
 
-            <h2>📝 תרגיל מעשי</h2>
+            <h2>📝 Practical Exercise</h2>
 
             <div class="task-box">
-                <div class="task-title">תרגיל: נתח את ה-Assembly הבא</div>
-                <p>זהו קוד check_password אמיתי. מה הסיסמה?</p>
+                <div class="task-title">Exercise: Analyze the Assembly Below</div>
+                <p>This is real check_password code. What is the password?</p>
                 <pre>
 check_password:
     push ebp
@@ -230,7 +230,7 @@ done:
 
             <div class="hint-box">
                 <div class="hint-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                    💡 רמז 1 - טבלת ASCII
+                    💡 Hint 1 - ASCII Table
                 </div>
                 <div class="hint-content">
                     0x41 = 'A', 0x42 = 'B', 0x43 = 'C', 0x44 = 'D'
@@ -239,51 +239,50 @@ done:
 
             <div class="hint-box">
                 <div class="hint-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                    💡 תשובה
+                    💡 Answer
                 </div>
                 <div class="hint-content">
-                    הסיסמה היא: <code>ABCD</code><br>
-                    אורך 4, והתווים הם A, B, C, D לפי הסדר.
+                    The password is: <code>ABCD</code><br>
+                    Length 4, and the characters are A, B, C, D in order.
                 </div>
             </div>
 
-            <h2>🎯 משימת בונוס</h2>
+            <h2>🎯 Bonus Task</h2>
 
             <div class="task-box">
-                <div class="task-title">אתגר: הורד ופתור crackme אמיתי</div>
+                <div class="task-title">Challenge: Download and Solve a Real Crackme</div>
                 <ol>
-                    <li>היכנס ל-<code>crackmes.one</code></li>
-                    <li>חפש crackme עם דירוג 1-2 (קל)</li>
-                    <li>הורד ונתח</li>
-                    <li>מצא את הסיסמה או עקוף את הבדיקה</li>
+                    <li>Go to <code>crackmes.one</code></li>
+                    <li>Search for a crackme with rating 1-2 (easy)</li>
+                    <li>Download and analyze</li>
+                    <li>Find the password or bypass the check</li>
                 </ol>
-                <p>Crackmes מומלצים למתחילים:</p>
+                <p>Recommended crackmes for beginners:</p>
                 <ul>
-                    <li>חפש "easy" או "beginner" בתיאור</li>
-                    <li>התחל עם crackmes של Windows (PE)</li>
-                    <li>עדיף 32-bit בהתחלה</li>
+                    <li>Search for "easy" or "beginner" in the description</li>
+                    <li>Start with Windows crackmes (PE)</li>
+                    <li>32-bit is better to start with</li>
                 </ul>
             </div>
 
-            <h2>📋 טיפים לפתרון Crackmes</h2>
+            <h2>📋 Tips for Solving Crackmes</h2>
 
             <div class="info-box">
-                <div class="info-box-title">💡 אסטרטגיה כללית</div>
+                <div class="info-box-title">💡 General Strategy</div>
                 <ol>
-                    <li><strong>חפש Strings</strong> - "wrong", "correct", "password"</li>
-                    <li><strong>חפש Imports</strong> - strcmp, MessageBox</li>
-                    <li><strong>מצא את נקודת ההחלטה</strong> - איפה הקוד מחליט אם להצליח או להיכשל</li>
-                    <li><strong>עקוב אחורה</strong> - מאיפה מגיע הערך שנבדק?</li>
-                    <li><strong>שים BP</strong> - על פונקציות השוואה ובדיקת הקלט</li>
+                    <li><strong>Search for Strings</strong> - "wrong", "correct", "password"</li>
+                    <li><strong>Search for Imports</strong> - strcmp, MessageBox</li>
+                    <li><strong>Find the decision point</strong> - where does the code decide to succeed or fail</li>
+                    <li><strong>Trace backwards</strong> - where does the checked value come from?</li>
+                    <li><strong>Set BP</strong> - on comparison functions and input checking</li>
                 </ol>
             </div>
 
             <div class="nav-buttons">
-                <a href="lab2.html" class="nav-btn">→ Lab 2: קריאת Assembly</a>
-                <a href="lab4.html" class="nav-btn">Lab 4: ניתוח PE ←</a>
+                <a href="lab2.html" class="nav-btn">← Lab 2: Reading Assembly</a>
+                <a href="lab4.html" class="nav-btn">Lab 4: PE Analysis →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

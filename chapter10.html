@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פרק 10: Debugging</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Chapter 10: Debugging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -30,7 +30,7 @@
         h2 { font-size: 1.8rem; color: var(--accent-primary); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
         h3 { font-size: 1.3rem; color: var(--accent-secondary); margin: 2rem 0 1rem; }
         p { margin-bottom: 1.5rem; }
-        .definition { background: var(--bg-card); border-right: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
+        .definition { background: var(--bg-card); border-left: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 1.5rem 0; }
         .definition-title { color: var(--accent-primary); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
         .info-box { background: rgba(0, 180, 216, 0.1); border: 1px solid var(--accent-secondary); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
         .info-box-title { color: var(--accent-secondary); font-weight: 700; margin-bottom: 0.5rem; }
@@ -39,9 +39,9 @@
         ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
         li { margin-bottom: 0.8rem; }
         code { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-primary); font-size: 0.9rem; }
-        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); direction: ltr; text-align: left; line-height: 1.6; }
+        pre { font-family: 'Fira Code', monospace; background: var(--bg-card); padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-color); line-height: 1.6; }
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
-        th, td { padding: 1rem; text-align: right; border-bottom: 1px solid var(--border-color); }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
         th { background: var(--bg-secondary); color: var(--accent-primary); font-weight: 600; }
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
         .nav-btn { background: var(--bg-card); color: var(--text-primary); padding: 1rem 2rem; border-radius: 10px; text-decoration: none; border: 1px solid var(--border-color); transition: all 0.3s; }
@@ -54,148 +54,148 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
-        <div class="chapter-number">פרק 10</div>
+        <div class="chapter-number">Chapter 10</div>
         <h1>Debugging</h1>
-        <p class="subtitle">ניתוח דינמי עם x64dbg ו-WinDbg</p>
+        <p class="subtitle">Dynamic analysis with x64dbg and WinDbg</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🔬 מהו ניתוח דינמי?</h2>
+            <h2>🔬 What is Dynamic Analysis?</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Dynamic Analysis</div>
-                <p>ניתוח תוכנה <strong>תוך כדי הרצה</strong>. מאפשר לראות ערכים בזמן אמת, לעקוב אחרי התנהגות, ולשנות ריצה.</p>
+                <div class="definition-title">📖 Definition: Dynamic Analysis</div>
+                <p>Analyzing software <strong>while running it</strong>. Allows seeing values in real-time, tracking behavior, and modifying execution.</p>
             </div>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Debugger</div>
-                <p>תוכנה שמאפשרת להריץ תוכנה אחרת צעד אחר צעד, לעצור בנקודות מסוימות, ולבדוק/לשנות זיכרון ורגיסטרים.</p>
+                <div class="definition-title">📖 Definition: Debugger</div>
+                <p>Software that allows running another program step by step, stopping at specific points, and examining/modifying memory and registers.</p>
             </div>
 
-            <p>יתרונות:</p>
+            <p>Advantages:</p>
             <ul>
-                <li>רואים ערכים אמיתיים בזמן ריצה</li>
-                <li>אפשר לעקוף בדיקות ותנאים</li>
-                <li>מגלים קוד שנפרס דינמית (unpacking)</li>
-                <li>קל לעקוב אחרי לוגיקה מסובכת</li>
+                <li>See real values at runtime</li>
+                <li>Can bypass checks and conditions</li>
+                <li>Discover dynamically unpacked code</li>
+                <li>Easy to follow complex logic</li>
             </ul>
 
             <div class="warning-box">
-                <div class="warning-box-title">⚠️ אזהרה</div>
+                <div class="warning-box-title">⚠️ Warning</div>
                 <p>
-                    כשמנתחים נוזקות, <strong>תמיד</strong> השתמש ב-VM מבודד!<br>
-                    הקוד רץ באמת ויכול לגרום נזק.
+                    When analyzing malware, <strong>always</strong> use an isolated VM!<br>
+                    The code actually runs and can cause damage.
                 </p>
             </div>
 
-            <h2>🛠️ כלי Debugging</h2>
+            <h2>🛠️ Debugging Tools</h2>
 
             <div class="tool-card">
                 <div class="tool-name">🔧 x64dbg</div>
-                <div class="tool-type">User-mode debugger - חינמי ופופולרי</div>
+                <div class="tool-type">User-mode debugger - Free and Popular</div>
                 <p>
-                    הדיבאגר הפופולרי ביותר ל-Windows RE. חינמי, פתוח, ועם ממשק נוח.
+                    The most popular debugger for Windows RE. Free, open-source, and with a convenient interface.
                 </p>
                 <ul>
-                    <li>תומך ב-32-bit (x32dbg) ו-64-bit (x64dbg)</li>
-                    <li>ממשק גרפי נוח</li>
-                    <li>תמיכה בפלאגינים</li>
-                    <li>מומלץ למתחילים!</li>
+                    <li>Supports 32-bit (x32dbg) and 64-bit (x64dbg)</li>
+                    <li>Convenient graphical interface</li>
+                    <li>Plugin support</li>
+                    <li>Recommended for beginners!</li>
                 </ul>
             </div>
 
             <div class="tool-card">
                 <div class="tool-name">🔧 WinDbg</div>
-                <div class="tool-type">Microsoft's debugger - לkernel ו-user mode</div>
+                <div class="tool-type">Microsoft's debugger - for kernel and user mode</div>
                 <p>
-                    הדיבאגר הרשמי של Microsoft. חזק מאוד אבל עם עקומת למידה תלולה.
+                    Microsoft's official debugger. Very powerful but with a steep learning curve.
                 </p>
                 <ul>
-                    <li>יכול לדבג kernel drivers</li>
-                    <li>גישה לsymbols של Windows</li>
-                    <li>ממשק CLI (יש גרסה חדשה עם GUI)</li>
+                    <li>Can debug kernel drivers</li>
+                    <li>Access to Windows symbols</li>
+                    <li>CLI interface (newer version has GUI)</li>
                 </ul>
             </div>
 
             <div class="tool-card">
                 <div class="tool-name">🔧 OllyDbg</div>
-                <div class="tool-type">קלאסיקה - 32-bit בלבד</div>
+                <div class="tool-type">Classic - 32-bit only</div>
                 <p>
-                    היה הכלי הכי פופולרי לפני x64dbg. עדיין טוב אבל לא מתעדכן.
+                    Was the most popular tool before x64dbg. Still good but not updated.
                 </p>
             </div>
 
-            <h2>🚀 התחלה עם x64dbg</h2>
+            <h2>🚀 Getting Started with x64dbg</h2>
 
-            <h3>ממשק המשתמש</h3>
+            <h3>User Interface</h3>
 
             <table>
                 <tr>
-                    <th>חלון</th>
-                    <th>תוכן</th>
+                    <th>Window</th>
+                    <th>Content</th>
                 </tr>
                 <tr>
                     <td><strong>CPU</strong></td>
-                    <td>קוד Assembly - התצוגה העיקרית</td>
+                    <td>Assembly code - the main view</td>
                 </tr>
                 <tr>
                     <td><strong>Registers</strong></td>
-                    <td>ערכי הרגיסטרים בזמן אמת</td>
+                    <td>Register values in real-time</td>
                 </tr>
                 <tr>
                     <td><strong>Stack</strong></td>
-                    <td>תוכן ה-Stack</td>
+                    <td>Stack contents</td>
                 </tr>
                 <tr>
                     <td><strong>Dump</strong></td>
-                    <td>תצוגת זיכרון (hex)</td>
+                    <td>Memory view (hex)</td>
                 </tr>
                 <tr>
                     <td><strong>Memory Map</strong></td>
-                    <td>מפת אזורי הזיכרון</td>
+                    <td>Map of memory regions</td>
                 </tr>
                 <tr>
                     <td><strong>Breakpoints</strong></td>
-                    <td>רשימת נקודות עצירה</td>
+                    <td>List of breakpoints</td>
                 </tr>
             </table>
 
-            <h3>קיצורי מקלדת</h3>
+            <h3>Keyboard Shortcuts</h3>
 
             <table class="shortcut-table">
                 <tr>
-                    <th>קיצור</th>
-                    <th>פעולה</th>
+                    <th>Shortcut</th>
+                    <th>Action</th>
                 </tr>
                 <tr>
                     <td>F2</td>
-                    <td>Toggle Breakpoint - הפעלה/כיבוי BP</td>
+                    <td>Toggle Breakpoint - enable/disable BP</td>
                 </tr>
                 <tr>
                     <td>F7</td>
-                    <td>Step Into - צעד פנימה (נכנס לפונקציות)</td>
+                    <td>Step Into - step inside (enters functions)</td>
                 </tr>
                 <tr>
                     <td>F8</td>
-                    <td>Step Over - צעד מעל (לא נכנס)</td>
+                    <td>Step Over - step over (doesn't enter)</td>
                 </tr>
                 <tr>
                     <td>F9</td>
-                    <td>Run - הרץ עד ה-BP הבא</td>
+                    <td>Run - run until next BP</td>
                 </tr>
                 <tr>
                     <td>Ctrl+F9</td>
-                    <td>Run until Return - הרץ עד סוף הפונקציה</td>
+                    <td>Run until Return - run until function end</td>
                 </tr>
                 <tr>
                     <td>Ctrl+G</td>
-                    <td>Go to Address - קפיצה לכתובת</td>
+                    <td>Go to Address - jump to address</td>
                 </tr>
                 <tr>
                     <td>G</td>
@@ -203,169 +203,168 @@
                 </tr>
                 <tr>
                     <td>;</td>
-                    <td>הוספת הערה</td>
+                    <td>Add comment</td>
                 </tr>
                 <tr>
                     <td>:</td>
-                    <td>שינוי שם (Label)</td>
+                    <td>Rename (Label)</td>
                 </tr>
             </table>
 
             <h2>🔴 Breakpoints</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Breakpoint (BP)</div>
-                <p>נקודה בקוד שבה הדיבאגר יעצור את הריצה. מאפשר לבדוק מצב בנקודה ספציפית.</p>
+                <div class="definition-title">📖 Definition: Breakpoint (BP)</div>
+                <p>A point in the code where the debugger will stop execution. Allows examining state at a specific point.</p>
             </div>
 
-            <h3>סוגי Breakpoints</h3>
+            <h3>Types of Breakpoints</h3>
 
             <table>
                 <tr>
-                    <th>סוג</th>
-                    <th>שימוש</th>
-                    <th>איך</th>
+                    <th>Type</th>
+                    <th>Use</th>
+                    <th>How</th>
                 </tr>
                 <tr>
                     <td><strong>Software BP</strong></td>
-                    <td>עצירה בפקודה ספציפית</td>
-                    <td>F2 על השורה</td>
+                    <td>Stop at specific instruction</td>
+                    <td>F2 on the line</td>
                 </tr>
                 <tr>
                     <td><strong>Hardware BP</strong></td>
-                    <td>עצירה על גישה לזיכרון</td>
-                    <td>ימני → Breakpoint → Hardware</td>
+                    <td>Stop on memory access</td>
+                    <td>Right-click → Breakpoint → Hardware</td>
                 </tr>
                 <tr>
                     <td><strong>Memory BP</strong></td>
-                    <td>עצירה כשקוראים/כותבים לאזור</td>
-                    <td>ימני על dump → Breakpoint</td>
+                    <td>Stop when reading/writing to region</td>
+                    <td>Right-click on dump → Breakpoint</td>
                 </tr>
                 <tr>
                     <td><strong>Conditional BP</strong></td>
-                    <td>עצירה רק אם תנאי מתקיים</td>
-                    <td>ימני → Edit condition</td>
+                    <td>Stop only if condition is met</td>
+                    <td>Right-click → Edit condition</td>
                 </tr>
             </table>
 
             <div class="info-box">
-                <div class="info-box-title">💡 טיפ: BP על API</div>
+                <div class="info-box-title">💡 Tip: BP on API</div>
                 <p>
-                    אפשר לשים BP על פונקציות Windows API!<br>
+                    You can set BP on Windows API functions!<br>
                     <code>bp kernel32.CreateFileA</code><br>
                     <code>bp ws2_32.connect</code><br>
-                    זה עוזר לתפוס פעולות מעניינות.
+                    This helps catch interesting operations.
                 </p>
             </div>
 
             <h2>👣 Stepping</h2>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Step Into (F7)</div>
-                <p>מבצע פקודה אחת. אם זה CALL, נכנס לתוך הפונקציה.</p>
+                <div class="definition-title">📖 Definition: Step Into (F7)</div>
+                <p>Executes one instruction. If it's a CALL, enters the function.</p>
             </div>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Step Over (F8)</div>
-                <p>מבצע פקודה אחת. אם זה CALL, מריץ את כל הפונקציה ועוצר אחריה.</p>
+                <div class="definition-title">📖 Definition: Step Over (F8)</div>
+                <p>Executes one instruction. If it's a CALL, runs the entire function and stops after it.</p>
             </div>
 
             <pre>
 00401000: mov eax, 5
-00401005: call func      ; F7 יכנס ל-func, F8 ירוץ וימשיך
-0040100A: add eax, 1     ; נעצור כאן אחרי F8
+00401005: call func      ; F7 enters func, F8 runs it and continues
+0040100A: add eax, 1     ; We stop here after F8
             </pre>
 
-            <h2>🔧 שינוי בזמן ריצה</h2>
+            <h2>🔧 Runtime Modification</h2>
 
-            <h3>שינוי רגיסטרים</h3>
-            <p>דאבל קליק על ערך רגיסטר בחלון Registers ושנה.</p>
+            <h3>Modifying Registers</h3>
+            <p>Double-click on a register value in the Registers window and change it.</p>
 
-            <h3>שינוי זיכרון</h3>
-            <p>בחלון Dump, דאבל קליק על byte ושנה.</p>
+            <h3>Modifying Memory</h3>
+            <p>In the Dump window, double-click on a byte and change it.</p>
 
-            <h3>שינוי פקודה (Patching)</h3>
+            <h3>Modifying Instructions (Patching)</h3>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Patching</div>
-                <p>שינוי bytes בקוד כדי לשנות התנהגות. למשל, להפוך JE ל-JNE.</p>
+                <div class="definition-title">📖 Definition: Patching</div>
+                <p>Changing bytes in the code to modify behavior. For example, changing JE to JNE.</p>
             </div>
 
             <pre>
-; קוד מקורי - בודק סיסמה
+; Original code - checks password
 cmp eax, 1
-je  valid_password    ; קופץ אם נכון
+je  valid_password    ; jumps if correct
 
-; אחרי patch - תמיד קופץ
+; After patch - always jumps
 cmp eax, 1
 jmp valid_password    ; JE (0x74) → JMP (0xEB)
             </pre>
 
             <div class="info-box">
-                <div class="info-box-title">💡 ב-x64dbg</div>
+                <div class="info-box-title">💡 In x64dbg</div>
                 <p>
-                    לשנות פקודה: Space על השורה, או ימני → Assemble<br>
-                    לשמור שינויים לקובץ: ימני → Patches → Patch File
+                    To modify instruction: Space on the line, or right-click → Assemble<br>
+                    To save changes to file: Right-click → Patches → Patch File
                 </p>
             </div>
 
-            <h2>🔍 טכניקות RE</h2>
+            <h2>🔍 RE Techniques</h2>
 
-            <h3>מציאת הסיסמה הנכונה</h3>
+            <h3>Finding the Correct Password</h3>
 
             <pre>
-; קוד טיפוסי של בדיקת סיסמה
-call get_input        ; קבלת קלט מהמשתמש
-push eax              ; הסיסמה שהוזנה
-push correct_password ; הסיסמה הנכונה
-call strcmp           ; השוואה
+; Typical password check code
+call get_input        ; get input from user
+push eax              ; the entered password
+push correct_password ; the correct password
+call strcmp           ; comparison
 test eax, eax
-jnz  wrong_password   ; אם לא שווה - כישלון
+jnz  wrong_password   ; if not equal - failure
 jmp  success
             </pre>
 
-            <p>אפשרויות:</p>
+            <p>Options:</p>
             <ol>
-                <li><strong>BP על strcmp</strong> - לראות מה מושווה</li>
-                <li><strong>לשנות ZF</strong> - אחרי TEST, לשנות את Zero Flag</li>
-                <li><strong>Patch</strong> - לשנות JNZ ל-JZ (או NOP)</li>
+                <li><strong>BP on strcmp</strong> - see what's being compared</li>
+                <li><strong>Change ZF</strong> - after TEST, change the Zero Flag</li>
+                <li><strong>Patch</strong> - change JNZ to JZ (or NOP)</li>
             </ol>
 
             <h3>Tracing</h3>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Trace</div>
-                <p>הרצת הקוד ורישום כל פקודה שמתבצעת. שימושי להבנת flow.</p>
+                <div class="definition-title">📖 Definition: Trace</div>
+                <p>Running the code and recording every instruction executed. Useful for understanding flow.</p>
             </div>
 
-            <p>ב-x64dbg: Debug → Trace over / Trace into</p>
+            <p>In x64dbg: Debug → Trace over / Trace into</p>
 
-            <h2>📋 סיכום הפרק</h2>
+            <h2>📋 Chapter Summary</h2>
             
             <ul>
-                <li><strong>Dynamic Analysis</strong> - ניתוח תוך כדי הרצה</li>
-                <li><strong>x64dbg</strong> - דיבאגר מומלץ למתחילים</li>
-                <li><strong>Breakpoints</strong> - נקודות עצירה (F2)</li>
+                <li><strong>Dynamic Analysis</strong> - analysis while running</li>
+                <li><strong>x64dbg</strong> - recommended debugger for beginners</li>
+                <li><strong>Breakpoints</strong> - stopping points (F2)</li>
                 <li><strong>F7</strong> = Step Into, <strong>F8</strong> = Step Over</li>
                 <li><strong>F9</strong> = Run until next breakpoint</li>
-                <li>אפשר לשנות רגיסטרים, זיכרון, ופקודות בזמן ריצה</li>
-                <li><strong>Patching</strong> - שינוי קוד לשינוי התנהגות</li>
+                <li>Can modify registers, memory, and instructions at runtime</li>
+                <li><strong>Patching</strong> - modifying code to change behavior</li>
             </ul>
 
             <div class="info-box">
-                <div class="info-box-title">🎉 סיימת את החלק התיאורטי!</div>
+                <div class="info-box-title">🎉 You've completed the theoretical section!</div>
                 <p>
-                    עכשיו הגיע הזמן לתרגול מעשי.<br>
-                    עבור ל-Labs כדי ליישם את מה שלמדת!
+                    Now it's time for practical exercises.<br>
+                    Go to Labs to apply what you've learned!
                 </p>
             </div>
 
             <div class="nav-buttons">
-                <a href="chapter9.html" class="nav-btn">→ פרק 9: כלי ניתוח</a>
-                <a href="lab1.html" class="nav-btn">🔧 Lab 1: הכרת הכלים ←</a>
+                <a href="chapter9.html" class="nav-btn">← Chapter 9: Analysis Tools</a>
+                <a href="lab1.html" class="nav-btn">🔧 Lab 1: Getting to Know the Tools →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 2: קריאת Assembly</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Lab 2: Reading Assembly</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -18,7 +18,7 @@
             --border-color: #2a3548;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Heebo', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.9; }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         nav { background: var(--bg-secondary); padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         nav a { color: var(--accent-primary); text-decoration: none; }
@@ -48,30 +48,30 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
         <div class="chapter-number">🔧 Lab 2</div>
-        <h1>קריאת Assembly</h1>
-        <p class="subtitle">ניתוח קטעי קוד והבנת הלוגיקה</p>
+        <h1>Reading Assembly</h1>
+        <p class="subtitle">Analyzing code snippets and understanding the logic</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🎯 מטרות התרגול</h2>
+            <h2>🎯 Lab Objectives</h2>
             <ul>
-                <li>קריאה והבנה של קוד Assembly</li>
-                <li>זיהוי מבנים נפוצים (if, loops, functions)</li>
-                <li>המרה מ-Assembly ל-C</li>
+                <li>Reading and understanding Assembly code</li>
+                <li>Identifying common structures (if, loops, functions)</li>
+                <li>Converting from Assembly to C</li>
             </ul>
 
-            <h2>📝 תרגיל 1: תנועת נתונים</h2>
+            <h2>📝 Exercise 1: Data Movement</h2>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 1.1</div>
-                <p>מה יהיה הערך של כל רגיסטר בסוף?</p>
+                <div class="exercise-title">Exercise 1.1</div>
+                <p>What will be the value of each register at the end?</p>
                 <pre>
 mov eax, 10
 mov ebx, 20
@@ -80,7 +80,7 @@ add ecx, ebx
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <code>EAX = 10</code><br>
@@ -91,8 +91,8 @@ add ecx, ebx
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 1.2</div>
-                <p>מה יהיה הערך של EAX בסוף?</p>
+                <div class="exercise-title">Exercise 1.2</div>
+                <p>What will be the value of EAX at the end?</p>
                 <pre>
 mov eax, 100
 sub eax, 25
@@ -101,7 +101,7 @@ dec eax
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <code>EAX = 84</code><br>
@@ -113,90 +113,90 @@ dec eax
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 1.3</div>
-                <p>מה ההבדל בין שתי השורות?</p>
+                <div class="exercise-title">Exercise 1.3</div>
+                <p>What is the difference between these two lines?</p>
                 <pre>
-mov eax, [ebp-4]    ; שורה A
-lea eax, [ebp-4]    ; שורה B
+mov eax, [ebp-4]    ; Line A
+lea eax, [ebp-4]    ; Line B
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
-                        <strong>שורה A (MOV):</strong> מעתיק את <em>הערך</em> שנמצא בכתובת EBP-4 אל EAX<br>
-                        <strong>שורה B (LEA):</strong> מעתיק את <em>הכתובת עצמה</em> (EBP-4) אל EAX<br><br>
-                        אם EBP=0x1000 והערך בכתובת 0x0FFC הוא 42:<br>
+                        <strong>Line A (MOV):</strong> Copies the <em>value</em> at address EBP-4 to EAX<br>
+                        <strong>Line B (LEA):</strong> Copies the <em>address itself</em> (EBP-4) to EAX<br><br>
+                        If EBP=0x1000 and the value at address 0x0FFC is 42:<br>
                         MOV: EAX = 42<br>
                         LEA: EAX = 0x0FFC
                     </div>
                 </div>
             </div>
 
-            <h2>📝 תרגיל 2: פעולות לוגיות</h2>
+            <h2>📝 Exercise 2: Logical Operations</h2>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 2.1</div>
-                <p>מה יהיה EAX בסוף? (רמז: עבוד בבינארי)</p>
+                <div class="exercise-title">Exercise 2.1</div>
+                <p>What will EAX be at the end? (Hint: work in binary)</p>
                 <pre>
 mov eax, 0xFF      ; 1111 1111
 and eax, 0x0F      ; 0000 1111
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <code>EAX = 0x0F = 15</code><br>
-                        AND משאיר רק את ה-bits ששניהם 1:<br>
+                        AND keeps only the bits that are 1 in both operands:<br>
                         1111 1111 AND 0000 1111 = 0000 1111
                     </div>
                 </div>
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 2.2</div>
-                <p>מה זה עושה?</p>
+                <div class="exercise-title">Exercise 2.2</div>
+                <p>What does this do?</p>
                 <pre>
 xor eax, eax
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
-                        <strong>מאפס את EAX!</strong><br>
-                        XOR של מספר עם עצמו תמיד נותן 0.<br>
-                        זו דרך מהירה יותר מ-<code>mov eax, 0</code>
+                        <strong>Zeros out EAX!</strong><br>
+                        XOR of a number with itself always gives 0.<br>
+                        This is faster than <code>mov eax, 0</code>
                     </div>
                 </div>
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 2.3</div>
-                <p>מה יהיה EAX?</p>
+                <div class="exercise-title">Exercise 2.3</div>
+                <p>What will EAX be?</p>
                 <pre>
 mov eax, 8        ; 0000 1000
 shl eax, 2        ; shift left 2
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <code>EAX = 32</code><br>
-                        SHL 2 = כפל ב-4 (2²)<br>
+                        SHL 2 = multiply by 4 (2²)<br>
                         8 × 4 = 32<br>
-                        בבינארי: 0000 1000 → 0010 0000
+                        In binary: 0000 1000 → 0010 0000
                     </div>
                 </div>
             </div>
 
-            <h2>📝 תרגיל 3: זיהוי תנאים</h2>
+            <h2>📝 Exercise 3: Identifying Conditions</h2>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 3.1</div>
-                <p>תרגם את הקוד הבא ל-C:</p>
+                <div class="exercise-title">Exercise 3.1</div>
+                <p>Translate the following code to C:</p>
                 <pre>
     cmp eax, 10
     jl  less_than
@@ -208,7 +208,7 @@ end:
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <pre>
@@ -218,14 +218,14 @@ if (eax >= 10) {
     ebx = 0;
 }
                         </pre>
-                        או בקיצור: <code>ebx = (eax >= 10) ? 1 : 0;</code>
+                        Or shortly: <code>ebx = (eax >= 10) ? 1 : 0;</code>
                     </div>
                 </div>
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 3.2</div>
-                <p>מה הקוד הבא בודק?</p>
+                <div class="exercise-title">Exercise 3.2</div>
+                <p>What does the following code check?</p>
                 <pre>
     test eax, eax
     jnz  not_zero
@@ -237,7 +237,7 @@ end:
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <pre>
@@ -247,17 +247,17 @@ if (eax == 0) {
     // code B
 }
                         </pre>
-                        TEST EAX, EAX מדליק את ZF אם EAX=0.<br>
-                        JNZ = Jump if Not Zero = קופץ אם EAX ≠ 0
+                        TEST EAX, EAX sets ZF to 1 if EAX=0.<br>
+                        JNZ = Jump if Not Zero = jumps if EAX ≠ 0
                     </div>
                 </div>
             </div>
 
-            <h2>📝 תרגיל 4: לולאות</h2>
+            <h2>📝 Exercise 4: Loops</h2>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 4.1</div>
-                <p>תרגם ל-C ומצא את הערך הסופי של EAX:</p>
+                <div class="exercise-title">Exercise 4.1</div>
+                <p>Translate to C and find the final value of EAX:</p>
                 <pre>
     mov eax, 0
     mov ecx, 5
@@ -268,7 +268,7 @@ loop_start:
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <pre>
@@ -284,8 +284,8 @@ for (int i = 5; i > 0; i--) {
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 4.2</div>
-                <p>מה הלולאה הזו עושה?</p>
+                <div class="exercise-title">Exercise 4.2</div>
+                <p>What does this loop do?</p>
                 <pre>
     mov ecx, 10
     mov esi, source
@@ -300,32 +300,32 @@ copy_loop:
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
-                        <strong>מעתיקה 10 bytes מכתובת source לכתובת dest!</strong><br>
-                        בC זה: <code>memcpy(dest, source, 10);</code><br><br>
-                        כל איטרציה:<br>
-                        1. קוראת byte מ-source<br>
-                        2. כותבת אותו ל-dest<br>
-                        3. מקדמת את שני המצביעים<br>
-                        4. ממשיכה עד ECX=0
+                        <strong>Copies 10 bytes from address source to address dest!</strong><br>
+                        In C: <code>memcpy(dest, source, 10);</code><br><br>
+                        Each iteration:<br>
+                        1. Reads a byte from source<br>
+                        2. Writes it to dest<br>
+                        3. Advances both pointers<br>
+                        4. Continues until ECX=0
                     </div>
                 </div>
             </div>
 
-            <h2>📝 תרגיל 5: פונקציות</h2>
+            <h2>📝 Exercise 5: Functions</h2>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 5.1</div>
-                <p>מה הפונקציה הזו מחשבת?</p>
+                <div class="exercise-title">Exercise 5.1</div>
+                <p>What does this function calculate?</p>
                 <pre>
 func:
     push ebp
     mov ebp, esp
     
-    mov eax, [ebp+8]     ; פרמטר 1
-    mov ebx, [ebp+12]    ; פרמטר 2
+    mov eax, [ebp+8]     ; parameter 1
+    mov ebx, [ebp+12]    ; parameter 2
     imul eax, ebx        ; EAX = EAX * EBX
     
     pop ebp
@@ -333,7 +333,7 @@ func:
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
                         <pre>
@@ -341,14 +341,14 @@ int func(int a, int b) {
     return a * b;
 }
                         </pre>
-                        הפונקציה מכפילה שני מספרים ומחזירה את התוצאה.
+                        The function multiplies two numbers and returns the result.
                     </div>
                 </div>
             </div>
 
             <div class="exercise-box">
-                <div class="exercise-title">תרגיל 5.2 - אתגר!</div>
-                <p>מה הפונקציה הזו עושה? (רמז: פונקציה רקורסיבית מפורסמת)</p>
+                <div class="exercise-title">Exercise 5.2 - Challenge!</div>
+                <p>What does this function do? (Hint: famous recursive function)</p>
                 <pre>
 mystery:
     push ebp
@@ -377,10 +377,10 @@ done:
                 </pre>
                 <div class="answer-box">
                     <div class="answer-title" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
-                        👁️ הצג תשובה
+                        👁️ Show Answer
                     </div>
                     <div class="answer-content">
-                        <strong>זו פונקציית Factorial (עצרת)!</strong>
+                        <strong>This is the Factorial function!</strong>
                         <pre>
 int factorial(int n) {
     if (n <= 1) {
@@ -394,21 +394,20 @@ int factorial(int n) {
                 </div>
             </div>
 
-            <h2>✅ סיכום</h2>
-            <p>אחרי התרגולים האלה, אתה אמור להרגיש יותר בנוח עם:</p>
+            <h2>✅ Summary</h2>
+            <p>After these exercises, you should feel more comfortable with:</p>
             <ul>
-                <li>קריאת הוראות MOV, ADD, SUB, AND, XOR, SHL</li>
-                <li>זיהוי תנאים (CMP + Jxx)</li>
-                <li>זיהוי לולאות</li>
-                <li>הבנת מבנה פונקציות</li>
+                <li>Reading MOV, ADD, SUB, AND, XOR, SHL instructions</li>
+                <li>Identifying conditions (CMP + Jxx)</li>
+                <li>Identifying loops</li>
+                <li>Understanding function structures</li>
             </ul>
 
             <div class="nav-buttons">
-                <a href="lab1.html" class="nav-btn">→ Lab 1: הכרת הכלים</a>
-                <a href="lab3.html" class="nav-btn">Lab 3: Crackme Challenge ←</a>
+                <a href="lab1.html" class="nav-btn">← Lab 1: Getting to Know the Tools</a>
+                <a href="lab3.html" class="nav-btn">Lab 3: Crackme Challenge →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

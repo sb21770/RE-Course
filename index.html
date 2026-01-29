@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RE Academy | קורס Reverse Engineering מקיף בעברית</title>
-<meta name="description" content="קורס מקיף ללימוד Reverse Engineering בעברית - מתיאוריה ועד תרגול מעשי. 10 פרקים תיאורטיים + 5 תרגולי Hands-on.">
-<meta property="og:title" content="RE Academy | קורס Reverse Engineering">
-<meta property="og:description" content="קורס מקיף בעברית ללימוד הנדסה לאחור - Assembly, PE Format, Debugging ועוד">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://sb21770.github.io/RE-Course/">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Reverse Engineering Course - From the Beginning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -31,7 +26,7 @@
         }
 
         body {
-            font-family: 'Heebo', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.8;
@@ -270,7 +265,7 @@
         .chapter-number {
             position: absolute;
             top: 1rem;
-            left: 1rem;
+            right: 1rem;
             width: 50px;
             height: 50px;
             background: var(--gradient-cyber);
@@ -317,7 +312,7 @@
         .chapter-card .arrow {
             position: absolute;
             bottom: 1.5rem;
-            left: 1.5rem;
+            right: 1.5rem;
             width: 40px;
             height: 40px;
             background: var(--bg-secondary);
@@ -405,7 +400,7 @@
                 <span class="logo-text">RE Academy</span>
             </div>
             <nav>
-                <span style="color: var(--text-secondary);">קורס Reverse Engineering מקיף</span>
+                <span style="color: var(--text-secondary);">Comprehensive Reverse Engineering Course</span>
             </nav>
         </div>
     </header>
@@ -413,21 +408,21 @@
     <section class="hero">
         <h1>🔓 Reverse Engineering</h1>
         <p class="hero-subtitle">
-            קורס מקיף מההתחלה ללימוד הנדסה לאחור - מתיאוריה ועד תרגול מעשי.
-            מיועד לאנשי סייבר שרוצים להבין לעומק איך תוכנות עובדות מבפנים.
+            A comprehensive course from the beginning for learning reverse engineering - from theory to practical exercises.
+            Designed for cyber professionals who want to deeply understand how software works from the inside.
         </p>
         <div class="hero-stats">
             <div class="stat-item">
                 <div class="stat-number">10</div>
-                <div class="stat-label">פרקים תיאורטיים</div>
+                <div class="stat-label">Theory Chapters</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">15+</div>
-                <div class="stat-label">תרגולים מעשיים</div>
+                <div class="stat-label">Hands-on Labs</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">∞</div>
-                <div class="stat-label">ידע חדש</div>
+                <div class="stat-label">New Knowledge</div>
             </div>
         </div>
     </section>
@@ -435,71 +430,71 @@
     <main>
         <!-- Course Overview -->
         <section class="course-overview">
-            <h2 class="section-title">מה תלמד בקורס?</h2>
+            <h2 class="section-title">What Will You Learn?</h2>
             <div class="overview-grid">
                 <div class="overview-item">
                     <div class="overview-icon">🏗️</div>
-                    <h3>ארכיטקטורת מחשבים</h3>
-                    <p>הבנת CPU, זיכרון, רגיסטרים וכיצד המחשב מריץ קוד</p>
+                    <h3>Computer Architecture</h3>
+                    <p>Understanding CPU, memory, registers, and how computers execute code</p>
                 </div>
                 <div class="overview-item">
                     <div class="overview-icon">📝</div>
-                    <h3>שפת Assembly</h3>
-                    <p>קריאה והבנה של שפת מכונה - השפה הקרובה ביותר לחומרה</p>
+                    <h3>Assembly Language</h3>
+                    <p>Reading and understanding machine language - the closest to hardware</p>
                 </div>
                 <div class="overview-item">
                     <div class="overview-icon">📦</div>
-                    <h3>פורמט PE</h3>
-                    <p>מבנה קבצי הרצה ב-Windows וכיצד לנתח אותם</p>
+                    <h3>PE Format</h3>
+                    <p>Structure of Windows executable files and how to analyze them</p>
                 </div>
                 <div class="overview-item">
                     <div class="overview-icon">🐛</div>
                     <h3>Debugging</h3>
-                    <p>שימוש ב-Debuggers לניתוח תוכנות בזמן ריצה</p>
+                    <p>Using debuggers to analyze programs at runtime</p>
                 </div>
                 <div class="overview-item">
                     <div class="overview-icon">🔍</div>
-                    <h3>ניתוח סטטי</h3>
-                    <p>שימוש ב-IDA Pro ו-Ghidra לניתוח ללא הרצה</p>
+                    <h3>Static Analysis</h3>
+                    <p>Using IDA Pro and Ghidra for analysis without execution</p>
                 </div>
                 <div class="overview-item">
                     <div class="overview-icon">🛡️</div>
-                    <h3>ניתוח Malware</h3>
-                    <p>יסודות ניתוח נוזקות ותוכנות זדוניות</p>
+                    <h3>Malware Analysis</h3>
+                    <p>Fundamentals of analyzing malicious software</p>
                 </div>
             </div>
         </section>
 
         <!-- Prerequisites -->
         <section class="prerequisites">
-            <h2 class="section-title">דרישות קדם</h2>
+            <h2 class="section-title">Prerequisites</h2>
             <ul class="prereq-list">
                 <li>
                     <span class="prereq-icon">✅</span>
                     <div>
-                        <strong>ידע בסיסי במערכות הפעלה</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">הבנה של תהליכים, קבצים, וניהול זיכרון</p>
+                        <strong>Basic knowledge of operating systems</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Understanding of processes, files, and memory management</p>
                     </div>
                 </li>
                 <li>
                     <span class="prereq-icon">✅</span>
                     <div>
-                        <strong>היכרות עם תכנות (רצוי C)</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">משתנים, פונקציות, לולאות, תנאים</p>
+                        <strong>Familiarity with programming (preferably C)</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Variables, functions, loops, conditions</p>
                     </div>
                 </li>
                 <li>
                     <span class="prereq-icon">✅</span>
                     <div>
-                        <strong>הבנה בסיסית של מספרים בינאריים</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">הקורס יחזור על זה, אבל רקע עוזר</p>
+                        <strong>Basic understanding of binary numbers</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">The course will review this, but background helps</p>
                     </div>
                 </li>
                 <li>
                     <span class="prereq-icon">✅</span>
                     <div>
-                        <strong>סקרנות ורצון ללמוד!</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">RE דורש סבלנות וחשיבה אנליטית</p>
+                        <strong>Curiosity and willingness to learn!</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">RE requires patience and analytical thinking</p>
                     </div>
                 </li>
             </ul>
@@ -507,226 +502,224 @@
 
         <!-- Chapters -->
         <section class="chapters-section">
-            <h2 class="section-title">תוכן הקורס</h2>
+            <h2 class="section-title">Course Content</h2>
             
-            <h3 style="color: var(--accent-primary); margin: 2rem 0 1.5rem; font-size: 1.3rem;">📚 חלק א' - תיאוריה</h3>
+            <h3 style="color: var(--accent-primary); margin: 2rem 0 1.5rem; font-size: 1.3rem;">📚 Part 1 - Theory</h3>
             <div class="chapters-grid">
                 <a href="chapter1.html" class="chapter-card">
                     <div class="chapter-number">1</div>
                     <div class="chapter-content">
-                        <h3>מבוא ל-Reverse Engineering</h3>
-                        <p>מהו RE, למה לומדים אותו, ומהם השימושים בתעשייה</p>
+                        <h3>Introduction to Reverse Engineering</h3>
+                        <p>What is RE, why learn it, and what are the industry applications</p>
                         <div class="chapter-topics">
-                            <span class="topic-tag">הגדרות</span>
-                            <span class="topic-tag">שימושים</span>
-                            <span class="topic-tag">כלים</span>
+                            <span class="topic-tag">Definitions</span>
+                            <span class="topic-tag">Uses</span>
+                            <span class="topic-tag">Tools</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter2.html" class="chapter-card">
                     <div class="chapter-number">2</div>
                     <div class="chapter-content">
-                        <h3>מערכות מספרים</h3>
-                        <p>בינארי, הקסדצימלי, המרות, וייצוג מספרים במחשב</p>
+                        <h3>Number Systems</h3>
+                        <p>Binary, hexadecimal, conversions, and number representation in computers</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">Binary</span>
                             <span class="topic-tag">Hex</span>
                             <span class="topic-tag">ASCII</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter3.html" class="chapter-card">
                     <div class="chapter-number">3</div>
                     <div class="chapter-content">
-                        <h3>ארכיטקטורת x86/x64</h3>
-                        <p>מבנה המעבד, רגיסטרים, ומחזור הפקודות</p>
+                        <h3>x86/x64 Architecture</h3>
+                        <p>CPU structure, registers, and instruction cycle</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">CPU</span>
                             <span class="topic-tag">Registers</span>
                             <span class="topic-tag">Pipeline</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter4.html" class="chapter-card">
                     <div class="chapter-number">4</div>
                     <div class="chapter-content">
-                        <h3>ניהול זיכרון</h3>
-                        <p>Stack, Heap, Virtual Memory, וכיצד תוכניות משתמשות בזיכרון</p>
+                        <h3>Memory Management</h3>
+                        <p>Stack, Heap, Virtual Memory, and how programs use memory</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">Stack</span>
                             <span class="topic-tag">Heap</span>
                             <span class="topic-tag">Segments</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter5.html" class="chapter-card">
                     <div class="chapter-number">5</div>
                     <div class="chapter-content">
-                        <h3>Assembly - יסודות</h3>
-                        <p>הוראות בסיסיות, תנועת נתונים, ופעולות אריתמטיות</p>
+                        <h3>Assembly - Basics</h3>
+                        <p>Basic instructions, data movement, and arithmetic operations</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">MOV</span>
                             <span class="topic-tag">ADD/SUB</span>
                             <span class="topic-tag">Operands</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter6.html" class="chapter-card">
                     <div class="chapter-number">6</div>
                     <div class="chapter-content">
-                        <h3>Assembly - בקרת זרימה</h3>
-                        <p>קפיצות, תנאים, לולאות, וקריאות לפונקציות</p>
+                        <h3>Assembly - Flow Control</h3>
+                        <p>Jumps, conditions, loops, and function calls</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">JMP</span>
                             <span class="topic-tag">CMP</span>
                             <span class="topic-tag">CALL/RET</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter7.html" class="chapter-card">
                     <div class="chapter-number">7</div>
                     <div class="chapter-content">
-                        <h3>פורמט PE</h3>
-                        <p>מבנה קבצי EXE ו-DLL ב-Windows</p>
+                        <h3>PE Format</h3>
+                        <p>Structure of EXE and DLL files in Windows</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">Headers</span>
                             <span class="topic-tag">Sections</span>
                             <span class="topic-tag">Imports</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter8.html" class="chapter-card">
                     <div class="chapter-number">8</div>
                     <div class="chapter-content">
                         <h3>Calling Conventions</h3>
-                        <p>איך פונקציות מקבלות פרמטרים ומחזירות ערכים</p>
+                        <p>How functions receive parameters and return values</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">cdecl</span>
                             <span class="topic-tag">stdcall</span>
                             <span class="topic-tag">fastcall</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter9.html" class="chapter-card">
                     <div class="chapter-number">9</div>
                     <div class="chapter-content">
-                        <h3>כלי ניתוח סטטי</h3>
-                        <p>עבודה עם IDA Pro ו-Ghidra</p>
+                        <h3>Static Analysis Tools</h3>
+                        <p>Working with IDA Pro and Ghidra</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">IDA</span>
                             <span class="topic-tag">Ghidra</span>
                             <span class="topic-tag">Decompiler</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="chapter10.html" class="chapter-card">
                     <div class="chapter-number">10</div>
                     <div class="chapter-content">
                         <h3>Debugging</h3>
-                        <p>ניתוח דינמי עם x64dbg ו-WinDbg</p>
+                        <p>Dynamic analysis with x64dbg and WinDbg</p>
                         <div class="chapter-topics">
                             <span class="topic-tag">Breakpoints</span>
                             <span class="topic-tag">Stepping</span>
                             <span class="topic-tag">Tracing</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
             </div>
 
-            <h3 style="color: var(--accent-warning); margin: 3rem 0 1.5rem; font-size: 1.3rem;">🔧 חלק ב' - תרגול מעשי</h3>
+            <h3 style="color: var(--accent-warning); margin: 3rem 0 1.5rem; font-size: 1.3rem;">🔧 Part 2 - Hands-on Labs</h3>
             <div class="chapters-grid">
                 <a href="lab1.html" class="chapter-card" style="border-color: var(--accent-warning);">
                     <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L1</div>
                     <div class="chapter-content">
-                        <h3>Lab 1: הכרת הכלים</h3>
-                        <p>התקנה ועבודה ראשונית עם IDA, Ghidra, x64dbg</p>
+                        <h3>Lab 1: Getting to Know the Tools</h3>
+                        <p>Installation and first steps with IDA, Ghidra, x64dbg</p>
                         <div class="chapter-topics">
                             <span class="topic-tag" style="color: var(--accent-warning);">Hands-on</span>
                             <span class="topic-tag" style="color: var(--accent-warning);">Setup</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="lab2.html" class="chapter-card" style="border-color: var(--accent-warning);">
                     <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L2</div>
                     <div class="chapter-content">
-                        <h3>Lab 2: קריאת Assembly</h3>
-                        <p>ניתוח תוכניות פשוטות והבנת הקוד</p>
+                        <h3>Lab 2: Reading Assembly</h3>
+                        <p>Analyzing simple programs and understanding the code</p>
                         <div class="chapter-topics">
                             <span class="topic-tag" style="color: var(--accent-warning);">Hands-on</span>
                             <span class="topic-tag" style="color: var(--accent-warning);">Analysis</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="lab3.html" class="chapter-card" style="border-color: var(--accent-warning);">
                     <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L3</div>
                     <div class="chapter-content">
                         <h3>Lab 3: Crackme Challenge</h3>
-                        <p>פתרון אתגר RE קלאסי - מציאת סיסמה</p>
+                        <p>Solving a classic RE challenge - finding the password</p>
                         <div class="chapter-topics">
                             <span class="topic-tag" style="color: var(--accent-warning);">Challenge</span>
                             <span class="topic-tag" style="color: var(--accent-warning);">Patching</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="lab4.html" class="chapter-card" style="border-color: var(--accent-warning);">
                     <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L4</div>
                     <div class="chapter-content">
-                        <h3>Lab 4: ניתוח PE</h3>
-                        <p>בדיקת מבנה קובץ EXE אמיתי</p>
+                        <h3>Lab 4: PE Analysis</h3>
+                        <p>Examining the structure of a real EXE file</p>
                         <div class="chapter-topics">
                             <span class="topic-tag" style="color: var(--accent-warning);">PE</span>
                             <span class="topic-tag" style="color: var(--accent-warning);">Headers</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
 
                 <a href="lab5.html" class="chapter-card" style="border-color: var(--accent-warning);">
                     <div class="chapter-number" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">L5</div>
                     <div class="chapter-content">
-                        <h3>Lab 5: Debugging מתקדם</h3>
-                        <p>מעקב אחר ביצוע, שינוי זיכרון, ו-patching</p>
+                        <h3>Lab 5: Advanced Debugging</h3>
+                        <p>Execution tracing, memory modification, and patching</p>
                         <div class="chapter-topics">
                             <span class="topic-tag" style="color: var(--accent-warning);">Debug</span>
                             <span class="topic-tag" style="color: var(--accent-warning);">Modify</span>
                         </div>
                     </div>
-                    <div class="arrow">←</div>
+                    <div class="arrow">→</div>
                 </a>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>🔓 RE Academy - קורס Reverse Engineering מקיף בעברית</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">נבנה עבור לומדים מתחילים בתחום</p>
+        <p>🔓 RE Academy - Comprehensive Reverse Engineering Course</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Built for beginners in the field</p>
     </footer>
 </body>
 </html>
-
-

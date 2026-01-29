@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פרק 1: מבוא ל-Reverse Engineering</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Chapter 1: Introduction to Reverse Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -19,7 +19,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Heebo', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.9;
@@ -88,7 +88,7 @@
         /* Definition Box */
         .definition {
             background: var(--bg-card);
-            border-right: 4px solid var(--accent-primary);
+            border-left: 4px solid var(--accent-primary);
             padding: 1.5rem;
             border-radius: 0 10px 10px 0;
             margin: 1.5rem 0;
@@ -172,7 +172,7 @@
         }
         th, td {
             padding: 1rem;
-            text-align: right;
+            text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
         th {
@@ -212,59 +212,59 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">→ חזרה לתפריט הראשי</a>
+        <a href="index.html">← Back to Main Menu</a>
     </nav>
 
     <header class="chapter-header">
-        <div class="chapter-number">פרק 1</div>
-        <h1>מבוא ל-Reverse Engineering</h1>
-        <p class="subtitle">מהי הנדסה לאחור ולמה היא חשובה בעולם הסייבר</p>
+        <div class="chapter-number">Chapter 1</div>
+        <h1>Introduction to Reverse Engineering</h1>
+        <p class="subtitle">What is reverse engineering and why is it important in cybersecurity</p>
     </header>
 
     <div class="container">
         <div class="content">
             
-            <h2>🔍 מהו Reverse Engineering?</h2>
+            <h2>🔍 What is Reverse Engineering?</h2>
             
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Reverse Engineering (RE)</div>
-                <p><strong>הנדסה לאחור</strong> - תהליך של פירוק מוצר או תוכנה כדי להבין איך הוא עובד מבפנים, בלי גישה לקוד המקור או לתיעוד המקורי.</p>
+                <div class="definition-title">📖 Definition: Reverse Engineering (RE)</div>
+                <p>The process of taking apart a product or software to understand how it works internally, without access to the original source code or documentation.</p>
             </div>
 
             <p>
-                חשוב על זה כמו לקחת שעון מכאני ולפרק אותו חלק חלק כדי להבין איך הוא עובד.
-                ב-RE של תוכנה, אנחנו "מפרקים" תוכנית מקומפלת (קובץ <code>.exe</code> למשל) כדי להבין:
+                Think of it like taking apart a mechanical watch piece by piece to understand how it works.
+                In software RE, we "disassemble" a compiled program (like an <code>.exe</code> file) to understand:
             </p>
             <ul>
-                <li><strong>מה התוכנה עושה</strong> - הפונקציונליות שלה</li>
-                <li><strong>איך היא עושה את זה</strong> - האלגוריתמים והלוגיקה</li>
-                <li><strong>עם מה היא מתקשרת</strong> - קבצים, רשת, מערכת הפעלה</li>
+                <li><strong>What the software does</strong> - its functionality</li>
+                <li><strong>How it does it</strong> - the algorithms and logic</li>
+                <li><strong>What it communicates with</strong> - files, network, operating system</li>
             </ul>
 
             <div class="diagram">
                 <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
                     <!-- Source Code -->
                     <rect x="20" y="60" width="120" height="80" rx="10" fill="#1a2235" stroke="#00ff88" stroke-width="2"/>
-                    <text x="80" y="95" text-anchor="middle" fill="#00ff88" font-size="12" font-family="Heebo">קוד מקור</text>
+                    <text x="80" y="95" text-anchor="middle" fill="#00ff88" font-size="12" font-family="Inter">Source Code</text>
                     <text x="80" y="115" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">.c / .cpp</text>
                     
                     <!-- Arrow 1 -->
                     <path d="M150 100 L200 100" stroke="#00b4d8" stroke-width="2" marker-end="url(#arrow)"/>
-                    <text x="175" y="85" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Heebo">קומפילציה</text>
+                    <text x="175" y="85" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter">Compile</text>
                     
                     <!-- Binary -->
                     <rect x="210" y="60" width="120" height="80" rx="10" fill="#1a2235" stroke="#00b4d8" stroke-width="2"/>
-                    <text x="270" y="95" text-anchor="middle" fill="#00b4d8" font-size="12" font-family="Heebo">קובץ בינארי</text>
+                    <text x="270" y="95" text-anchor="middle" fill="#00b4d8" font-size="12" font-family="Inter">Binary File</text>
                     <text x="270" y="115" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Fira Code">.exe / .dll</text>
                     
                     <!-- Arrow 2 -->
                     <path d="M340 100 L390 100" stroke="#ff6b35" stroke-width="2" marker-end="url(#arrow2)"/>
-                    <text x="365" y="85" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Heebo">RE</text>
+                    <text x="365" y="85" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter">RE</text>
                     
                     <!-- Assembly -->
                     <rect x="400" y="60" width="120" height="80" rx="10" fill="#1a2235" stroke="#ff6b35" stroke-width="2"/>
-                    <text x="460" y="95" text-anchor="middle" fill="#ff6b35" font-size="12" font-family="Heebo">Assembly</text>
-                    <text x="460" y="115" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Heebo">הבנת הקוד</text>
+                    <text x="460" y="95" text-anchor="middle" fill="#ff6b35" font-size="12" font-family="Inter">Assembly</text>
+                    <text x="460" y="115" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter">Understanding</text>
                     
                     <!-- Arrow markers -->
                     <defs>
@@ -277,120 +277,119 @@
                     </defs>
                 </svg>
                 <p style="color: var(--text-secondary); margin-top: 1rem; font-size: 0.9rem;">
-                    RE = תהליך הפוך - מהקובץ הסופי חזרה להבנת הקוד
+                    RE = The reverse process - from the final binary back to understanding the code
                 </p>
             </div>
 
-            <h2>🎯 למה ללמוד Reverse Engineering?</h2>
+            <h2>🎯 Why Learn Reverse Engineering?</h2>
 
-            <h3>1. ניתוח נוזקות (Malware Analysis)</h3>
+            <h3>1. Malware Analysis</h3>
             <p>
-                כשנוזקה חדשה מופיעה, צוותי אבטחה צריכים להבין מה היא עושה.
-                אין להם את קוד המקור - רק את הקובץ עצמו. RE מאפשר לחקור:
+                When new malware appears, security teams need to understand what it does.
+                They don't have the source code - only the file itself. RE allows them to investigate:
             </p>
             <ul>
-                <li>איך הנוזקה מדביקה מחשבים</li>
-                <li>מה היא גונבת או משנה</li>
-                <li>איך לזהות ולעצור אותה</li>
+                <li>How the malware infects computers</li>
+                <li>What it steals or modifies</li>
+                <li>How to detect and stop it</li>
             </ul>
 
-            <h3>2. מחקר חולשות (Vulnerability Research)</h3>
+            <h3>2. Vulnerability Research</h3>
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Vulnerability (חולשה)</div>
-                <p>באג או פגם בתוכנה שתוקף יכול לנצל כדי לגרום לנזק - למשל להריץ קוד זדוני או לגנוב מידע.</p>
+                <div class="definition-title">📖 Definition: Vulnerability</div>
+                <p>A bug or flaw in software that an attacker can exploit to cause harm - such as running malicious code or stealing data.</p>
             </div>
             <p>
-                חוקרי אבטחה משתמשים ב-RE כדי למצוא חולשות בתוכנות לפני שהאקרים מוצאים אותן.
+                Security researchers use RE to find vulnerabilities in software before hackers find them.
             </p>
 
-            <h3>3. הבנת תוכנות ללא קוד מקור</h3>
+            <h3>3. Understanding Software Without Source Code</h3>
             <p>
-                לפעמים צריך להבין איך תוכנה ישנה עובדת, או לבדוק אם תוכנה של צד שלישי בטוחה.
+                Sometimes you need to understand how old software works, or verify if third-party software is safe.
             </p>
 
-            <h3>4. פיתוח כלי הגנה</h3>
+            <h3>4. Developing Defense Tools</h3>
             <p>
-                יצירת חתימות לזיהוי נוזקות, כתיבת כללי YARA, ובניית מערכות הגנה.
+                Creating signatures for malware detection, writing YARA rules, and building defense systems.
             </p>
 
             <div class="info-box">
-                <div class="info-box-title">💡 טיפ לקריירה</div>
+                <div class="info-box-title">💡 Career Tip</div>
                 <p>
-                    יכולות RE מבוקשות מאוד בתעשיית הסייבר. משרות כמו 
-                    Malware Analyst, Vulnerability Researcher, ו-Security Researcher
-                    דורשות ידע טוב ב-RE.
+                    RE skills are highly sought after in the cybersecurity industry. Positions like 
+                    Malware Analyst, Vulnerability Researcher, and Security Researcher
+                    require strong RE knowledge.
                 </p>
             </div>
 
-            <h2>🛠️ סוגי RE</h2>
+            <h2>🛠️ Types of RE</h2>
 
             <table>
                 <tr>
-                    <th>סוג</th>
-                    <th>תיאור</th>
-                    <th>כלים נפוצים</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Common Tools</th>
                 </tr>
                 <tr>
-                    <td><strong>Static Analysis</strong><br>(ניתוח סטטי)</td>
-                    <td>בדיקת התוכנה בלי להריץ אותה. קריאת הקוד והבנתו.</td>
+                    <td><strong>Static Analysis</strong></td>
+                    <td>Examining the software without running it. Reading and understanding the code.</td>
                     <td>IDA Pro, Ghidra, Binary Ninja</td>
                 </tr>
                 <tr>
-                    <td><strong>Dynamic Analysis</strong><br>(ניתוח דינמי)</td>
-                    <td>הרצת התוכנה ומעקב אחריה בזמן אמת.</td>
+                    <td><strong>Dynamic Analysis</strong></td>
+                    <td>Running the software and monitoring it in real-time.</td>
                     <td>x64dbg, OllyDbg, WinDbg</td>
                 </tr>
             </table>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Disassembler</div>
-                <p>כלי שממיר קוד מכונה (ביטים) חזרה ל-Assembly - שפה קריאה יותר לאדם.</p>
+                <div class="definition-title">📖 Definition: Disassembler</div>
+                <p>A tool that converts machine code (bits) back to Assembly - a more human-readable language.</p>
             </div>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Decompiler</div>
-                <p>כלי מתקדם יותר שמנסה להמיר את הקוד חזרה לשפה גבוהה כמו C. לא תמיד מדויק 100%.</p>
+                <div class="definition-title">📖 Definition: Decompiler</div>
+                <p>A more advanced tool that attempts to convert code back to a high-level language like C. Not always 100% accurate.</p>
             </div>
 
             <div class="definition">
-                <div class="definition-title">📖 הגדרה: Debugger</div>
-                <p>כלי שמאפשר להריץ תוכנה צעד אחר צעד, לעצור בנקודות מסוימות, ולבדוק את מצב הזיכרון והרגיסטרים.</p>
+                <div class="definition-title">📖 Definition: Debugger</div>
+                <p>A tool that allows you to run a program step by step, stop at certain points, and examine the state of memory and registers.</p>
             </div>
 
-            <h2>⚖️ היבטים משפטיים</h2>
+            <h2>⚖️ Legal Aspects</h2>
 
             <div class="warning-box">
-                <div class="warning-box-title">⚠️ חשוב לדעת</div>
+                <div class="warning-box-title">⚠️ Important to Know</div>
                 <p>
-                    RE יכול להיות אסור בחלק מהמקרים:
+                    RE can be illegal in some cases:
                 </p>
                 <ul style="margin-bottom: 0;">
-                    <li>הפרת הסכם רישיון (EULA)</li>
-                    <li>עקיפת הגנות DRM</li>
-                    <li>פגיעה בקניין רוחני</li>
+                    <li>Violating license agreements (EULA)</li>
+                    <li>Bypassing DRM protections</li>
+                    <li>Infringing intellectual property</li>
                 </ul>
                 <p style="margin-top: 1rem; margin-bottom: 0;">
-                    <strong>מותר בדרך כלל:</strong> מחקר אבטחה, תאימות, חינוך.
-                    תמיד בדוק את החוקים הרלוונטיים!
+                    <strong>Generally allowed:</strong> Security research, compatibility, education.
+                    Always check the relevant laws!
                 </p>
             </div>
 
-            <h2>📋 סיכום הפרק</h2>
+            <h2>📋 Chapter Summary</h2>
             
             <ul>
-                <li><strong>RE</strong> = הבנת תוכנה בלי קוד מקור</li>
-                <li>שימושים עיקריים: ניתוח נוזקות, מציאת חולשות, מחקר</li>
-                <li><strong>Static Analysis</strong> = ניתוח בלי הרצה</li>
-                <li><strong>Dynamic Analysis</strong> = ניתוח תוך כדי הרצה</li>
-                <li>כלים חשובים: IDA, Ghidra, x64dbg</li>
+                <li><strong>RE</strong> = Understanding software without source code</li>
+                <li>Main uses: Malware analysis, finding vulnerabilities, research</li>
+                <li><strong>Static Analysis</strong> = Analysis without running</li>
+                <li><strong>Dynamic Analysis</strong> = Analysis while running</li>
+                <li>Important tools: IDA, Ghidra, x64dbg</li>
             </ul>
 
             <div class="nav-buttons">
-                <a href="index.html" class="nav-btn">→ חזרה לתפריט</a>
-                <a href="chapter2.html" class="nav-btn">פרק 2: מערכות מספרים ←</a>
+                <a href="index.html" class="nav-btn">← Back to Menu</a>
+                <a href="chapter2.html" class="nav-btn">Chapter 2: Number Systems →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-
