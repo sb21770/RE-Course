@@ -1,61 +1,60 @@
-# 🔓 קורס Reverse Engineering בעברית
+# 🔓 Reverse Engineering Course
 
-קורס מקיף ללימוד הנדסה לאחור (Reverse Engineering) מההתחלה - מתיאוריה ועד תרגול מעשי.
+A comprehensive course for learning Reverse Engineering from the beginning - from theory to hands-on practice.
 
-## 🌐 גישה לקורס
+## 🌐 Access the Course
 
-**[לחץ כאן לכניסה לקורס](https://sb21770.github.io/RE-Course/)**
+**[Click here to access the course](https://sb21770.github.io/RE-Course/)**
 
-## 📚 מה בקורס?
+## 📚 Course Content
 
-### חלק א' - תיאוריה (10 פרקים)
+### Part 1 - Theory (10 Chapters)
 
-| פרק | נושא |
-|-----|------|
-| 1 | מבוא ל-Reverse Engineering |
-| 2 | מערכות מספרים (בינארי, הקס) |
-| 3 | ארכיטקטורת x86/x64 |
-| 4 | ניהול זיכרון (Stack, Heap) |
-| 5 | Assembly - יסודות |
-| 6 | Assembly - בקרת זרימה |
-| 7 | פורמט PE |
+| Chapter | Topic |
+|---------|-------|
+| 1 | Introduction to Reverse Engineering |
+| 2 | Number Systems (Binary, Hex) |
+| 3 | x86/x64 Architecture |
+| 4 | Memory Management (Stack, Heap) |
+| 5 | Assembly - Basics |
+| 6 | Assembly - Flow Control |
+| 7 | PE Format |
 | 8 | Calling Conventions |
-| 9 | כלי ניתוח סטטי (Ghidra, IDA) |
+| 9 | Static Analysis Tools (Ghidra, IDA) |
 | 10 | Debugging (x64dbg) |
 
-### חלק ב' - תרגול מעשי (5 Labs)
+### Part 2 - Hands-on Labs (5 Labs)
 
-| Lab | נושא |
-|-----|------|
-| 1 | הכרת הכלים |
-| 2 | קריאת Assembly |
+| Lab | Topic |
+|-----|-------|
+| 1 | Getting to Know the Tools |
+| 2 | Reading Assembly |
 | 3 | Crackme Challenge |
-| 4 | ניתוח PE |
-| 5 | Debugging מתקדם |
+| 4 | PE Analysis |
+| 5 | Advanced Debugging |
 
-## 🎯 למי מיועד?
+## 🎯 Who is this for?
 
-- אנשי סייבר שרוצים להרחיב ידע
-- מתחילים בתחום ה-RE
-- כל מי שרוצה להבין איך תוכנות עובדות מבפנים
+- Cyber professionals who want to expand their knowledge
+- Beginners in the RE field
+- Anyone who wants to understand how software works from the inside
 
-## 📋 דרישות קדם
+## 📋 Prerequisites
 
-- ידע בסיסי במערכות הפעלה
-- היכרות עם תכנות (רצוי C)
-- סקרנות ורצון ללמוד!
+- Basic knowledge of operating systems
+- Familiarity with programming (preferably C)
+- Curiosity and willingness to learn!
 
-## 🛠️ כלים שנלמד
+## 🛠️ Tools We'll Learn
 
-- **Ghidra** - כלי ניתוח סטטי (חינמי)
-- **x64dbg** - Debugger (חינמי)
-- **PE-bear** - ניתוח קבצי PE
+- **Ghidra** - Static analysis tool (free)
+- **x64dbg** - Debugger (free)
+- **PE-bear** - PE file analysis
 
-## 📝 רישיון
+## 📝 License
 
-הקורס נוצר למטרות לימוד בלבד.
+This course was created for educational purposes only.
 
 ---
 
-⭐ אם הקורס עזר לך, תשאיר כוכב!
-
+⭐ If this course helped you, leave a star!
