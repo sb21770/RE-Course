@@ -75,6 +75,65 @@
                 Understanding this format is essential for analyzing malware and suspicious files.
             </p>
 
+            <h2>🔨 Who Creates the PE Structure?</h2>
+
+            <p>
+                The developer only writes source code. The <strong>compiler</strong> and <strong>linker</strong> 
+                automatically create all the PE headers, signatures, and structure!
+            </p>
+
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        FROM CODE TO EXE                                 │
+└─────────────────────────────────────────────────────────────────────────┘
+
+     DEVELOPER                    COMPILER                   LINKER
+    writes this:                creates this:             creates this:
+         │                           │                         │
+         ▼                           ▼                         ▼
+┌─────────────────┐         ┌─────────────────┐       ┌─────────────────┐
+│   main.c        │         │   main.obj      │       │   program.exe   │
+│                 │         │                 │       │                 │
+│ #include &lt;...&gt;  │         │ Machine code    │       │ ┌─────────────┐ │
+│                 │  ───►   │ (just the code, │ ───►  │ │ DOS Header  │ │
+│ int main() {    │ compile │  no headers)    │ link  │ │ DOS Stub    │ │
+│   printf("Hi"); │         │                 │       │ │ PE Sig      │ │
+│   return 0;     │         │ Symbols:        │       │ │ File Header │ │
+│ }               │         │ - main          │       │ │ Opt Header  │ │
+│                 │         │ - printf (ref)  │       │ │ Sections    │ │
+└─────────────────┘         └─────────────────┘       │ │ .text       │ │
+                                                      │ │ .data       │ │
+     YOU write                COMPILER does           │ │ Imports     │ │
+     only this!               the translation         │ └─────────────┘ │
+                                                      └─────────────────┘
+                                                      
+                                                       LINKER builds
+                                                       the complete
+                                                       PE structure!
+            </pre>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Summary: Who Does What?</div>
+                <table style="margin: 0.5rem 0; font-size: 0.9rem;">
+                    <tr>
+                        <th>Role</th>
+                        <th>Creates</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Developer</strong></td>
+                        <td>Source code only (what the program does)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Compiler</strong></td>
+                        <td>Machine code (translated instructions)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Linker</strong></td>
+                        <td>Complete PE structure (DOS Header, PE Signature, all headers, sections, imports)</td>
+                    </tr>
+                </table>
+            </div>
+
             <h2>🗂️ General PE Structure</h2>
 
             <div class="diagram">
@@ -200,22 +259,87 @@
                 <p>The first 64 bytes of every PE. Starts with <code>MZ</code> (0x4D5A) - initials of Mark Zbikowski, a Microsoft programmer.</p>
             </div>
 
-            <p>Important fields:</p>
-            <ul>
-                <li><code>e_magic</code> - always <code>MZ</code> (0x5A4D in Little Endian)</li>
-                <li><code>e_lfanew</code> - offset to PE Header (at byte 0x3C)</li>
-            </ul>
+            <p>Important fields (these are actual field names from the Windows <code>IMAGE_DOS_HEADER</code> structure):</p>
+            
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Location</th>
+                    <th>Value</th>
+                    <th>Meaning</th>
+                </tr>
+                <tr>
+                    <td><code>e_magic</code></td>
+                    <td>Offset 0x00 (fixed)</td>
+                    <td><code>4D 5A</code> = "MZ"</td>
+                    <td>Magic number - confirms this is an executable</td>
+                </tr>
+                <tr>
+                    <td><code>e_lfanew</code></td>
+                    <td>Offset 0x3C (fixed)</td>
+                    <td>Varies per file</td>
+                    <td>Pointer to PE Signature location</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 How e_lfanew Works</div>
+                <p>
+                    The field <code>e_lfanew</code> is <strong>always at offset 0x3C</strong> - this never changes.<br>
+                    But the <strong>value inside</strong> tells you where to find the PE Signature:
+                </p>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0.5rem 0;">
+Step 1: Go to offset 0x3C
+Step 2: Read the 4-byte value there (e.g., 80 00 00 00 = 0x80)
+Step 3: Jump to that offset (0x80)
+Step 4: You should find: 50 45 00 00 ("PE\0\0")
+                </pre>
+            </div>
 
             <pre>
-Offset 0x00: 4D 5A ...           ; "MZ" - magic
-Offset 0x3C: XX XX XX XX         ; e_lfanew - pointer to PE signature
+┌────────────────────────────────────────────────────────────────┐
+│ Offset 0x00: 4D 5A ...           ; e_magic = "MZ" (always)     │
+│ ...                                                            │
+│ Offset 0x3C: 80 00 00 00         ; e_lfanew = 0x80             │
+│              ↓                     (this VALUE varies)         │
+│              └─────────────────────────────┐                   │
+│ ...                                        ↓                   │
+│ Offset 0x80: 50 45 00 00         ; PE Signature found here!    │
+└────────────────────────────────────────────────────────────────┘
             </pre>
 
             <h2>📋 PE Signature & File Header</h2>
 
             <div class="definition">
                 <div class="definition-title">📖 Definition: PE Signature</div>
-                <p>4 bytes: <code>PE\0\0</code> (0x50450000). Appears right after the DOS Header/Stub.</p>
+                <p>
+                    4 bytes that confirm this is a Windows PE file: <code>50 45 00 00</code><br>
+                    In ASCII: "P" (0x50) + "E" (0x45) + null (0x00) + null (0x00) = <code>"PE\0\0"</code>
+                </p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Why Both MZ and PE Signatures?</div>
+                <table style="margin: 0.5rem 0; font-size: 0.9rem;">
+                    <tr>
+                        <th>Signature</th>
+                        <th>Bytes</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><code>MZ</code></td>
+                        <td><code>4D 5A</code></td>
+                        <td>Says "I might be an executable" (legacy DOS compatibility)</td>
+                    </tr>
+                    <tr>
+                        <td><code>PE\0\0</code></td>
+                        <td><code>50 45 00 00</code></td>
+                        <td>Confirms "Yes, I'm definitely a Windows PE file!"</td>
+                    </tr>
+                </table>
+                <p style="margin: 0.5rem 0 0 0;">
+                    Historical reason: PE files start with MZ so old DOS systems show "This program cannot be run in DOS mode" instead of crashing. Windows uses e_lfanew to find the real PE data.
+                </p>
             </div>
 
             <p>File Header (COFF Header) - 20 bytes:</p>
@@ -400,10 +524,58 @@ Section Headers area in file:
                 <p>A list of functions the program imports from other DLLs. Windows fills in the addresses at load time.</p>
             </div>
 
-            <p>
-                The Import Table is located at <code>DataDirectory[1]</code>.<br>
-                In RE, this tells us which API functions the program uses:
-            </p>
+            <h3>Where is the Import Table?</h3>
+            
+            <p>This can be confusing! The Import Table involves <strong>two places</strong>:</p>
+
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  WHERE IS THE IMPORT TABLE?                             │
+└─────────────────────────────────────────────────────────────────────────┘
+
+   OPTIONAL HEADER                              SECTIONS
+  ┌─────────────────────┐                    ┌─────────────────────┐
+  │ ...                 │                    │ .text               │
+  │ DataDirectory[0]    │                    │ (code)              │
+  │ DataDirectory[1] ───┼───── POINTER ─────►├─────────────────────┤
+  │   (Import Table)    │      (RVA)         │ .rdata or .idata    │
+  │ DataDirectory[2]    │                    │ ┌─────────────────┐ │
+  │ ...                 │                    │ │ IMPORT TABLE    │ │
+  └─────────────────────┘                    │ │ (actual data)   │ │
+                                             │ │ - kernel32.dll  │ │
+   Contains: POINTER                         │ │   - CreateFile  │ │
+   (tells you WHERE                          │ │   - ReadFile    │ │
+   to find imports)                          │ │ - user32.dll    │ │
+                                             │ │   - MessageBox  │ │
+                                             │ └─────────────────┘ │
+                                             └─────────────────────┘
+                                             
+                                              Contains: ACTUAL DATA
+                                              (the real import list)
+            </pre>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Two Parts to Understand</div>
+                <table style="margin: 0.5rem 0; font-size: 0.9rem;">
+                    <tr>
+                        <th>Location</th>
+                        <th>What's there</th>
+                        <th>Analogy</th>
+                    </tr>
+                    <tr>
+                        <td><code>DataDirectory[1]</code></td>
+                        <td>A <strong>pointer</strong> (RVA) saying "imports are at address X"</td>
+                        <td>Street address on an envelope</td>
+                    </tr>
+                    <tr>
+                        <td>Inside a Section<br>(usually <code>.rdata</code> or <code>.idata</code>)</td>
+                        <td>The <strong>actual Import Table data</strong> (DLL names, function names)</td>
+                        <td>The actual house at that address</td>
+                    </tr>
+                </table>
+            </div>
+
+            <p>Common imported functions (tells us what the program does):</p>
 
             <ul>
                 <li><code>CreateFile</code>, <code>ReadFile</code> - file access</li>
@@ -426,6 +598,101 @@ Section Headers area in file:
             <div class="definition">
                 <div class="definition-title">📖 Definition: Export Table</div>
                 <p>A list of functions the file exports for use by others. Common in DLLs.</p>
+            </div>
+
+            <p>Just like Import Table, the Export Table has a <strong>pointer</strong> and <strong>actual data</strong>:</p>
+
+            <pre>
+DataDirectory[0]  →  POINTER (RVA) saying "exports are at address X"
+                           ↓
+.edata section    →  ACTUAL EXPORT DATA (function names, addresses)
+            </pre>
+
+            <h2>📋 DataDirectory - The Master Pointer Table</h2>
+
+            <p>
+                The <code>DataDirectory</code> in the Optional Header is an array of 16 <strong>pointers</strong>.<br>
+                Each entry points to different data stored in the sections:
+            </p>
+
+            <table>
+                <tr>
+                    <th>Index</th>
+                    <th>Name</th>
+                    <th>Points to</th>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td><strong>Export Table</strong></td>
+                    <td>Functions this file exports (for DLLs)</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Import Table</strong></td>
+                    <td>Functions imported from other DLLs</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Resource Table</td>
+                    <td>Icons, dialogs, strings, etc.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Exception Table</td>
+                    <td>Exception handling info</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Certificate Table</td>
+                    <td>Digital signatures</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Base Relocation</td>
+                    <td>For loading at different address</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Debug</td>
+                    <td>Debug information</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>IAT</td>
+                    <td>Import Address Table</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>CLR Runtime</td>
+                    <td>.NET metadata</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <div class="info-box-title">💡 Key Concept: Headers Have Pointers, Sections Have Data</div>
+                <pre style="background: transparent; padding: 0; border: none; margin: 0;">
+┌─────────────────────────────────────────────────────────────────┐
+│                     HEADERS vs SECTIONS                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   OPTIONAL HEADER                      SECTIONS                 │
+│   (DataDirectory)                      (actual content)         │
+│                                                                 │
+│   ┌──────────────┐                   ┌──────────────────────┐   │
+│   │ [0] Export ──┼────► POINTER ────►│ .edata: Export data  │   │
+│   │ [1] Import ──┼────► POINTER ────►│ .rdata: Import data  │   │
+│   │ [2] Resource─┼────► POINTER ────►│ .rsrc:  Icons, etc.  │   │
+│   │ [5] Reloc  ──┼────► POINTER ────►│ .reloc: Reloc data   │   │
+│   └──────────────┘                   └──────────────────────┘   │
+│                                                                 │
+│   Contains: RVA + Size               Contains: ACTUAL DATA      │
+│   (WHERE to find it)                 (the real content)         │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+                </pre>
+                <p style="margin: 0.5rem 0 0 0;">
+                    <strong>Remember:</strong> Headers never contain the actual data - they only contain pointers that tell you where to find the data in the sections!
+                </p>
             </div>
 
             <h2>🔧 Tools for PE Analysis</h2>
